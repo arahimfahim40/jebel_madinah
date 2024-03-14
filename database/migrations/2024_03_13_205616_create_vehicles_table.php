@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('vehicles', function (Blueprint $table) {
             $table->id();
-            $table->integer('customer_id');
-            $table->integer('invoice_id');
+            $table->unsignedBigInteger('customer_id');
+            $table->unsignedBigInteger('invoice_id');
             $table->string('year')->nullable();
             $table->string('container_number')->nullable();
             $table->string('title_received_date')->nullable();
@@ -40,8 +40,8 @@ return new class extends Migration
             $table->string('make')->nullable();
             $table->string('towed_from')->nullable();
             $table->string('tow_amount')->nullable();
-            $table->integer('created_by')->nullable();
-            $table->integer('updated_by')->nullable();
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->enum('status', ['pending', 'on_the_way', 'on_hand_with_title', 'on_hand_no_title', 'shipped'])->default('on_the_way');
             $table->enum('vehicle_type', ['half-cut', 'complete'])->default('complete');
             $table->date('payment_date')->nullable();
@@ -70,9 +70,8 @@ return new class extends Migration
             $table->tinyInteger('is_key')->default(0);
             $table->text('customer_note')->nullable();
             $table->timestamp('deleted_at')->nullable();
-            $table->integer('deleted_by')->nullable();
+            $table->unsignedBigInteger('deleted_by')->nullable();
 
-            $table->primary('id');
             $table->unique('vin');
             $table->index('created_by');
             $table->index('updated_by');
