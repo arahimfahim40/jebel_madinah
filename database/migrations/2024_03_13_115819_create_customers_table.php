@@ -24,13 +24,11 @@ return new class extends Migration
             $table->date('join_date')->nullable();
             $table->string('second_email', 255)->nullable();
             $table->string('second_phone', 255)->nullable();
-
             $table->unsignedBigInteger('created_by')->nullable();
             $table->timestamps();
             $table->unsignedBigInteger('updated_by')->nullable();
-           
+
             $table->integer('status')->default(0);
-           
             $table->string('comp_city', 100)->nullable();
             $table->string('zip_code', 50)->nullable();
             $table->string('country', 50)->nullable();
@@ -57,6 +55,10 @@ return new class extends Migration
             $table->string('notify_poc', 50)->nullable();
             $table->text('loading_instruction')->nullable();
             $table->string('token', 100);
+
+            $table->timestamp('email_verified_at')->nullable();
+            $table->rememberToken();
+
             $table->softDeletes();
             $table->unsignedBigInteger('deleted_by')->nullable();
 

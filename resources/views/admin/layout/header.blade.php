@@ -56,16 +56,7 @@
                         {{-- <a class="dropdown-item" href="{{route('edit_my_profile')}}">
                             <i class="ti-user mr-0-5"></i> Profile
                         </a> --}}
-                        <?php
-                        $account = DB::table('accounts')->where('user_id', '=', @Auth::user()->id)->count();
-                        if($accounts ?? $account > 0){
-                        ?>
-                        {{-- <a class="dropdown-item" href="{{route('view_accounts_trans')}}">
-                            <i class="ti-stamp mr-0-5"></i> Accounts
-                        </a> --}}
-                        <?php
-                        }
-                        ?>
+                        
                         {{-- <a class="dropdown-item" href="{{route('admin_logout')}}"><i
                                     class="ti-power-off mr-0-5"></i> Sign out</a> --}}
                         <a class="dropdown-item text-warning" target="_blank" href="https://oldsystem.pglsystem.com/">

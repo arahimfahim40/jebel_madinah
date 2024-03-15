@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('vehicles', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('customer_id');
-            $table->unsignedBigInteger('invoice_id');
+            $table->unsignedBigInteger('customer_id')->nullable();
+            $table->unsignedBigInteger('invoice_id')->nullable();
             $table->string('year')->nullable();
             $table->string('container_number')->nullable();
             $table->string('title_received_date')->nullable();
@@ -60,8 +60,6 @@ return new class extends Migration
             $table->integer('dubai_demurage')->nullable();
             $table->integer('other_cost')->nullable();
             $table->integer('sales_cost')->nullable();
-            $table->integer('profit')->nullable();
-            $table->string('percent_profit')->nullable();
             $table->string('auction')->nullable();
             $table->string('auction_city')->nullable();
             $table->string('title')->nullable();
@@ -69,6 +67,7 @@ return new class extends Migration
             $table->string('title_status')->nullable();
             $table->tinyInteger('is_key')->default(0);
             $table->text('customer_note')->nullable();
+            $table->timestamps();
             $table->timestamp('deleted_at')->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();
 

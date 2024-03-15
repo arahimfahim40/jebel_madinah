@@ -15,3 +15,15 @@
     padding: 10px;
     margin-top: 10px;
 }
+
+.select2-selection__clear{
+    z-index: 500;
+}
+
+.select2-container.select2-container--default {
+    width: 100% !important;
+}
+
+.none{
+    display: none;
+}

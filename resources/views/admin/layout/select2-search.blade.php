@@ -1,6 +1,8 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $(".s2s_user").select2({
+            allowClear: true,
+            placeholder: "Search User by Name ...",
             ajax: {
                 url: "{{ route('s2s_user') }}",
                 type: "get",
@@ -177,6 +179,8 @@
         });
 
         $(".s2s_for_account").select2({
+            placeholder: 'Search Account',
+            allowClear: true,
             ajax: {
                 url: "{{ route('s2s_for_account') }}",
                 type: "get",
@@ -267,10 +271,69 @@
             }
         });
 
+        $(".s2s_available_clear_logs").select2({
+            placeholder: 'Search by Container Number',
+            ajax: {
+                url: "{{ route('s2s_available_clear_logs') }}",
+                type: "get",
+                dataType: 'json',
+                data: function(params) {
+                    return {
+                        search: params.term
+                    };
+                },
+                processResults: function(response) {
+                    return {
+                        results: response
+                    };
+                },
+                cache: true
+            }
+        });
+
+        $(".s2s_all_available_containers").select2({
+            placeholder: 'Search by Available Container Number',
+            ajax: {
+                url: "{{ route('s2s_all_available_containers') }}",
+                type: "get",
+                dataType: 'json',
+                data: function(params) {
+                    return {
+                        search: params.term
+                    };
+                },
+                processResults: function(response) {
+                    return {
+                        results: response
+                    };
+                },
+                cache: true
+            }
+        });
+
         $(".s2mix_containers").select2({
             placeholder: 'Search by Container Number',
             ajax: {
                 url: "{{ route('s2s_mix_containers') }}",
+                type: "get",
+                dataType: 'json',
+                data: function(params) {
+                    return {
+                        search: params.term
+                    };
+                },
+                processResults: function(response) {
+                    return {
+                        results: response
+                    };
+                },
+                cache: true
+            }
+        });
+        $(".s2s_mix_shipping_vehicles").select2({
+            placeholder: 'Search by Vin or Lot#',
+            ajax: {
+                url: "{{ route('s2s_mix_shipping_vehicles') }}",
                 type: "get",
                 dataType: 'json',
                 data: function(params) {
@@ -307,6 +370,7 @@
         });
 
         $(".search_vehicle_select2").select2({
+            placeholder: "Search by VIN",
             ajax: {
                 url: "{{ route('search_vehicle_select2') }}",
                 type: "get",
@@ -326,6 +390,8 @@
         });
 
         $(".search_comapny_select2").select2({
+            placeholder: "Search by company name",
+            allowClear: true,
             ajax: {
                 url: "{{ route('searchCompany') }}",
                 type: "get",
@@ -577,6 +643,7 @@
         // Select 2 for vessels
         $(".s2s_all_vessels").select2({
             placeholder: 'Search by Vessel Name',
+            allowClear: true,
             ajax: {
                 url: "{{ route('s2s_all_vessels') }}",
                 type: "get",
@@ -598,6 +665,7 @@
         // Select 2 for vessels
         $(".s2s_all_steamshipline").select2({
             placeholder: 'Search by Steamship Line',
+            allowClear: true,
             ajax: {
                 url: "{{ route('s2s_all_steamshipline') }}",
                 type: "get",
@@ -619,6 +687,7 @@
         // Select 2 for destinations
         $(".s2s_all_destinations").select2({
             placeholder: 'Search by Destination',
+            allowClear: true,
             ajax: {
                 url: "{{ route('s2s_all_destinations') }}",
                 type: "get",
