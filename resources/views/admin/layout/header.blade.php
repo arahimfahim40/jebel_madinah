@@ -57,7 +57,6 @@
                             <i class="ti-user mr-0-5"></i> Profile
                         </a> --}}
                         
-                        
                         {{-- <a class="dropdown-item" href="{{route('admin_logout')}}"><i
                                     class="ti-power-off mr-0-5"></i> Sign out</a> --}}
                         <a class="dropdown-item text-warning" target="_blank" href="https://oldsystem.pglsystem.com/">

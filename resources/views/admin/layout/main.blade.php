@@ -74,15 +74,39 @@
             width: 100%;
         }
     </style>
-    @yield('style')
+    @stack('css')
 </head>
 
 <body class="fixed-sidebar fixed-header skin-default content-appear">
-    <div class="wrapper">
+    <div class="wrapper" style="overflow: unset;">
         <div class="preloader"></div>
         {{-- @include('admin.layout.sidebar') --}}
         @include('admin.layout.header')
         @yield('content')
+
+        <!-- Notification general modal -->
+        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="logProperties">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-body" style="padding: 0px;">
+                        <div class="bg-info p-1 px-2" style="display:flex;">
+                            <div class="font-weight-bold" style="width:5%">#</div>
+                            <div class="font-weight-bold" style="width:25%">Attribute</div>
+                            <div class="font-weight-bold" style="width:40%">Value</div>
+                            <div class="font-weight-bold" style="width:40%">Old Value</div>
+                        </div>
+                        <div id="properties_loading" style="display:none;">
+                            <div style='position:relative; margin-top:5%; margin-left:45%; z-index:1000;'><img width='70px' src='{{ asset('img/loading.gif') }}' alt='Loading ...'> </div>
+                        </div>
+                        <div style="max-height: 500px; overflow-y: auto;" id="log_data"></div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger btn-rounded" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Notification general modal -->
     </div>
     <script type="text/javascript" src="{{asset('assets/js/jquery-3.6.0.min.js')}}"></script>
     <script type="text/javascript" src="{{asset('assets/jquery-plugin/tableHTMLExport.js')}}"></script>
@@ -106,17 +130,13 @@
     <script type="text/javascript" src="{{asset('assets/DataTables-1.10.12/datatables.min.js')}}"></script>
     <script type="text/javascript" src="{{asset('assets/sweetalert2v11/sweetalert2.min.js')}}"></script>
     <script type="text/javascript" src="{{asset('assets/js/app.js')}}"></script>
-   
     <script type="text/javascript" src="{{asset('assets/notify/notify.js')}}"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
 
-    @yield('js')
+    @stack('js')
 
-
-
-
-    {{-- <script type="text/javascript">
+    <script type="text/javascript">
         var request = $.ajax({
             url: "{{route('admin_sidebar_count')}}",
             method: "GET",
@@ -132,12 +152,19 @@
             window.shipment_section = false;
             window.shipment_atloading_section = false;
             window.shipment_checked_section = false;
-            window.shipment_advanced_booking_section = false;
-            window.advanced_booking_summary_section = false;
             window.shipment_clearance_section = false;
+            window.advanced_booking_vessels_section = false;
+            window.advanced_booking_section = false;
+            window.advanced_booking_up_coming_section = false;
+            window.advanced_booking_in_process_section = false;
+            window.advanced_booking_rolled_over_section = false;
+            window.advanced_booking_cancelled_section = false;
+            window.advanced_booking_archived_section = false;
+            window.advanced_booking_summary_section = false;
             window.invoice_section = false;
             window.mix_shipping_section = false;
             window.mix_shipping_invoice_section = false;
+            window.mix_shipping_full_invoice_section = false;
             window.expenses_section = false;
             window.clearance_section = false;
             window.used_cars_section = false;
@@ -163,29 +190,57 @@
                 } else if ($('.shipment_checked_section .active').html() != undefined && !shipment_checked_section) {
                     shipment_checked_section = true;
                     get_admin_sidebar_sub_count('ShipmentChecked');
-                } else if ($('.shipment_advanced_booking_section .active').html() != undefined && !shipment_advanced_booking_section) {
-                    shipment_advanced_booking_section = true;
-                    get_admin_sidebar_sub_count('ShipmentAdvancedBooking');
-                    if ($('.advanced_booking_summary_section .active').html() != undefined && !advanced_booking_summary_section) {
-                        advanced_booking_summary_section = true;
-                        get_admin_sidebar_sub_count('AdvancedBookingSummary');
-                    }
                 } else if ($('.shipment_clearance_section .active').html() != undefined && !shipment_clearance_section) {
                     shipment_clearance_section = true;
                     get_admin_sidebar_sub_count('ShipmentClearance');
                 }
                 // end sub content of shipment section
+            } else if ($('.advanced_booking_section .active').html() != undefined && !advanced_booking_section) {
+                advanced_booking_section = true;
+                get_admin_sidebar_sub_count('AdvancedBooking');
+
+                if ($('.advanced_booking_vessels_section .active').html() != undefined && !advanced_booking_vessels_section) {
+                    advanced_booking_vessels_section = true;
+                    get_admin_sidebar_sub_count('AdvancedBookingVessels');
+                }
+                if ($('.advanced_booking_up_coming_section .active').html() != undefined && !advanced_booking_up_coming_section) {
+                    advanced_booking_up_coming_section = true;
+                    get_admin_sidebar_sub_count('AdvancedBookingUpComing');
+                }
+                if ($('.advanced_booking_in_process_section .active').html() != undefined && !advanced_booking_in_process_section) {
+                    advanced_booking_in_process_section = true;
+                    get_admin_sidebar_sub_count('AdvancedBookingInProcess');
+                }
+                if ($('.advanced_booking_rolled_over_section .active').html() != undefined && !advanced_booking_rolled_over_section) {
+                    advanced_booking_rolled_over_section = true;
+                    get_admin_sidebar_sub_count('AdvancedBookingRolledOver');
+                }
+                if ($('.advanced_booking_cancelled_section .active').html() != undefined && !advanced_booking_cancelled_section) {
+                    advanced_booking_cancelled_section = true;
+                    get_admin_sidebar_sub_count('AdvancedBookingCancelled');
+                }
+                if ($('.advanced_booking_archived_section .active').html() != undefined && !advanced_booking_archived_section) {
+                    advanced_booking_archived_section = true;
+                    get_admin_sidebar_sub_count('AdvancedBookingArchived');
+                }
+                if ($('.advanced_booking_summary_section .active').html() != undefined && !advanced_booking_summary_section) {
+                    advanced_booking_summary_section = true;
+                    get_admin_sidebar_sub_count('AdvancedBookingSummary');
+                }
             } else if ($('.invoice_section .active').html() != undefined && !invoice_section) {
                 invoice_section = true;
                 get_admin_sidebar_sub_count('Invoice');
             } else if ($('.mix_shipping_section .active').html() != undefined && !mix_shipping_section) {
                 mix_shipping_section = true;
                 get_admin_sidebar_sub_count('MixShipping');
-                if ($('.mix_shipping_invoice_section .active').html() != undefined && !mix_shipping_invoice_section) {
+                
+            }else if ($('.mix_shipping_invoice_section .active').html() != undefined && !mix_shipping_invoice_section) {
                     mix_shipping_invoice_section = true;
                     get_admin_sidebar_sub_count('MixShippingInvoice');
-                }
-            } else if ($('.expenses_section .active').html() != undefined && !expenses_section) {
+            }else if ($('.mix_shipping_full_invoice_section .active').html() != undefined && !mix_shipping_full_invoice_section) {
+                    mix_shipping_full_invoice_section = true;
+                    get_admin_sidebar_sub_count('MixShippingFullInvoice');
+            }else if ($('.expenses_section .active').html() != undefined && !expenses_section) {
                 expenses_section = true;
                 get_admin_sidebar_sub_count('Expenses');
             } else if ($('.clearance_section .active').html() != undefined && !clearance_section) {
@@ -202,9 +257,20 @@
         });
 
         request.done(function(msg) {
-            $('.t_all_vehicle').text(msg.t_all_vehicle);
-            $('.t_all_shipment').text(msg.t_all_shipment);
-            $('.t_all_invoice').text(msg.t_all_invoice);
+            // $('.t_all_vehicle').text(msg.t_all_vehicle);
+            // $('.t_all_shipment').text(msg.t_all_shipment);
+            // $('.t_advanced_booking').text(msg.t_advanced_booking);
+            // $('.t_all_invoice').text(msg.t_all_invoice);
+            // $('.t_open_check').text(msg.t_open_check);
+            // $('.t_paid_check').text(msg.t_paid_check);
+            // $('.t_due_check').text(msg.t_due_check);
+            // $('.t_pending_check').text(msg.t_pending_check);
+            $('.t_mix_on_the_way').text(msg.t_mix_on_the_way);
+            $('.t_mix_container').text(msg.t_mix_container);
+            $('.t_mix_all_invoice').text(msg.t_mix_all_invoice);
+            $('.t_mix_all_full_invoice').text(msg.t_mix_all_full_invoice);
+            $('.countNotification').text(msg.countNotification);
+            // $('.t_all_checks').text(msg.t_all_checks);
             $('.t_all_transaction').text(msg.t_all_transaction);
             $('.t_all_transfer').text(msg.t_all_transfer);
             // Clearance
@@ -275,11 +341,43 @@
                     locations.forEach(item => {
                         $('.t_checked_shipment_' + item.id).text(msg['t_checked_shipment_' + item.id]);
                     });
-                } else if (type == 'ShipmentAdvancedBooking') {
-                    window.shipment_advanced_booking_section = true;
+                } else if (type == 'AdvancedBooking') {
+                    window.advanced_booking_section = true;
+                    $('.t_booking_up_coming_all').text(msg['t_booking_up_coming_all']);
+                    $('.t_booking_in_process_all').text(msg['t_booking_in_process_all']);
+                    $('.t_booking_rolled_over_all').text(msg['t_booking_rolled_over_all']);
+                    $('.t_booking_cancelled_all').text(msg['t_booking_cancelled_all']);
+                    $('.t_booking_archived_all').text(msg['t_booking_archived_all']);
                     $('.t_vessels').text(msg['t_vessels']);
+                } else if (type == 'AdvancedBookingVessels') {
+                    window.advanced_booking_vessels_section = true;
+                    $('.t_vessels_up_coming').text(msg['t_vessels_up_coming']);
+                    $('.t_vessels_in_process').text(msg['t_vessels_in_process']);
+                    $('.t_vessels_archived').text(msg['t_vessels_archived']);
+                } else if (type == 'AdvancedBookingUpComing') {
+                    window.advanced_booking_up_coming_section = true;
                     locations.forEach(item => {
-                        $('.t_advanced_booking_' + item.id).text(msg['t_advanced_booking_' + item.id]);
+                        $('.t_booking_up_coming_' + item.id).text(msg['t_booking_up_coming_' + item.id]);
+                    });
+                } else if (type == 'AdvancedBookingInProcess') {
+                    window.advanced_booking_in_process_section = true;
+                    locations.forEach(item => {
+                        $('.t_booking_in_process_' + item.id).text(msg['t_booking_in_process_' + item.id]);
+                    });
+                } else if (type == 'AdvancedBookingRolledOver') {
+                    window.advanced_booking_rolled_over_section = true;
+                    locations.forEach(item => {
+                        $('.t_booking_rolled_over_' + item.id).text(msg['t_booking_rolled_over_' + item.id]);
+                    });
+                } else if (type == 'AdvancedBookingCancelled') {
+                    window.advanced_booking_cancelled_section = true;
+                    locations.forEach(item => {
+                        $('.t_booking_cancelled_' + item.id).text(msg['t_booking_cancelled_' + item.id]);
+                    });
+                } else if (type == 'AdvancedBookingArchived') {
+                    window.advanced_booking_archived_section = true;
+                    locations.forEach(item => {
+                        $('.t_booking_archived_' + item.id).text(msg['t_booking_archived_' + item.id]);
                     });
                 } else if (type == 'AdvancedBookingSummary') {
                     window.advanced_booking_summary_section = true;
@@ -300,14 +398,17 @@
                     $('.t_paid_invoice').text(msg.t_paid_invoice);
                 } else if (type == 'MixShippingInvoice') {
                     window.mix_shipping_invoice_section = true;
+                    $('.t_mix_on_the_way_invoice').text(msg.t_mix_on_the_way_invoice);
                     $('.t_mix_pending_invoice').text(msg.t_mix_pending_invoice);
                     $('.t_mix_open_invoice').text(msg.t_mix_open_invoice);
                     $('.t_mix_past_due_invoice').text(msg.t_mix_past_due_invoice);
                     $('.t_mix_paid_invoice').text(msg.t_mix_paid_invoice);
-                } else if (type == 'MixShipping') {
-                    window.mix_shipping_section = true;
-                    $('.t_mix_container').text(msg.t_mix_container);
-                    $('.t_mix_all_invoice').text(msg.t_mix_all_invoice);
+                } else if (type == 'MixShippingFullInvoice') {
+                    window.mix_shipping_full_invoice_section = true;
+                    $('.t_mix_pending_full_invoice').text(msg.t_mix_pending_full_invoice);
+                    $('.t_mix_open_full_invoice').text(msg.t_mix_open_full_invoice);
+                    $('.t_mix_past_due_full_invoice').text(msg.t_mix_past_due_full_invoice);
+                    $('.t_mix_paid_full_invoice').text(msg.t_mix_paid_full_invoice);
                 } else if (type == 'Expenses') {
                     window.expenses_section = true;
                     $('.t_pending_transaction').text(msg.t_pending_transaction);
@@ -320,6 +421,7 @@
                     window.clearance_section = true;
                     $('.t_delivery_pending_invoice').text(msg.t_delivery_pending_invoice);
                     $('.t_pending_invoice').text(msg.t_pending_invoice);
+                    $('.t_new_imported').text(msg.t_new_imported);
                     $('.t_delivery_open_invoice').text(msg.t_delivery_open_invoice);
                     $('.t_open_invoice').text(msg.t_open_invoice);
                     $('.t_delivery_past_due_invoice').text(msg.t_delivery_past_due_invoice);
@@ -348,129 +450,34 @@
         }
 
 
-
-        request.done(function(msg) {
-            $('.t_all_vehicle').text(msg.allvehicle);
-            $('.t_on_the_way').text(msg.onthewayvehicle);
-            $('.t_on_hand_no').text(msg.onhandnotitlevehicle);
-            $('.t_on_inventory').text(msg.oninventoryvehicle);
-            $('.t_on_inventory-1').text(msg.oninventoryvehicle1);
-            $('.t_on_inventory-2').text(msg.oninventoryvehicle2);
-            $('.t_on_inventory-4').text(msg.oninventoryvehicle3);
-            $('.t_on_inventory-5').text(msg.oninventoryvehicle4);
-            $('.t_on_hand_with').text(msg.onhandwithtitlevehicle);
-            $('.t_shipped').text(msg.shippedvehicle);
-            $('.t_shipped_atloading').text(msg.shippedAtloadingvehicle);
-            $('.t_pending').text(msg.pendingvehicle);
-
-            $('.t_all_ship').text(msg.allshipment);
-            $('.t_pending_ship').text(msg.pendingshipment);
-            $('.t_loading_ship').text(msg.loadingshipment);
-            $('.t_at_the_dock_ship').text(msg.atTheDockShipment);
-            $('.t_checked_ship').text(msg.checkedshipment);
-            $('.t_finalchecked_ship').text(msg.finalcheckedshipment);
-            $('.t_submitsi_ship').text(msg.submitsishipment);
-            $('.t_on_the_way_ship').text(msg.onthewayshipment);
-            $('.t_arrived_ship').text(msg.arrivedshipment);
-
-            // halfcut
-
-            $('.t_clearance_ship').text(msg.clearanceshipment);
-            $('.t_clearance_ship-1').text(msg.clearanceshipment1);
-            $('.t_clearance_ship-2').text(msg.clearanceshipment2);
-            $('.t_clearance_ship-4').text(msg.clearanceshipment4);
-            $('.t_clearance_ship-5').text(msg.clearanceshipment5);
-
-            // Booking
-
-            $('.t_advanced_booking').text(msg.advanced_booking);
-            $('.t_advanced_booking-1').text(msg.advanced_booking1);
-            $('.t_advanced_booking-2').text(msg.advanced_booking2);
-            $('.t_advanced_booking-4').text(msg.advanced_booking3);
-            $('.t_advanced_booking-5').text(msg.advanced_booking4);
-
-            // Vessels
-
-            $('.t_vessels').text(msg.vessels);
-            $('.booking-all').text(msg.all_booking_summ);
-            $('.booking-1').text(msg.all_booking_summ1);
-            $('.booking-2').text(msg.all_booking_summ2);
-            $('.booking-4').text(msg.all_booking_summ4);
-            $('.booking-5').text(msg.all_booking_summ5);
-
-            //Halfcut coutn
-
-            $('.t_halfcut').text(msg.halfcutVehicles);
-            $('.t_halfcut-1').text(msg.halfcutVehicles1);
-            $('.t_halfcut-2').text(msg.halfcutVehicles2);
-            $('.t_halfcut-4').text(msg.halfcutVehicles4);
-            $('.t_halfcut-5').text(msg.halfcutVehicles55);
-
-            $('.t_all_inv').text(msg.allinvoice);
-            $('.t_open_inv').text(msg.openinvoice);
-            $('.t_past_due_inv').text(msg.pastdueinvoice);
-            $('.t_paid_inv').text(msg.paidinvoice);
-            $('.t_pending_inv').text(msg.pendinginvoice);
-
-            //pglc software
-            $('.clearinvoice').text(msg.clearinvoice);
-
-            $('.allinvoices').text(msg.allinvoices);
-            $('.pendinginvoices').text(msg.pendinginvoices);
-            $('.openinvoices').text(msg.openinvoices);
-            $('.pastdueinvoices').text(msg.pastdueinvoices);
-            $('.paidinvoices').text(msg.paidinvoices);
-            //delivery order invoices
-            $('.deliveryallinvoices').text(msg.deliveryallinvoices);
-            $('.deliverypendinginvoices').text(msg.deliverypendinginvoices);
-            $('.deliveryopeninvoices').text(msg.deliveryopeninvoices);
-            $('.deliverypastdueinvoices').text(msg.deliverypastdueinvoices);
-            $('.deliverypaidinvoices').text(msg.deliverypaidinvoices);
-        });
-        request.fail(function(jqXHR, textStatus) {
-            alert('fail to load the total');
-        });
-        // get messages
-        $('.message_admin').click(function() {
-            $('.meessage_admin_detail').html("<div style='text-align:center'><img width='40px' src='img/loading.gif' alt='Loading ...'> </div>");
-            var request = $.ajax({
-                url: "{{route('message_admin')}}",
-                method: "GET",
-                dataType: 'json'
-            });
-            request.done(function(msg) {
-                $('.meessage_admin_detail').html(msg);
-            });
-            request.fail(function(jqXHR, textStatus) {
-                $('.meessage_admin_detail').html('');
-                alert(textStatus);
-            });
-        });
-    </script>
-    <script>
         $(document).ready(function() {
-            $('#example th').each(function(col) {
-
+            $('#example th, .client_side_sorting_table th').each(function(col) {
                 $(this).click(function() {
                     if ($(this).is('.asc')) {
-                        $(this).removeClass('asc');
-                        $(this).addClass('desc selected');
+                        $(this).removeClass('asc sorting_asc');
+                        $(this).addClass('selected desc sorting_desc');
                         sortOrder = -1;
                     } else {
-                        $(this).addClass('asc selected');
-                        $(this).removeClass('desc');
+                        $(this).addClass('selected asc sorting_asc');
+                        $(this).removeClass('desc sorting_desc');
                         sortOrder = 1;
                     }
-                    $(this).siblings().removeClass('asc selected');
-                    $(this).siblings().removeClass('desc selected');
+                    $(this).siblings().removeClass('selected asc sorting_asc');
+                    $(this).siblings().removeClass('selected desc sorting_desc');
                     var arrData = $('table').find('tbody >tr:has(td)').get();
                     arrData.sort(function(a, b) {
-                        var val1 = $(a).children('td').eq(col).text().toUpperCase();
-                        var val2 = $(b).children('td').eq(col).text().toUpperCase();
-                        if ($.isNumeric(val1) && $.isNumeric(val2))
-                            return sortOrder == 1 ? val1 - val2 : val2 - val1;
-                        else
+                        var val1 = $(a).children('td').eq(col).text();
+                        var val2 = $(b).children('td').eq(col).text();
+                        var val1Numeric = val1.replace(/[$,DH]/g, '');
+                        var val2Numeric = val2.replace(/[$,DH]/g, '');
+                        var dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+                        if ($.isNumeric(val1Numeric) && $.isNumeric(val2Numeric) &&  !(dateRegex.test(val1) || dateRegex.test(val2) )) {
+                            console.log(val1Numeric, val2Numeric);
+                            // Sort numerically
+                            return sortOrder == 1 ? val1Numeric - val2Numeric : val2Numeric - val1Numeric;
+                        }else{
                             return (val1 < val2) ? -sortOrder : (val1 > val2) ? sortOrder : 0;
+                        }
                     });
                     $.each(arrData, function(index, row) {
                         $('tbody').append(row);
@@ -493,13 +500,11 @@
             });
 
         });
-    </script>
-    <script>
+
         $(document).ready(function() {
             $(".select2").select2();
         });
-    </script>
-    <script>
+    
         function onlyDotsAndNumbers(txt, event) {
             var charCode = (event.which) ? event.which : event.keyCode
             if (charCode == 46) {
@@ -520,119 +525,12 @@
 
             return true;
         }
-
-        $(document).ready(function() {
-            //   $('.select2search').select2();
-            $('.select2search').select2({
-                width: 'element',
-                // tags: true,
-            });
-        });
-        $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
-            changeSelect()
-        })
-
-        // Select2
-        function changeSelect() {
-            $("select.select2search").select2({
-                // tags: true
-            });
-        }
-    </script>
-
-    <script>
-        $(document).ready(function() {
-            $('#searchData').keyup(function() {
-                let searchData = $('#searchData').val();
-                $.ajax({
-                    type: 'get',
-                    url: "{{route('search_clears_log')}}",
-                    data: {
-                        searchData: searchData
-                    },
-                    success: function(data) {
-                        $('#user_data').empty().html(data);
-                    }
-                });
-            })
-            $("#clear_status").change(function() {
-                let selectstatus = $('#clear_status').val();
-                let searchData = $('#searchData').val();
-                $.ajax({
-                    type: 'get',
-                    url: "{{route('search_clears_log')}}",
-                    data: {
-                        searchData: searchData,
-                        selectstatus: selectstatus
-                    },
-                    success: function(data) {
-                        $('#user_data').empty().html(data);
-                    }
-                });
-            });
-        });
-    </script>
-
-    <script type="text/javascript">
-        function addNewPurchaser() {
-            if ("{{Auth::guard('admin')->user()->hasPermissions(['Admin', 'add-used-car-purchaser'])}}") {
-                window.location.href = "{{route('usedCarPurchaser')}}";
-            } else {
-                alert("You are not allowed to add new purchaser!");
-            }
-        }
-
-        function addNewCustomer() {
-            if ("{{Auth::guard('admin')->user()->hasPermissions(['Admin', 'add-used-cars-customers'])}}") {
-                window.location.href = "{{route('unitedCustomers')}}";
-            } else {
-                alert("You are not allowed to add new customer!");
-            }
-        }
-
-        function addNewYard() {
-            if ("{{Auth::guard('admin')->user()->hasPermissions(['Admin', 'add-used-car-yard'])}}") {
-                window.location.href = "{{route('pucYard')}}";
-            } else {
-                alert("You are not allowed to add new yard!");
-            }
-        }
-    </script>
-
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $("#filterByClearance").on('change', function() {
-                let filterBy = $(this).val();
-                filterClearLog(filterBy);
-            });
-
-            function filterClearLog(filterBy) {
-                $('#searchBody').html("<div style='position:fixed; margin-top:7%; margin-left:40%;'><img width='70px' src= '" + "{{asset('img/loading.gif')}}" + "' alt='Loading ...'> </div> ");
-                var request = $.ajax({
-                    url: "{{route('filter_clear_log')}}",
-                    method: "GET",
-                    data: {
-                        filterBy: filterBy
-                    },
-                });
-                request.done(function(msg) {
-                    $('#user_data').html(msg);
-                });
-                request.fail(function(jqXHR, textStatus) {
-                    $('#user_data').append(textStatus);
-                });
-            }
-        });
-    </script>
-
-
-    <script type="text/javascript">
+    
+    
         $(document).on('select2:open', () => {
             document.querySelector('.select2-search__field').focus();
         });
-    </script>
-
-    <script type="text/javascript">
+    
         function getVehicleSummaryCounts(e) {
             e.preventDefault();
             vehicleSummaryCounter();
@@ -642,26 +540,19 @@
             e.preventDefault();
         }
 
-        function vehicleSummaryCounter() {
-            var pgla_request = $.ajax({
-                url: "{{route('vehicleSummaryCounter')}}",
-                method: "GET",
-                dataType: 'json'
-            });
-            pgla_request.done(function(msg) {
-                for (let i = 0; i <= Object.values(msg.data).length; i++) {
-                    $('#vl-all').text(msg.all);
-                    $('#vl-' + Object.keys(msg.data)[parseInt(i)]).text(Object.values(msg.data)[i]);
-                }
-            });
-            pgla_request.fail(function(jqXHR, textStatus) {
-                alert('fail to load the vehicle summary total.');
-                console.log(msg, jqXHR);
-            });
+
+    
+        document.getElementsByClassName('prevent-max-min')[0].oninput = function() {
+            var max = parseInt(this.max);
+            var min = parseInt(this.min);
+            if (parseInt(this.value) > max) {
+                this.value = max;
+            } else if (parseInt(this.value) < min) {
+                this.value = min;
+            }
         }
     </script>
-    <!-- this script is very danger don't touch. -->
-    @include('admin.layout.select2-search') --}}
+
 
 
 </body>
