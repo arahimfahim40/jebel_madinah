@@ -1,9 +1,9 @@
 <div class="site-overlay"></div>
-<?php
+{{--<?php
 $locations = DB::table('locations')
     ->whereNull('deleted_at')
     ->get();
-?>
+?>--}}
 <div class="site-sidebar">
     <div class="custom-scroll custom-scroll-light">
         <ul class="sidebar-menu">
@@ -14,7 +14,7 @@ $locations = DB::table('locations')
                 </a>
             </li>
 
-            @if (Auth::guard('admin')->user()->hasPermissions(['Admin', 'vehicles-management']))
+        
                 <li class="with-sub vehicle_section">
                     <a href="/all_vehicles_admin" class="waves-effect  waves-light vehicles"
                         onclick="event.preventDefault(); !window.vehicle_section && get_admin_sidebar_sub_count('Vehicle')">
@@ -24,11 +24,10 @@ $locations = DB::table('locations')
                         <span class="s-text">Vehicles</span>
                     </a>
                     <ul>
-                        @if (Auth::guard('admin')->user()->hasPermissions(['Admin', 'add-vehicles']))
+                        
                             <li>
                                 <a href="{{ url('add_vehicle') }}">Add new</a>
                             </li>
-                        @endif
                         <li>
                             <a href="{{ route('tow_cost_report_admin') }}" class="waves-effect  waves-light">
                                 <span class="s-text">Tow Cost Report</span>
@@ -61,7 +60,7 @@ $locations = DB::table('locations')
                                 <li><a href="{{ route('on_inventory_vehicle_admin') }}">All
                                         <span class="tag tag-info t_on_inventory" style="float:right;">0</span></a>
                                 </li>
-                                @foreach ($locations as $loca)
+                                {{-- @foreach ($locations as $loca)
                                     <li>
                                         <a
                                             href="{{ url('on_inventory_vehicle_admin') }}?location_id={{ $loca->id }}">{{ $loca->location }}
@@ -69,7 +68,7 @@ $locations = DB::table('locations')
                                                 style="float:right;">0</span>
                                         </a>
                                     </li>
-                                @endforeach
+                                @endforeach --}}
                             </ul>
                         </li>
 
@@ -85,7 +84,7 @@ $locations = DB::table('locations')
                                 <li><a href="{{ route('onhand_onhalfcut_vehicle_admin') }}">All
                                         <span class="tag tag-info t_halfcut" style="float:right;">0</span></a>
                                 </li>
-                                @foreach ($locations as $loca)
+                                {{--@foreach ($locations as $loca)
                                     <li>
                                         <a
                                             href="{{ url('onhand_onhalfcut_vehicle_admin') }}?location_id={{ $loca->id }}">{{ $loca->location }}
@@ -93,7 +92,7 @@ $locations = DB::table('locations')
                                                 style="float:right;">0</span>
                                         </a>
                                     </li>
-                                @endforeach
+                                @endforeach --}}
 
                                 <li class="with-sub halfcut_summary_section">
                                     <a href="/onhand_onhalfcut_vehicle_admin/onhand_onhalfcut_vehicle_summary"
@@ -113,7 +112,7 @@ $locations = DB::table('locations')
                                                     style="float:right;">0</span>
                                             </a>
                                         </li>
-                                        @foreach ($locations as $loca)
+                                        {{-- @foreach ($locations as $loca)
                                             <li>
                                                 <a
                                                     href="\onhand_onhalfcut_vehicle_admin/onhand_onhalfcut_vehicle_summary?status=5&location_id={{ $loca->id }}">{{ $loca->location }}
@@ -121,7 +120,7 @@ $locations = DB::table('locations')
                                                         style="float:right;">0</span>
                                                 </a>
                                             </li>
-                                        @endforeach
+                                        @endforeach --}}
                                     </ul>
                                 </li>
                             </ul>

@@ -80,7 +80,7 @@
 <body class="fixed-sidebar fixed-header skin-default content-appear">
     <div class="wrapper">
         <div class="preloader"></div>
-        @include('admin.layout.sidebar')
+        {{-- @include('admin.layout.sidebar') --}}
         @include('admin.layout.header')
         @yield('content')
     </div>

@@ -1,13 +1,45 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\admin\LoginController;
+use App\Http\Controllers\admin\UserController;
+
+Route::get('/',function(){
+    return view("welcome");
+});
 
 Route::get('/admin_login', function () {
     return view('admin/auth/login');
 });
 
-Route::get('/dashboards', 'admin\HomeController@dashboard')->name('dashboard_admin');
-Route::post('/admin_login', 'admin\LoginController@login')->name('admin_login');
+/* Route::middleware('auth')->group(function(){
+    Route::get('/user',[UserController::class,'user'])->name('user');
+    Route::post('/user',[UserController::class,'create'])->name('user.create');
+});   */  
+
+//Route::get('/dashboards', 'admin\HomeController@dashboard')->name('dashboard_admin');
+//Route::post('/admin_login', 'app\Http\Controllers\admin\LoginController@login')->name('admin_login');
+Route::post('/admin_login', [LoginController::class, 'login'])->name('admin_login');
+// user section 
+Route::get('/user', [UserController::class,'index'])->name('user');
+Route::post('/user', [UserController::class,'create'])->name('user.create');
+/* Route::get('/user_data_admin', 'admin\UserController@user_data')->name('all_vehicle_data_admin');
+Route::get('/search_user', 'admin\UserController@search_user')->name('search_user_admin');
+Route::get('/paginat_user_admin', 'admin\UserController@paginate_user')->name('paginate_user_admin');
+Route::get('/delete_user_admin/{id}', 'admin\UserController@deleteUser')->name('delete_user_admin');
+Route::get('/edit_user_admin/{id}', 'admin\UserController@editUserAdmin')->name('edit_user_admin');
+Route::post('/add_user_admin', 'admin\UserController@add_user')->name('add_user_admin');
+Route::post('/update_user_admin', 'admin\UserController@updateUser')->name('update_user_admin');
+Route::get('/admin_logout', 'admin\LoginController@logout')->name('admin_logout');
+Route::get('/s2s_user', 'admin\UserController@s2sUser')->name('s2s_user');
+Route::get('/s2s_timezone', 'admin\UserController@s2sTimezone')->name('s2s_timezone');
+Route::get('/get_user_permissions', 'admin\UserController@getUserPermissions')->name('get_user_permissions');
+Route::get('/assign_permission_to_user', 'admin\UserController@assignPermissionToUser')->name('assign_permission_to_user');
+Route::get('/edit_my_profile', 'admin\UserController@editMyProfile')->name('edit_my_profile');
+Route::post('/update_my_profile', 'admin\UserController@updateMyProfile')->name('update_my_profile'); */
+
+
+
+
 Route::get('/admin_shipment_summary', 'admin\HomeController@shipment_summary')->name('shipment_summary_admin');
 Route::get('/admin_vehicle_summary', 'admin\HomeController@vehicle_summary')->name('vehicle_summary_admin');
 Route::get('/admin_sidebar_count', 'admin\HomeController@admin_sidebar_count')->name('admin_sidebar_count');
@@ -322,22 +354,7 @@ Route::get('/delete_status_admin/{id}', 'admin\PglController@delete_status')->na
 Route::post('/add_status_admin', 'admin\PglController@add_status')->name('add_status_admin');
 Route::post('/edit_status_admin', 'admin\PglController@edit_status')->name('edit_status_admin');
 
-// user section 
-Route::get('/user_admin', 'admin\UserController@user')->name('user_admin');
-Route::get('/user_data_admin', 'admin\UserController@user_data')->name('all_vehicle_data_admin');
-Route::get('/search_user', 'admin\UserController@search_user')->name('search_user_admin');
-Route::get('/paginat_user_admin', 'admin\UserController@paginate_user')->name('paginate_user_admin');
-Route::get('/delete_user_admin/{id}', 'admin\UserController@deleteUser')->name('delete_user_admin');
-Route::get('/edit_user_admin/{id}', 'admin\UserController@editUserAdmin')->name('edit_user_admin');
-Route::post('/add_user_admin', 'admin\UserController@add_user')->name('add_user_admin');
-Route::post('/update_user_admin', 'admin\UserController@updateUser')->name('update_user_admin');
-Route::get('/admin_logout', 'admin\LoginController@logout')->name('admin_logout');
-Route::get('/s2s_user', 'admin\UserController@s2sUser')->name('s2s_user');
-Route::get('/s2s_timezone', 'admin\UserController@s2sTimezone')->name('s2s_timezone');
-Route::get('/get_user_permissions', 'admin\UserController@getUserPermissions')->name('get_user_permissions');
-Route::get('/assign_permission_to_user', 'admin\UserController@assignPermissionToUser')->name('assign_permission_to_user');
-Route::get('/edit_my_profile', 'admin\UserController@editMyProfile')->name('edit_my_profile');
-Route::post('/update_my_profile', 'admin\UserController@updateMyProfile')->name('update_my_profile');
+
 
 // supplier section.
 Route::get('/suppliers', 'admin\SupplierController@suppliers')->name('suppliers');
