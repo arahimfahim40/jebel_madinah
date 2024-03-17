@@ -13,10 +13,18 @@ class Vehicle extends Model
     use HasFactory, SoftDeletes;
     //protected $connection = 'mysql';
     protected $table = 'vehicles';
+
+    const VEHICLE_STATUS = ['pending','on_the_way','on_hand_with_title','on_hand_no_title','shipped'];
+
     protected $fillable = [
         "customer_id",
         "invoice_id",
         "year",
+        "make",
+        "model",
+        "color",
+        "vin",
+        "lot_number",
         "container_number",
         "title_received_date",
         "title_number",
@@ -25,27 +33,23 @@ class Vehicle extends Model
         "pickup_date",
         "deliver_date",
         "note",
-        "color",
-        "model",
-        "vin",
+       
         "weight",
         "cbm",
-        "value",
         "licence_number",
+
         "storage_amount",
-        "check_number",
-        "add_charges",
-        "lot_number",
-        "htnumber",
-        "c_remark",
-        "make",
         "towed_from",
         "tow_amount",
+
+        "htnumber",
+        "c_remark",
         "status",
         "vehicle_type",
         "payment_date",
         "shipas",
-        "port_of_loading_id",
+       
+        "point_of_loading_id",
         "buyer_number",
         "photos_link",
         "storage_cost",
@@ -58,7 +62,6 @@ class Vehicle extends Model
         "dubai_storage_cost",
         "dubai_demurage",
         "other_cost",
-        "sales_cost",
         "auction",
         "auction_city",
         "title",
@@ -80,6 +83,10 @@ class Vehicle extends Model
         // Chain fluent methods for configuration options
     }
     
+    public function location()
+    {
+        return $this->belongsTo(Location::class, 'point_of_loading_id', 'id');
+    }
 
     public function customer()
     {

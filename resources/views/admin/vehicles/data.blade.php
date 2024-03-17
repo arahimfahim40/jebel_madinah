@@ -1,15 +1,13 @@
 
-<table class="table table-bordered table-hover content-table" >
+<table class="table table-bordered table-hover content-table bg-white" >
     <thead class="bg-info">
         <tr>
             <th>#</th>
             <th>Action</th>
-            <th>ID</th>
-            <th>Causer ID</th>
-            <th>Caused By</th>
-            <th>Caused At</th>
-            <th>View Changes</th>
-            <th>Year</th>
+            <th>Photos</th>
+            <th>Vehicle Description</th>
+            <th>VIN#</th>
+            <th>Lot Number</th>
             <th>Container Number</th>
             <th>Title Received Date</th>
             <th>Title Number</th>
@@ -17,43 +15,21 @@
             <th>Purchase Date</th>
             <th>Pickup Date</th>
             <th>Deliver Date</th>
-            <th>Note</th>
-            <th>Color</th>
-            <th>Model</th>
-            <th>VIN</th>
+            <th>Point of Loading</th>
             <th>Weight</th>
             <th>CBM</th>
-            <th>Value</th>
             <th>Licence Number</th>
-            <th>Storage Amount</th>
-            <th>Check Number</th>
-            <th>Add Charges</th>
-            <th>Lot Number</th>
             <th>HT Number</th>
             <th>C Remark</th>
-            <th>Make</th>
+            {{-- <th>Note</th> --}}
             <th>Towed From</th>
-            <th>Tow Amount</th>
             <th>Status</th>
             <th>Vehicle Type</th>
             <th>Payment Date</th>
             <th>Shipas</th>
-            <th>Port of Loading ID</th>
             <th>Buyer Number</th>
-            <th>Photos Link</th>
-            <th>Storage Cost</th>
+            
             <th>Vehicle Price</th>
-            <th>Auction Fee</th>
-            <th>Tow Amounts</th>
-            <th>Dismantal Cost</th>
-            <th>Ship Cost</th>
-            <th>Dubai Custom Cost</th>
-            <th>Dubai Storage Cost</th>
-            <th>Dubai Demurage</th>
-            <th>Other Cost</th>
-            <th>Sales Cost</th>
-            <th>Profit</th>
-            <th>Percent Profit</th>
             <th>Auction</th>
         </tr>
     </thead>
@@ -62,13 +38,23 @@
         @foreach ($vehicles as $index => $item)
             <tr id="searchBody">
                 <td>{{ $index + 1 }}</td>
-                <td><!-- Action column content --></td>
-                <td>{{ $item->id }}</td>
-                <td>{{ $item->causer_id }}</td>
-                <td>{{ $item->caused_by }}</td>
-                <td>{{ $item->caused_at }}</td>
-                <td><!-- View Changes column content --></td>
-                <td>{{ $item->year }}</td>
+                <td></td>
+                <td class="column">
+                    <?php
+                    $label = 'tag-success';
+                    if (strpos(@$item->photos_link, 'http') === false) {
+                        $label = '';
+                    }
+                    ?>
+                    <a href="{{ $item->photos_link }}" target="_blank" style="text-align: center; font-size:30px;">
+                        <span class="ti-image  <?= $label ?>">
+                            <p style="display: none">{{ $item->photos_link }}</p>
+                        </span>
+                    </a>
+                </td>
+                <td>{{ $item->year }} {{ $item->make }} {{ $item->model }} {{ $item->color }}</td>
+                <td>{{ $item->vin }}</td>
+                <td>{{ $item->lot_number }}</td>
                 <td>{{ $item->container_number }}</td>
                 <td>{{ $item->title_received_date }}</td>
                 <td>{{ $item->title_number }}</td>
@@ -76,45 +62,36 @@
                 <td>{{ $item->purchase_date }}</td>
                 <td>{{ $item->pickup_date }}</td>
                 <td>{{ $item->deliver_date }}</td>
-                <td>{{ $item->note }}</td>
-                <td>{{ $item->color }}</td>
-                <td>{{ $item->model }}</td>
-                <td>{{ $item->vin }}</td>
+                <td>{{ @$item->location->name }}</td>
                 <td>{{ $item->weight }}</td>
                 <td>{{ $item->cbm }}</td>
-                <td>{{ $item->value }}</td>
                 <td>{{ $item->licence_number }}</td>
-                <td>{{ $item->storage_amount }}</td>
-                <td>{{ $item->check_number }}</td>
-                <td>{{ $item->add_charges }}</td>
-                <td>{{ $item->lot_number }}</td>
                 <td>{{ $item->htnumber }}</td>
                 <td>{{ $item->c_remark }}</td>
-                <td>{{ $item->make }}</td>
+                {{-- <td>{{ $item->note }}</td> --}}
                 <td>{{ $item->towed_from }}</td>
-                <td>{{ $item->tow_amount }}</td>
-                <td>{{ $item->status }}</td>
+                <td>
+                    @if($item->status == 'pending')
+                        <span class="tag tag-secondary" >{{ucwords(str_replace('_', ' ', $item->status))}}</span>
+                    @elseif ($item->status == 'on_the_way')
+                        <span class="tag tag-warning" >{{ucwords(str_replace('_', ' ', $item->status))}}</span>
+                    @elseif ($item->status == 'on_hand_no_title')
+                        <span class="tag tag-danger" >{{ucwords(str_replace('_', ' ', $item->status))}}</span>
+                    @elseif ($item->status == 'on_hand_with_title')
+                        <span class="tag tag-info" >{{ucwords(str_replace('_', ' ', $item->status))}}</span>
+                    @elseif ($item->status == 'shipped')
+                        <span class="tag tag-success" >{{ucwords(str_replace('_', ' ', $item->status))}}</span>
+                    @endif
+                </td>
                 <td>{{ $item->vehicle_type }}</td>
                 <td>{{ $item->payment_date }}</td>
                 <td>{{ $item->shipas }}</td>
-                <td>{{ $item->port_of_loading_id }}</td>
+                
                 <td>{{ $item->buyer_number }}</td>
-                <td>{{ $item->photos_link }}</td>
-
-                <td>{{ $item->storage_cost }}</td>
                 <td>{{ $item->vehicle_price }}</td>
-                <td>{{ $item->auction_fee }}</td>
-                <td>{{ $item->tow_amounts }}</td>
-                <td>{{ $item->dismantal_cost }}</td>
-                <td>{{ $item->ship_cost }}</td>
-                <td>{{ $item->dubai_custom_cost }}</td>
-                <td>{{ $item->dubai_storage_cost }}</td>
-                <td>{{ $item->dubai_demurage }}</td>
-                <td>{{ $item->other_cost }}</td>
-                <td>{{ $item->sales_cost }}</td>
-                <td>{{ $item->profit }}</td>
-                <td>{{ $item->percent_profit }}</td>
                 <td>{{ $item->auction }}</td>
+               
+                
             </tr>
         @endforeach
     </tbody>
@@ -122,12 +99,10 @@
         <tr>
             <th>#</th>
             <th>Action</th>
-            <th>ID</th>
-            <th>Causer ID</th>
-            <th>Caused By</th>
-            <th>Caused At</th>
-            <th>View Changes</th>
-            <th>Year</th>
+            <th>Photos</th>
+            <th>Vehicle Description</th>
+            <th>VIN#</th>
+            <th>Lot Number</th>
             <th>Container Number</th>
             <th>Title Received Date</th>
             <th>Title Number</th>
@@ -135,51 +110,27 @@
             <th>Purchase Date</th>
             <th>Pickup Date</th>
             <th>Deliver Date</th>
-            <th>Note</th>
-            <th>Color</th>
-            <th>Model</th>
-            <th>VIN</th>
+            <th>Point of Loading</th>
             <th>Weight</th>
             <th>CBM</th>
-            <th>Value</th>
             <th>Licence Number</th>
-            <th>Storage Amount</th>
-            <th>Check Number</th>
-            <th>Add Charges</th>
-            <th>Lot Number</th>
             <th>HT Number</th>
             <th>C Remark</th>
-            <th>Make</th>
+            {{-- <th>Note</th> --}}
             <th>Towed From</th>
-            <th>Tow Amount</th>
             <th>Status</th>
             <th>Vehicle Type</th>
             <th>Payment Date</th>
             <th>Shipas</th>
-            <th>Port of Loading ID</th>
             <th>Buyer Number</th>
-            <th>Photos Link</th>
-            <th>Storage Cost</th>
             <th>Vehicle Price</th>
-            <th>Auction Fee</th>
-            <th>Tow Amounts</th>
-            <th>Dismantal Cost</th>
-            <th>Ship Cost</th>
-            <th>Dubai Custom Cost</th>
-            <th>Dubai Storage Cost</th>
-            <th>Dubai Demurage</th>
-            <th>Other Cost</th>
-            <th>Sales Cost</th>
-            <th>Profit</th>
-            <th>Percent Profit</th>
             <th>Auction</th>
         </tr>
     </tfoot>
 </table>
 
-
-{{-- @if ($vehicles instanceof \Illuminate\Pagination\LengthAwarePaginator)
-    {{ $vehicles->appends(Request::all())->links() }}
-@endif --}}
+@if ($vehicles instanceof \Illuminate\Pagination\LengthAwarePaginator)
+    {{ $vehicles->appends(Request::All())->links() }}
+@endif
 
 

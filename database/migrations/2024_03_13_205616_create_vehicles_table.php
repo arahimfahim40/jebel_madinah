@@ -29,11 +29,8 @@ return new class extends Migration
             $table->string('vin')->default('0');
             $table->string('weight')->nullable();
             $table->text('cbm')->nullable();
-            $table->string('value')->nullable();
             $table->string('licence_number')->nullable();
             $table->string('storage_amount')->nullable();
-            $table->string('check_number')->nullable();
-            $table->string('add_charges')->nullable();
             $table->string('lot_number')->nullable();
             $table->string('htnumber')->nullable();
             $table->text('c_remark')->nullable();
@@ -46,7 +43,7 @@ return new class extends Migration
             $table->enum('vehicle_type', ['half-cut', 'complete'])->default('complete');
             $table->date('payment_date')->nullable();
             $table->string('shipas')->nullable();
-            $table->integer('port_of_loading_id')->nullable();
+            $table->integer('point_of_loading_id')->nullable();
             $table->string('buyer_number')->nullable();
             $table->text('photos_link')->nullable();
             $table->integer('storage_cost')->default(0);

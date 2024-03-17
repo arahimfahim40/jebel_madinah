@@ -27,7 +27,7 @@
                             <span class="tag tag-success t_all_vehicle" style="float:right;">0</span>
                         </a></li>
                     <li><a href="{{ route('vehicles.index') }}?status=pending">Pending
-                            <span class="tag tag-warning t_pending_vehicle" style="float:right;">0</span></a>
+                            <span class="tag tag-secondary t_pending_vehicle" style="float:right;">0</span></a>
                     </li>
                     <li><a href="{{ route('vehicles.index') }}?status=on_the_way">On The Way
                             <span class="tag tag-warning t_on_the_way_vehicle" style="float:right;">0</span></a>
