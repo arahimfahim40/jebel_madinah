@@ -28,11 +28,15 @@
     .form-register .steps ul{
         justify-content: center;
     }
-    .actions {
+    /* .actions {
         display: none;
+    } */
+    #create-vehicle-form ul {
+        margin-bottom: 0px;
     }
-    .col-md-3 {
-        float: unset !important;
+    .error{
+        color: red;
+        font-size: 12px;
     }
 </style>
 @endpush
@@ -44,14 +48,14 @@
             @include('errors')
 
             <div class="wizard-v4-content w-100">
-                <div class="wizard-form py-1">
-                    <h2>Create Log Invoice</h2>
-                    <form class="form-register form-horizontal" method="POST" action="<?php echo URL::to('/clear_log_invoice') ?>">
+                <div class="wizard-form py-2">
+                    <h2 class="mb-1" style="text-align: center;">Add New Vehicle</h2>
+                    <form id="create-vehicle-form" class="form-register form-horizontal" method="POST" action="{{ route('vehicles.create')}}">
                         @csrf
-                        <div id="log-invoice-form">
+                        <div>
                             <h2>
                                 <span class="step-icon"><i class="ti-receipt"></i></span>
-                                <span class="step-text">Log Invoices</span>
+                                <span class="step-text">General Info</span>
                             </h2>
                             <section>
                                 <div class="inner">
@@ -61,20 +65,8 @@
                                             <select onchange="onCantainerChange(this)"
                                                 name="log_id"
                                                 class="form-control s2s_available_clear_logs"
-                                                required
                                             />
                                             </select>
-                                        </div>
-                                        <div class="col-md-3 form-group">
-                                            <label for="customer">Company Name</label><span class="requited_filed">*</span>
-                                            <input disabled 
-                                                type="text" 
-                                                name="company_id"
-                                                id="company_id" 
-                                                value="{{@$clearLogs->clearLog->getCompany->name}}"
-                                                placeholder="Company Name"
-                                                class="form-control"
-                                            />
                                         </div>
                                         <div class="col-md-3 form-group">
                                             <label>Invoice Date</label>
@@ -83,6 +75,7 @@
                                                 placeholder="Invoice Date"
                                                 class="form-control"
                                                 value="{{date('Y-m-d')}}"
+                                                required
                                             />
                                         </div>
                                         <div class="col-md-3 form-group">
@@ -91,6 +84,7 @@
                                                 name="be_no"   
                                                 placeholder="B.E No" 
                                                 class="form-control"
+                                                required
                                             />
                                         </div>
                                         <div class="col-md-3 form-group">
@@ -434,8 +428,293 @@
                             </section>
                             <!-- SECTION 2 -->
                             <h2>
+                                <span class="step-icon"><i class="fa fa-car"></i></span>
+                                <span class="step-text">Vehicle Info</span>
+                            </h2>
+
+                            <section>
+                                <div class="inner">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h4>Clearance Costs</h4>
+                                            <hr>
+                                        </div>
+                                        <div class="col-md-3 form-group">
+                                        <label>Port Handling Cost on PGL</label>
+                                        <input type="number" 
+                                            name="port_handling_pgl_cost" 
+                                            placeholder="Port Handling Cost on PGL"
+                                            step="0.01" 
+                                            maxlength="10"
+                                            oninput="onInputClearanceCost(this)" 
+                                            class="form-control"
+                                        />
+                                        </div>
+                                        <div class="col-md-3 form-group">
+                                            <label>Inspection Cost on PGL</label>
+                                            <input type="number" 
+                                                name="inspection_pgl_cost" 
+                                                placeholder="Inspection Cost on PGL" 
+                                                step="0.01" 
+                                                maxlength="10"
+                                                oninput="onInputClearanceCost(this)" 
+                                                class="form-control"
+                                            />
+                                        </div>
+                                        <div class="col-md-3 form-group">
+                                            <label>Doc Attestation Cost on PGL</label>
+                                            <input type="number" 
+                                                name="doc_attestation_pgl_cost" 
+                                                placeholder="Doc Attestation Cost on PGL" 
+                                                step="0.01" 
+                                                maxlength="10"
+                                                oninput="onInputClearanceCost(this)" 
+                                                class="form-control"
+                                            />
+                                        </div>
+                                        <div class="col-md-3 form-group">
+                                            <label>Terminal Handling Cost on PGL</label>
+                                            <input type="number" 
+                                                name="terminal_handling_pgl_cost" 
+                                                placeholder="Terminal Handling Cost on PGL" 
+                                                step="0.01" 
+                                                maxlength="10"
+                                                oninput="onInputClearanceCost(this)" 
+                                                class="form-control"
+                                            />
+                                        </div>
+                                        <div class="col-md-3 form-group">
+                                            <label>Custom Duty on PGL</label>
+                                            <input type="number" 
+                                                name="custom_pgl_cost" 
+                                                placeholder="Custom on PGL" 
+                                                step="0.01" 
+                                                maxlength="10"
+                                                oninput="onInputClearanceCost(this)" 
+                                                class="form-control"
+                                            />
+                                        </div>
+                                        <div class="col-md-3 form-group">
+                                            <label>Vat on PGL</label>
+                                            <input type="number" 
+                                                name="vat_pgl_cost" 
+                                                placeholder="Vat on PGL" 
+                                                step="0.01" 
+                                                maxlength="10"
+                                                oninput="onInputClearanceCost(this)" 
+                                                class="form-control"
+                                            />
+                                        </div>
+                                        <div class="col-md-3 form-group">
+                                            <label>Wash Find Cost on PGL</label>
+                                            <input type="number" 
+                                                name="wash_find_pgl_cost" 
+                                                placeholder="Wash Find Cost on PGL" 
+                                                step="0.01" 
+                                                maxlength="10"
+                                                oninput="onInputClearanceCost(this)" 
+                                                class="form-control"
+                                            />
+                                        </div>
+                                        <div class="col-md-3 form-group">
+                                            <label>Port Storage Cost on PGL</label>
+                                            <input type="number" 
+                                                name="port_storage_pgl_cost" 
+                                                placeholder="Port Storage Cost on PGL" 
+                                                step="0.01" 
+                                                maxlength="10"
+                                                oninput="onInputClearanceCost(this)" 
+                                                class="form-control"
+                                            />
+                                        </div>
+                                        <div class="col-md-3 form-group">
+                                            <label>Additional Cost on PGL</label>
+                                            <input type="number" 
+                                                name="additional_pgl_cost" 
+                                                placeholder="Additional Cost on PGL" 
+                                                step="0.01" 
+                                                maxlength="10"
+                                                oninput="onInputClearanceCost(this)" 
+                                                class="form-control"
+                                            />
+                                        </div>
+                                        <div class="col-md-3 form-group">
+                                            <label>Demurrage Cost on PGL</label>
+                                            <input type="number" 
+                                                name="demurrage_pgl_cost" 
+                                                placeholder="Demurrage Cost on PGL" 
+                                                step="0.01" 
+                                                maxlength="10"
+                                                oninput="onInputClearanceCost(this)" 
+                                                class="form-control"
+                                            />
+                                        </div>
+                                        <div class="col-md-3 form-group">
+                                            <label>Repairing Cost on PGL</label>
+                                            <input type="number" 
+                                                name="repairing_pgl_cost" 
+                                                placeholder="Repairing Cost on PGL" 
+                                                step="0.01" 
+                                                maxlength="10"
+                                                oninput="onInputClearanceCost(this)" 
+                                                class="form-control"
+                                            />
+                                        </div>
+                                        <div class="col-md-3 form-group">
+                                            <label>VCC Cost on PGL</label>
+                                            <input type="number" 
+                                                name="vcc_pgl_cost" 
+                                                placeholder="VCC Cost on PGL" 
+                                                step="0.01" 
+                                                maxlength="10"
+                                                oninput="onInputClearanceCost(this)" 
+                                                class="form-control"
+                                            />
+                                        </div>
+                                        <div class="col-md-3 form-group">
+                                            <label>Damage Cost on PGL</label>
+                                            <input type="number" 
+                                                name="damage_pgl_cost" 
+                                                placeholder="Damage Cost on PGL" 
+                                                step="0.01" 
+                                                maxlength="10"
+                                                oninput="onInputClearanceCost(this)" 
+                                                class="form-control"
+                                            />
+                                        </div>
+                                        <div class="col-md-3 form-group">
+                                            <label>Detention Cost on PGL</label>
+                                            <input type="number" 
+                                                name="detention_pgl_cost" 
+                                                placeholder="Detention Cost on PGL" 
+                                                step="0.01" 
+                                                maxlength="10"
+                                                oninput="onInputClearanceCost(this)" 
+                                                class="form-control"
+                                            />
+                                        </div>
+                                        <div class="col-md-3 form-group">
+                                            <label>Total Clearance</label>
+                                            <input type="number" 
+                                                id="total_clrearance_pgl_cost"
+                                                name="total_clrearance_pgl_cost"
+                                                placeholder="Total Clearance" 
+                                                step="0.01" 
+                                                maxlength="10"
+                                                disabled
+                                                class="form-control"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h4>Delivery Costs</h4>
+                                            <hr>
+                                        </div>
+                                        <div class="col-md-3 form-group">
+                                            <label>Delivery Cost on PGL</label>
+                                            <input type="number" 
+                                                name="delivery_pgl_cost" 
+                                                placeholder="Delivery Cost on PGL" 
+                                                step="0.01" 
+                                                maxlength="10"
+                                                class="form-control"
+                                            />
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h4>Transportation Costs</h4>
+                                            <hr>
+                                        </div>
+
+                                        <div class="col-md-3 form-group">
+                                            <label>Fuel Cost on PGL</label>
+                                            <input type="number" 
+                                                name="fuel_pgl_cost" 
+                                                placeholder="Fuel Cost on PGL" 
+                                                step="0.01" 
+                                                maxlength="10"
+                                                oninput="onInputTransportationCost(this)" 
+                                                class="form-control"
+                                            />
+                                        </div>
+                                        <div class="col-md-3 form-group">
+                                            <label>Tip Cost on PGL</label>
+                                            <input type="number" 
+                                                name="tip_pgl_cost" 
+                                                placeholder="Tip Cost on PGL" 
+                                                step="0.01" 
+                                                maxlength="10"
+                                                oninput="onInputTransportationCost(this)" 
+                                                class="form-control"
+                                            />
+                                        </div>
+                                        <div class="col-md-3 form-group">
+                                            <label>Crane Cost on PGL</label>
+                                            <input type="number" 
+                                                name="crane_pgl_cost" 
+                                                placeholder="Crane Cost on PGL" 
+                                                step="0.01" 
+                                                maxlength="10"
+                                                oninput="onInputTransportationCost(this)" 
+                                                class="form-control"
+                                            />
+                                        </div>
+                                        <div class="col-md-3 form-group">
+                                            <label>Token Cost on PGL</label>
+                                            <input type="number" 
+                                                name="token_pgl_cost" 
+                                                placeholder="Token Cost on PGL" 
+                                                step="0.01" 
+                                                maxlength="10"
+                                                oninput="onInputTransportationCost(this)" 
+                                                class="form-control"
+                                            />
+                                        </div>
+                                        <div class="col-md-3 form-group">
+                                            <label>Charges on truck Cost</label>
+                                            <input type="number" 
+                                                name="charges_on_truck_pgl_cost" 
+                                                placeholder="Charges on truck Cost" 
+                                                step="0.01" 
+                                                maxlength="10"
+                                                oninput="onInputTransportationCost(this)" 
+                                                class="form-control"
+                                            />
+                                        </div>
+                                        <div class="col-md-3 form-group">
+                                            <label>Taxi truck Cost on PGL</label>
+                                            <input type="number" 
+                                                name="taxi_truck_pgl_cost" 
+                                                placeholder="Taxi truck Cost on PGL" 
+                                                step="0.01" 
+                                                maxlength="10"
+                                                oninput="onInputTransportationCost(this)" 
+                                                class="form-control"
+                                            />
+                                        </div>
+                                        <div class="col-md-3 form-group">
+                                            <label>Total Transportation</label>
+                                            <input type="number" 
+                                                id="total_transportation_pgl_cost"
+                                                name="taxi_truck_pgl_cost"
+                                                placeholder="Total Transportation" 
+                                                step="0.01" 
+                                                maxlength="10"
+                                                disabled
+                                                class="form-control"
+                                            />
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </section>
+                            <!-- SECTION 3 -->
+                            <h2>
                                 <span class="step-icon"><i class="fa fa-money"></i></span>
-                                <span class="step-text">PGL Costs</span>
+                                <span class="step-text">Charges & Costs</span>
                             </h2>
 
                             <section>
@@ -731,7 +1010,9 @@
 </div>
 @stop
 @push('js')
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
 <script src="{{ asset('assets/formwizard/js/jquery.steps.js') }}"></script>
+<script src="{{ asset('assets/formwizard/js/jquery.validate.js') }}"></script>
 <script src="{{ asset('assets/formwizard/js/jquery-ui.min.js') }}"></script>
 
 <script>
@@ -844,8 +1125,8 @@
         $('#total_invoice').val(total.toLocaleString('en-US'));
     }
 
-    var form = $("#log-invoice-form");
-    form.steps({
+    var form = $("#create-vehicle-form");
+    form.children("div").steps({
         headerTag: "h2",
         bodyTag: "section",
         transitionEffect: "fade",
@@ -857,23 +1138,23 @@
             previous : 'Back',
             next : 'Next',
             finish : 'Submit',
-            current : ''
+            current : 'Save'
         },
-        // onStepChanging: function (event, currentIndex, newIndex)
-        // {
-        //     console.log(form, currentIndex, newIndex);
-        //     // form.validate().settings.ignore = ":disabled,:hidden";
-        //     // return form.valid();
-        // },
-        // onFinishing: function (event, currentIndex)
-        // {
-        //     // form.validate().settings.ignore = ":disabled";
-        //     // return form.valid();
-        // },
-        // onFinished: function (event, currentIndex)
-        // {
-        //     alert("Submitted!");
-        // }
+        onStepChanging: function (event, currentIndex, newIndex)
+        {
+            form.validate().settings.ignore = ":disabled,:hidden";
+            console.log(form);
+            return form.valid();
+        },
+        onFinishing: function (event, currentIndex)
+        {
+            form.validate().settings.ignore = ":disabled";
+            return form.valid();
+        },
+        onFinished: function (event, currentIndex)
+        {
+            alert("Submitted!");
+        }
     });
 
 </script>
