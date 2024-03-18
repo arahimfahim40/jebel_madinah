@@ -906,6 +906,7 @@ Auth::routes();
     Route::get('/admin/customers/{customer}/edit', [CustomerController::class, 'edit'])->name('customers.edit');
     Route::put('/admin/customers/{customer}', [CustomerController::class, 'update'])->name('customers.update');
     Route::delete('/admin/customers/{customer}', [CustomerController::class, 'destroy'])->name('customers.destroy');
+    Route::get('/admin/s2s_customers', [CustomerController::class, 's2s_customers'])->name('s2s_customers');
 
     // Locations Routes
     Route::get('/admin/locations', [LocationController::class, 'index'])->name('locations.index');

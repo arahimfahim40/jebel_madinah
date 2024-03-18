@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('time_zone_id')->nullable();
             $table->string('name');
             $table->string('username')->unique();
             $table->string('email')->unique();
@@ -21,6 +22,8 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+
+            $table->foreign('time_zone_id')->references('id')->on('time_zones')->onDelete('cascade');
         });
     }
 

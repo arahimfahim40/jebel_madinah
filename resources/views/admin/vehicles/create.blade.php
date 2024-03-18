@@ -38,6 +38,10 @@
         color: red;
         font-size: 12px;
     }
+    .required::after {
+        content: ' *';
+        color: red;
+    }
 </style>
 @endpush
 @section('content')
@@ -60,362 +64,132 @@
                             <section>
                                 <div class="inner">
                                     <div class="row">
-                                        <div class="col-md-3 form-group">
-                                            <label>Clear Log</label>
-                                            <select onchange="onCantainerChange(this)"
-                                                name="log_id"
-                                                class="form-control s2s_available_clear_logs"
-                                            />
-                                            </select>
+                                        <div class="col-md-4 px-0">
+                                            <div class="col-md-12 form-group">
+                                                <label class="required">Select Customer</label>
+                                                <select 
+                                                    {{-- onchange="onCantainerChange(this)" --}}
+                                                    name="customer_id"
+                                                    class="form-control s2s_customers"
+                                                    required
+                                                /></select>
+                                            </div>
+                                            <div class="col-md-12 form-group">
+                                                <label class="required">Vin#</label>
+                                                <input 
+                                                    type="text" 
+                                                    name="vin"   
+                                                    placeholder="Vin"
+                                                    class="form-control"
+                                                    required
+                                                />
+                                            </div>
+                                            <div class="col-md-12 form-group">
+                                                <label class="required">Lot Number</label>
+                                                <input type="text" 
+                                                    name="be_no"   
+                                                    placeholder="B.E No" 
+                                                    class="form-control"
+                                                    required
+                                                />
+                                            </div>
+                                            <div class="col-md-12 form-group">
+                                                <label >Year</label>
+                                                <input 
+                                                    type="number" 
+                                                    name="year" 
+                                                    placeholder="Year" 
+                                                    class="form-control"
+                                                />
+                                            </div>
+                                            
+                                            <div class="col-md-12 form-group">
+                                                <label >Make</label>
+                                                <input 
+                                                    type="number" 
+                                                    name="make" 
+                                                    placeholder="Make" 
+                                                    class="form-control"
+                                                />
+                                            </div>
+                                            <div class="col-md-12 form-group">
+                                                <label >Model</label>
+                                                <input 
+                                                    type="number" 
+                                                    name="model" 
+                                                    placeholder="Model" 
+                                                    class="form-control"
+                                                />
+                                            </div>
+                                            <div class="col-md-12 form-group">
+                                                <label >Color</label>
+                                                <input 
+                                                    type="number" 
+                                                    name="color" 
+                                                    placeholder="Color" 
+                                                    class="form-control"
+                                                />
+                                            </div>
                                         </div>
-                                        <div class="col-md-3 form-group">
-                                            <label>Invoice Date</label>
-                                            <input type="date" 
-                                                name="invoice_date"   
-                                                placeholder="Invoice Date"
-                                                class="form-control"
-                                                value="{{date('Y-m-d')}}"
-                                                required
-                                            />
+                                        <div class="col-md-4 px-0">
+                                            <div class="col-md-12 form-group">
+                                                <label>Invoice Date</label>
+                                                <input type="date" 
+                                                    name="invoice_date"   
+                                                    placeholder="Invoice Date"
+                                                    class="form-control"
+                                                    value="{{date('Y-m-d')}}"
+                                                    required
+                                                />
+                                            </div>
+                                            <div class="col-md-12 form-group">
+                                                <label>B.E No</label>
+                                                <input type="text" 
+                                                    name="be_no"   
+                                                    placeholder="B.E No" 
+                                                    class="form-control"
+                                                    required
+                                                />
+                                            </div>
+                                            <div class="col-md-12 form-group">
+                                                <label>Job No</label>
+                                                <input type="text" 
+                                                    name="job_no" 
+                                                    placeholder="Job No" 
+                                                    class="form-control"
+                                                />
+                                            </div>
                                         </div>
-                                        <div class="col-md-3 form-group">
-                                            <label>B.E No</label>
-                                            <input type="text" 
-                                                name="be_no"   
-                                                placeholder="B.E No" 
-                                                class="form-control"
-                                                required
-                                            />
-                                        </div>
-                                        <div class="col-md-3 form-group">
-                                            <label>Job No</label>
-                                            <input type="text" 
-                                                name="job_no" 
-                                                placeholder="Job No" 
-                                                class="form-control"
-                                            />
+                                        <div class="col-md-4 px-0">
+                                            <div class="col-md-12 form-group">
+                                                <label>Invoice Date</label>
+                                                <input type="date" 
+                                                    name="invoice_date"   
+                                                    placeholder="Invoice Date"
+                                                    class="form-control"
+                                                    value="{{date('Y-m-d')}}"
+                                                    required
+                                                />
+                                            </div>
+                                            <div class="col-md-12 form-group">
+                                                <label>B.E No</label>
+                                                <input type="text" 
+                                                    name="be_no"   
+                                                    placeholder="B.E No" 
+                                                    class="form-control"
+                                                    required
+                                                />
+                                            </div>
+                                            <div class="col-md-12 form-group">
+                                                <label>Job No</label>
+                                                <input type="text" 
+                                                    name="job_no" 
+                                                    placeholder="Job No" 
+                                                    class="form-control"
+                                                />
+                                            </div>
                                         </div>
                                     </div>
-                                    <span id="invoice_amount">
-                                        <div class="row">
-                                            <div class="col-md-3 form-group">
-                                                <label>Custom Duty</label>
-                                                <input type="number" 
-                                                    name="custom_duty" 
-                                                    step="0.01" 
-                                                    maxlength="10" 
-                                                    placeholder="Custom Duty" 
-                                                    class="form-control"
-                                                    onchange="changeInput(this)"
-                                                />
-                                            </div>
-                                            <div class="col-md-3 form-group">
-                                                <label>Vat Amount</label>
-                                                <input type="number" 
-                                                    name="vat" 
-                                                    step="0.01" 
-                                                    maxlength="10" 
-                                                    placeholder="Vat Amount" 
-                                                    class="form-control"
-                                                    onchange="changeInput(this)"
-                                                />
-                                            </div>
-                                            <div class="col-md-3 form-group">
-                                                <label>Port Handling</label>
-                                                <input type="number" 
-                                                    name="port_handling" 
-                                                    placeholder="Port Handling"  
-                                                    step="0.01" 
-                                                    maxlength="10" 
-                                                    class="form-control" 
-                                                    onchange="changeInput(this)"
-                                                />
-                                                
-                                            </div>
-                                            <div class="col-md-3 form-group">
-                                                <label>VCC</label>
-                                                <input type="number" 
-                                                    name="vcc" 
-                                                    placeholder="VCC" 
-                                                    step="0.01" 
-                                                    maxlength="10" 
-                                                    class="form-control" 
-                                                    onchange="changeInput(this)"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-3 form-group">
-                                                <label>Transporter Charges</label>
-                                                <input type="number" 
-                                                    name="transporter_charges" 
-                                                    placeholder="Transporter Charges" 
-                                                    step="0.01" 
-                                                    maxlength="10" 
-                                                    class="form-control" 
-                                                    onchange="changeInput(this)"
-                                                />
-                                            </div>
-
-                                            <div class="col-md-3 form-group">
-                                                <label>E Token</label>
-                                                <input type="number" 
-                                                    name="e_token" 
-                                                    placeholder="E Token" 
-                                                    step="0.01" 
-                                                    maxlength="10" 
-                                                    class="form-control" 
-                                                    onchange="changeInput(this)"
-                                                />
-                                            </div>
-
-                                            <div class="col-md-3 form-group">
-                                                <label>Local Service Charges</label>
-                                                <input type="number" 
-                                                    name="local_service_charges" 
-                                                    placeholder="Local Service Charges" 
-                                                    step="0.01" 
-                                                    maxlength="10" 
-                                                    class="form-control" 
-                                                    onchange="changeInput(this)"
-                                                />
-                                            </div>
-
-                                            <div class="col-md-3 form-group">
-                                                <label>Bill Of Entry</label>
-                                                <input type="number" 
-                                                    name="bill_of_entry" 
-                                                    placeholder="Bill Of Entry" 
-                                                    step="0.01" 
-                                                    maxlength="10" 
-                                                    class="form-control" 
-                                                    onchange="changeInput(this)"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-3 form-group">
-                                                <label>Handling Fee</label>
-                                                <input type="number" 
-                                                    name="handling_fee" 
-                                                    placeholder="Handling Fee" 
-                                                    step="0.01" 
-                                                    maxlength="10" 
-                                                    class="form-control" 
-                                                    onchange="changeInput(this)"
-                                                />
-                                            </div>
-
-                                            <div class="col-md-3 form-group">
-                                                <label>Demurrage Charges</label>
-                                                <input type="number" 
-                                                    name="demurrage" 
-                                                    placeholder="Demurrage Charges" 
-                                                    step="0.01" 
-                                                    maxlength="10" 
-                                                    class="form-control" 
-                                                    onchange="changeInput(this)"
-                                                />
-                                                
-                                            </div>
-                                            <div class="col-md-3 form-group">
-                                                <label>Unloading Charges</label>
-                                                <input type="number" 
-                                                    name="unloading" 
-                                                    placeholder="Unloading Charges" 
-                                                    step="0.01" 
-                                                    maxlength="10" 
-                                                    class="form-control" 
-                                                    onchange="changeInput(this)"
-                                                />
-                                            </div>
-                                            <div class="col-md-3 form-group">
-                                                <label>Consignee Charges</label>
-                                                <input type="number" 
-                                                    name="consignee_charges" 
-                                                    placeholder="Consignee Charges" 
-                                                    step="0.01" 
-                                                    maxlength="10" 
-                                                    class="form-control" 
-                                                    onchange="changeInput(this)"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-3 form-group">
-                                                <label>Demage Charges</label>
-                                                <input type="number" 
-                                                    name="damage_charges" 
-                                                    placeholder="Demage Charges" 
-                                                    step="0.01" 
-                                                    maxlength="10" 
-                                                    class="form-control" 
-                                                    onchange="changeInput(this)"
-                                                />
-                                            </div>
-                                            <div class="col-md-3 form-group">
-                                                <label>Wash Fine Charges</label>
-                                                <input type="number" 
-                                                    name="wash_fine_charges" 
-                                                    placeholder="Wash Fine Charges" 
-                                                    step="0.01" 
-                                                    maxlength="10" 
-                                                    class="form-control" 
-                                                    onchange="changeInput(this)"
-                                                />
-                                            </div>
-                                            <div class="col-md-3 form-group">
-                                                <label>Repairing Cost Charges</label>
-                                                <input type="number" 
-                                                    name="repairing_cost_charges" 
-                                                    placeholder="Repairing Cost Charges" 
-                                                    step="0.01" 
-                                                    maxlength="10" 
-                                                    class="form-control" 
-                                                    onchange="changeInput(this)"
-                                                />
-                                                
-                                            </div>
-                                            <div class="col-md-3 form-group">
-                                                <label>MOF Service Charges</label>
-                                                <input type="number" 
-                                                    name="export_services_fees" 
-                                                    placeholder="MOF Service Charges" 
-                                                    step="0.01" 
-                                                    maxlength="10" 
-                                                    class="form-control" 
-                                                    onchange="changeInput(this)"
-                                                />
-                                            </div>
-
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-3 form-group">
-                                                <label>Detention Charges</label>
-                                                <input type="number" 
-                                                    name="detention_charges" 
-                                                    placeholder="Detention Charges" 
-                                                    step="0.01" 
-                                                    maxlength="10" 
-                                                    class="form-control" 
-                                                    onchange="changeInput(this)"
-                                                />
-                                            </div>
-                                            <div class="col-md-3 form-group">
-                                                <label>Port Storage</label>
-                                                <input type="number" 
-                                                    name="port_storage" 
-                                                    placeholder="Port Storage" 
-                                                    step="0.01" 
-                                                    maxlength="10" 
-                                                    class="form-control" 
-                                                    onchange="changeInput(this)"
-                                                >
-                                            </div>
-                                            <div class="col-md-3 form-group">
-                                                <label>Inspection Charges</label>
-                                                <input type="number" 
-                                                    name="inspection_charges" 
-                                                    placeholder="Inspection Charges" 
-                                                    step="0.01" 
-                                                    maxlength="10" 
-                                                    class="form-control" 
-                                                    onchange="changeInput(this)"
-                                                />
-                                            </div>
-                                            <div class="col-md-3 form-group">
-                                                <label>Deliver Order Charges</label>
-                                                <input type="number" 
-                                                    name="delivery_order_amount" 
-                                                    placeholder="Deliver Order Charges" 
-                                                    step="0.01" 
-                                                    maxlength="10" 
-                                                    class="form-control" 
-                                                    onchange="changeInput(this)"
-                                                />
-                                            </div>
-                                            <div class="col-md-3 form-group">
-                                                <label>Terminal Handling Charges</label>
-                                                <input type="number" 
-                                                    name="terminal_handling_charges" 
-                                                    placeholder="Terminal Handling Charges" 
-                                                    step="0.01" 
-                                                    maxlength="10" 
-                                                    class="form-control" 
-                                                    onchange="changeInput(this)"
-                                                />
-                                                
-                                            </div>
-                                            <div class="col-md-3 form-group">
-                                                <label>Additional Charges</label>
-                                                <input type="number" 
-                                                    name="additional_charges" 
-                                                    placeholder="Additional Charges" 
-                                                    step="0.01" 
-                                                    maxlength="10" 
-                                                    class="form-control" 
-                                                    onchange="changeInput(this)"
-                                                />
-                                            </div>
-                                            <div class="col-md-3 form-group">
-                                                <label>Doc Attestation</label>
-                                                <input type="number" 
-                                                    name="doc_attestation" 
-                                                    placeholder="Doc Attestation" 
-                                                    step="0.01" 
-                                                    maxlength="10" 
-                                                    class="form-control" 
-                                                    onchange="changeInput(this)"
-                                                />
-                                            </div>
-                                            <div class="col-md-3 form-group">
-                                                <label>Crane Charges</label>
-                                                <input type="number" 
-                                                    name="crune_charges" 
-                                                    placeholder="Crane Charges" 
-                                                    step="0.01" 
-                                                    maxlength="10" 
-                                                    class="form-control" 
-                                                    onchange="changeInput(this)"
-                                                />
-                                                
-                                            </div>
-                                        
-                                            <div class="col-md-3 form-group">
-                                                <label>Other Charges</label>
-                                                <input type="number" 
-                                                    name="other_charges" 
-                                                    placeholder="Other Charges" 
-                                                    step="0.01" 
-                                                    maxlength="10" 
-                                                    class="form-control" 
-                                                    onchange="changeInput(this)"
-                                                />
-                                            </div>
-                                            <div class="col-md-3 form-group">
-                                                <label>Total Invoice</label>
-                                                <input type="text" 
-                                                    id="total_invoice" 
-                                                    name="total_invoice" 
-                                                    placeholder="Total Invoice" 
-                                                    step="0.01" 
-                                                    maxlength="10" 
-                                                    class="form-control" 
-                                                    disabled
-                                                />
-                                            </div>
-                                            <div class="col-md-3 form-group">
-                                                <label>Discount/Deduction</label>
-                                                <input type="number" 
-                                                    name="discount" 
-                                                    placeholder="Discount or Deduction" 
-                                                    step="0.01" 
-                                                    maxlength="10" 
-                                                    class="form-control"
-                                                />
-                                            </div>
-                                        </div>
-                                    </span>
                                     
                                     <div class="col-md-12 p-0">
                                         <div class="form-group">
@@ -1010,10 +784,8 @@
 </div>
 @stop
 @push('js')
-<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
 <script src="{{ asset('assets/formwizard/js/jquery.steps.js') }}"></script>
 <script src="{{ asset('assets/formwizard/js/jquery.validate.js') }}"></script>
-<script src="{{ asset('assets/formwizard/js/jquery-ui.min.js') }}"></script>
 
 <script>
 
