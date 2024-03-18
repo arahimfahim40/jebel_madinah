@@ -7,8 +7,8 @@
             <th>Photos</th>
             <th>Vehicle Description</th>
             <th>VIN#</th>
-            <th>Lot Number</th>
-            <th>Container Number</th>
+            <th>Lot#</th>
+            <th>Container#</th>
             <th>Title Received Date</th>
             <th>Title Number</th>
             <th>Title State</th>
@@ -56,12 +56,12 @@
                 <td>{{ $item->vin }}</td>
                 <td>{{ $item->lot_number }}</td>
                 <td>{{ $item->container_number }}</td>
-                <td>{{ $item->title_received_date }}</td>
+                <td class="text-nowrap">{{ $item->title_received_date }}</td>
                 <td>{{ $item->title_number }}</td>
                 <td>{{ $item->title_state }}</td>
-                <td>{{ $item->purchase_date }}</td>
-                <td>{{ $item->pickup_date }}</td>
-                <td>{{ $item->deliver_date }}</td>
+                <td class="text-nowrap">{{ $item->purchase_date }}</td>
+                <td class="text-nowrap">{{ $item->pickup_date }}</td>
+                <td class="text-nowrap">{{ $item->deliver_date }}</td>
                 <td>{{ @$item->location->name }}</td>
                 <td>{{ $item->weight }}</td>
                 <td>{{ $item->cbm }}</td>
@@ -84,7 +84,7 @@
                     @endif
                 </td>
                 <td>{{ $item->vehicle_type }}</td>
-                <td>{{ $item->payment_date }}</td>
+                <td class="text-nowrap">{{ $item->payment_date }}</td>
                 <td>{{ $item->shipas }}</td>
                 
                 <td>{{ $item->buyer_number }}</td>
@@ -102,8 +102,8 @@
             <th>Photos</th>
             <th>Vehicle Description</th>
             <th>VIN#</th>
-            <th>Lot Number</th>
-            <th>Container Number</th>
+            <th>Lot#</th>
+            <th>Container#</th>
             <th>Title Received Date</th>
             <th>Title Number</th>
             <th>Title State</th>
