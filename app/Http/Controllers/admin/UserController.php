@@ -26,15 +26,17 @@ class UserController extends Controller
     public function create(Request $request){
 
         $this->validate($request, [
+            'fullname' => 'required',
             'username' => 'required|unique:users',
             'email' => 'required|unique:users',
             'password' => 'required',
-            'usert' => 'required',
+            'timezone' => 'required',
             'photo' => 'mimes:jpg,png,jpeg,bmp,gif|max:1024'
         ]);
 
         $new_user = new User();
-        $new_user->name = $request['name'];
+        $new_user->name = $request['fullname'];
+        $new_user->username = $request['username'];
         $new_user->email = $request['email'];
         $new_user->password = Hash::make($request['password']);
     

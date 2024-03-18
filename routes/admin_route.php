@@ -25,10 +25,7 @@ Route::get('/admin_login', function () {
 
 //Route::get('/dashboards', 'admin\HomeController@dashboard')->name('dashboard_admin');
 //Route::post('/admin_login', 'app\Http\Controllers\admin\LoginController@login')->name('admin_login');
-Route::post('/admin_login', [LoginController::class, 'login'])->name('admin_login');
-// user section 
-Route::get('/user', [UserController::class,'index'])->name('user');
-Route::post('/user', [UserController::class,'create'])->name('user.create');
+
 /* Route::get('/user_data_admin', 'admin\UserController@user_data')->name('all_vehicle_data_admin');
 Route::get('/search_user', 'admin\UserController@search_user')->name('search_user_admin');
 Route::get('/paginat_user_admin', 'admin\UserController@paginate_user')->name('paginate_user_admin');
@@ -885,6 +882,12 @@ Route::post('/send_message', 'admin\whatsapp\WhatsAppController@sendMessage')->n
 Auth::routes();
 
 // Route::middleware('auth:web')->group(function () {
+
+
+    Route::post('/admin_login', [LoginController::class, 'login'])->name('admin_login');
+    // user section 
+    Route::get('admin/user', [UserController::class,'index'])->name('user.index');
+    Route::post('admin/user', [UserController::class,'create'])->name('user.create');
 
     Route::get('/dashboards', 'admin\HomeController@dashboard')->name('dashboard_admin');
     Route::post('/admin_login', 'admin\LoginController@login')->name('admin_login');

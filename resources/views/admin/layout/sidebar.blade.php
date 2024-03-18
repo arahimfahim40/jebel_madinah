@@ -108,6 +108,13 @@
                 </ul>
             </li>
             {{-- @endif --}}
+
+            <li>
+                <a href="{{ route('user.index') }}" class="waves-effect  waves-light">
+                    <span class="s-icon"><i class="fa fa-users"></i></span>
+                    <span class="s-text">Users</span>
+                </a>
+            </li>
         </ul>
     </div>
 </div>

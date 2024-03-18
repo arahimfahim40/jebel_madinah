@@ -77,7 +77,7 @@
                 </div>
             </div>
 
-			@include('admin.user.add')
+			@include('admin.user.create')
         
             <table class="table table-bordered" id="tbl_user">
 				<thead class="bg-info">
@@ -133,7 +133,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: "{{ route('user') }}",
+                    url: "{{ route('user.index') }}",
                     data: function (data) {
                         data.user_type_filter = $('#user_type_filter').val(),
                         data.user_status_filter = $('#user_status_filter').val(),
