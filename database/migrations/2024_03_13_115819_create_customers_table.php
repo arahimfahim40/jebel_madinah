@@ -54,7 +54,6 @@ return new class extends Migration
             $table->string('notify_fax', 50)->nullable();
             $table->string('notify_poc', 50)->nullable();
             $table->text('loading_instruction')->nullable();
-            $table->string('token', 100);
 
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();

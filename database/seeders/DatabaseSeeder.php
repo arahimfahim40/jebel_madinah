@@ -30,7 +30,15 @@ class DatabaseSeeder extends Seeder
             ['name' => $faker->name],
             ['name' => $faker->name],
         ]);
+        \App\Models\Customer::insert([
+            ['name' => $faker->name, 'email' => $faker->email, 'password' => bcrypt($faker->password) ],
+            ['name' => $faker->name, 'email' => $faker->email, 'password' => bcrypt($faker->password) ],
+            ['name' => $faker->name, 'email' => $faker->email, 'password' => bcrypt($faker->password) ],
+            ['name' => $faker->name, 'email' => $faker->email, 'password' => bcrypt($faker->password) ],
+            ['name' => $faker->name, 'email' => $faker->email, 'password' => bcrypt($faker->password) ],
+        ]);
 
         $this->call(VehicleSeeder::class);
+        $this->call(TimeZonesSeeder::class);
     }
 }

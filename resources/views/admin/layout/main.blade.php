@@ -541,18 +541,10 @@
         }
 
 
-    
-        document.getElementsByClassName('prevent-max-min')[0].oninput = function() {
-            var max = parseInt(this.max);
-            var min = parseInt(this.min);
-            if (parseInt(this.value) > max) {
-                this.value = max;
-            } else if (parseInt(this.value) < min) {
-                this.value = min;
-            }
-        }
+
     </script>
 
+    @include('admin.layout.select2-search')
 
 
 </body>
