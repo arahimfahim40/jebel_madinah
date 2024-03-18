@@ -13,13 +13,18 @@ class VehicleController extends Controller
      */
     public function index(Request $request)
     {
-        $paginate = $request->paginate ? $request->paginate : 20;
-        $vehicles = Vehicle::paginate($paginate);
+        $paginate = $request->paginate ? $request->paginate : 10;
+        $status = in_array($request->status, Vehicle::VEHICLE_STATUS) ? $request->status : '';
+        // dd($request->status);
+        $vehicles = Vehicle::with('location:id,name')
+        ->when(!empty($status), function ($q) use ($status) {
+            $q->where('status', $status);
+        })->paginate($paginate);
         if ($request->ajax()) {
-          return view('admin.vehicles.data', compact('vehicles', 'paginate'))->render();
+          return view('admin.vehicles.data', compact('vehicles', 'status', 'paginate'));
         }
         
-        return view('admin.vehicles.list', compact('vehicles', 'paginate'))->render();
+        return view('admin.vehicles.list', compact('vehicles', 'status', 'paginate'));
     }
 
     /**
@@ -27,7 +32,7 @@ class VehicleController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.vehicles.create');
     }
 
     /**

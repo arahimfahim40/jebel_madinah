@@ -1,5 +1,5 @@
 
-?<?php
+<?php
 
 use App\Models\Location;
 use Illuminate\Support\Facades\Cache;

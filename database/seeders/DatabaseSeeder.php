@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use Faker\Factory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Permission;
@@ -31,6 +33,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // \App\Models\User::factory(10)->create();
+        $faker = Factory::create();
 
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',
@@ -61,5 +64,15 @@ class DatabaseSeeder extends Seeder
         $role->syncPermissions($permissions);
 
         $user->assignRole([$role->id]);
+
+        \App\Models\Location::insert([
+            ['name' => $faker->name],
+            ['name' => $faker->name],
+            ['name' => $faker->name],
+            ['name' => $faker->name],
+            ['name' => $faker->name],
+        ]);
+
+        $this->call(VehicleSeeder::class);
     }
 }
