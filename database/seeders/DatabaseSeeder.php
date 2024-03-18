@@ -55,11 +55,7 @@ class DatabaseSeeder extends Seeder
 
         $role = Role::create(['name' => 'Admin']);
 
-       
-
         $permissions = Permission::pluck('id')->all();
-
-        
 
         $role->syncPermissions($permissions);
 
