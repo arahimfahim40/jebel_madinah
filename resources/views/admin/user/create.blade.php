@@ -1,3 +1,7 @@
+<?php 
+ $timezones = DB::table('time_zones')->get();
+?>
+
 <div class="modal fade" id="add_user">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -6,36 +10,43 @@
                     <span aria-hidden="true">×</span></button>
                 <h4 class="modal-title">User Register Form</h4>
             </div>
-            <form action="{{url('add_user_admin')}}" method="post" enctype="multipart/form-data">
+
+            <form action="{{url('/admin/user')}}" method="post" enctype="multipart/form-data">
                 {!! csrf_field() !!}
                 <div class="modal-body">
+
                     <div class="form-group">
                         <label for="fullname">Full name <span class="text-danger">*</span></label>
                         <input type="text" name="fullname" id="fullname" class="form-control" placeholder="enter fullname"  />
                     </div>
+
                     <div class="form-group">
                         <label for="username">Username <span class="text-danger">*</span></label>
                         <input type="text" name="username" id="username" class="form-control" placeholder="enter username"  />
                     </div>
+
                     <div class="form-group">
                         <label for="email">Email <span class="text-danger">*</span></label>
                         <input type="email" name="email" id="email" class="form-control" placeholder="enter user email" required/>
                     </div>
+
                     <div class="form-group">
                         <label for="password">Password <span class="text-danger">*</span></label>
                         <input type="password" name="password" id="password" class="form-control" placeholder="enter user password" required/>
                     </div>
-                    
+
                     <div class="row">
                         <div class="form-group col-md-6">
                             <label for="timezone">Choose User Timezone <span class="text-danger">*</span></label>
                             <select name="timezone" id="timezone" class="form-control s2s_timezone" required>
                                 <option value="" hidden selected disabled>--- Timezone ---</option>
-                                
+                                @foreach($timezones as $tz)
+                                    <option value="{{$tz->id}}">{{ucfirst($tz->name)}}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
-                    
+
                     <div class="box box-block bg-white">
                         <div class="row">
                             <div class="col-md-12">

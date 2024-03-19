@@ -46,7 +46,7 @@
     <div class="content-area py-1">
         <div class="container-fluid" > 
 
-        {{-- @include('errors') --}}
+            @include('errors') 
 
             <div class="card shadow">
                 <div class="card-body">
