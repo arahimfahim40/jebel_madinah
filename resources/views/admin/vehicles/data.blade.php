@@ -22,11 +22,9 @@
             <th>HT Number</th>
             <th>C Remark</th>
             {{-- <th>Note</th> --}}
-            <th>Towed From</th>
             <th>Status</th>
-            <th>Vehicle Type</th>
+            <th>Ship As</th>
             <th>Payment Date</th>
-            <th>Shipas</th>
             <th>Buyer Number</th>
             
             <th>Vehicle Price</th>
@@ -66,10 +64,9 @@
                 <td>{{ $item->weight }}</td>
                 <td>{{ $item->cbm }}</td>
                 <td>{{ $item->licence_number }}</td>
-                <td>{{ $item->htnumber }}</td>
-                <td>{{ $item->c_remark }}</td>
+                <td>{{ $item->hat_number }}</td>
+                <td>{{ $item->customer_remark }}</td>
                 {{-- <td>{{ $item->note }}</td> --}}
-                <td>{{ $item->towed_from }}</td>
                 <td>
                     @if($item->status == 'pending')
                         <span class="tag tag-secondary" >{{ucwords(str_replace('_', ' ', $item->status))}}</span>
@@ -83,9 +80,8 @@
                         <span class="tag tag-success" >{{ucwords(str_replace('_', ' ', $item->status))}}</span>
                     @endif
                 </td>
-                <td>{{ $item->vehicle_type }}</td>
+                <td>{{ $item->ship_as }}</td>
                 <td class="text-nowrap">{{ $item->payment_date }}</td>
-                <td>{{ $item->shipas }}</td>
                 
                 <td>{{ $item->buyer_number }}</td>
                 <td>{{ $item->vehicle_price }}</td>
@@ -117,11 +113,9 @@
             <th>HT Number</th>
             <th>C Remark</th>
             {{-- <th>Note</th> --}}
-            <th>Towed From</th>
             <th>Status</th>
-            <th>Vehicle Type</th>
+            <th>Ship As</th>
             <th>Payment Date</th>
-            <th>Shipas</th>
             <th>Buyer Number</th>
             <th>Vehicle Price</th>
             <th>Auction</th>
