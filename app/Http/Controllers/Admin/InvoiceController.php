@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Invoice;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class InvoiceController extends Controller
 {
@@ -43,7 +44,46 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'customer_id' => 'required|exists:customers,id',
+            'status' => 'required|in:open,pending,past_due,paid',
+            'exchange_rate' => 'nullable|numeric',
+            'discount' => 'nullable|numeric',
+            'invoice_date' => 'required|date',
+            'move_to_open_date' => 'required|date',
+            'invoice_due_date' => 'required|date'
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            // Retrieve the filtered data from the request
+            $filteredData = $request->only([
+                'customer_id',
+                'exchange_rate',
+                'move_to_open_date',
+                'invoice_date',
+                'invoice_due_date',
+                'status',
+                'discount',
+                'description',
+            ]);
+
+            // Create a new invoice store
+            $invoice = Invoice::create($filteredData);
+
+            // Commit the transaction
+            DB::commit();
+
+            // Redirect back with success message
+            return redirect()->route('invoices.index')->with('success', 'Invoice created successfully');
+        } catch (\Exception $e) {
+            // An error occurred, rollback the transaction
+            DB::rollBack();
+
+            // Handle the exception or return an error response
+            return response()->json(['message' => 'Failed to create invoice store', 'error' => $e->getMessage()], 500);
+        }
     }
 
     /**
