@@ -14,6 +14,8 @@ class Invoice extends Model
     //protected $connection = 'mysql';
     protected $table = 'invoices';
 
+    const INVOICE_STATUS = ['pending','open','past_due','paid'];
+
     protected $fillable = [
         "customer_id",
         "exchange_rate",
@@ -43,7 +45,7 @@ class Invoice extends Model
 
     public function vehicles()
     {
-        return $this->belongsTo(Customer::class, 'customer_id', 'id');
+        return $this->hasMany(Vehicle::class, 'invoice_id', 'id');
     }
 
     public function customer()

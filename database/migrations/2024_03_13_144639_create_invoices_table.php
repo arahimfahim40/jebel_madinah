@@ -25,6 +25,7 @@ return new class extends Migration
             $table->timestamps();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();
+            $table->softDeletes();
 
             $table->foreign('customer_id')->references('id')->on('customers');
             $table->foreign('created_by')->references('id')->on('users');
