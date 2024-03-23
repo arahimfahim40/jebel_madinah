@@ -18,11 +18,11 @@ return new class extends Migration
             $table->string('username')->unique();
             $table->string('email')->unique();
             $table->string('photo')->nullable();
+            $table->boolean('active')->default(true);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
-
             $table->foreign('time_zone_id')->references('id')->on('time_zones')->onDelete('cascade');
         });
     }

@@ -17,6 +17,17 @@ class DatabaseSeeder extends Seeder
      */
 
      private $permissions = [
+        ["name"=>"role-view","group_name"=>"role"],
+        ["name"=>"role-create","group_name"=>"role"],
+        ["name"=>"role-edit","group_name"=>"role"],
+        ["name"=>"role-delete","group_name"=>"role"],
+
+        ["name"=>"user-view","group_name"=>"user"],
+        ["name"=>"user-create","group_name"=>"user"],
+        ["name"=>"user-edit","group_name"=>"user"],
+        ["name"=>"user-delete","group_name"=>"user"],
+    ];
+     /* private $permissions = [
         'role-view',
         'role-create',
         'role-edit',
@@ -25,7 +36,7 @@ class DatabaseSeeder extends Seeder
         'user-create',
         'user-edit',
         'user-delete',
-     ];
+     ]; */
 
     /**
      * Seed the application's database.
@@ -40,9 +51,10 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
+        $this->call(TimeZonesSeeder::class);
+
         foreach ($this->permissions as $permission) {
-            Permission::create(['name' => $permission ]);
-            //Permission::create($permission);
+            Permission::create( $permission );
         }
 
         // Create admin User and assign the role to him.
@@ -50,14 +62,14 @@ class DatabaseSeeder extends Seeder
             'name' => 'admin',
             'username' => 'admin@gmail.com',
             'email' => 'admin@gmail.com',
+            'time_zone_id' => '1',
             'password' => Hash::make('password')
         ]);
 
         $role = Role::create(['name' => 'Admin']);
-
         $permissions = Permission::pluck('id')->all();
-
-        $role->syncPermissions($permissions);
+        //$role->syncPermissions($permissions);
+        $role->syncPermission($permissions);
 
         $user->assignRole([$role->id]);
 
@@ -77,6 +89,6 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call(VehicleSeeder::class);
-        $this->call(TimeZonesSeeder::class);
+       
     }
 }

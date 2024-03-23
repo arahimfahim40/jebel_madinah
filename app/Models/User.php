@@ -45,4 +45,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function time_zones()
+    {
+        return $this->belongsTo(TimeZone::class,  'time_zone_id', 'id');
+    }
 }

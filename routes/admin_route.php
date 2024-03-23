@@ -887,7 +887,11 @@ Auth::routes();
     Route::post('/admin_login', [LoginController::class, 'login'])->name('admin_login');
     // user section 
     Route::get('admin/user', [UserController::class,'index'])->name('user.index');
-    Route::post('admin/user', [UserController::class,'create'])->name('user.create');
+    Route::get('admin/create', [UserController::class,'create'])->name('user.create');
+    Route::post('admin/user', [UserController::class,'store'])->name('user.store');
+    Route::get('/admin/user/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
+    Route::put('/admin/user/update/{id}', [UserController::class, 'update'])->name('user.update');
+
 
     Route::get('/dashboards', 'admin\HomeController@dashboard')->name('dashboard_admin');
     Route::post('/admin_login', 'admin\LoginController@login')->name('admin_login');

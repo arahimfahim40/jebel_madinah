@@ -16,13 +16,14 @@ class VehicleController extends Controller
     {
         $paginate = $request->paginate ? $request->paginate : 10;
         $status = in_array($request->status, Vehicle::VEHICLE_STATUS) ? $request->status : '';
-        // dd($request->status);
         $vehicles = Vehicle::with('location:id,name')
         ->when(!empty($status), function ($q) use ($status) {
             $q->where('status', $status);
         })
         ->orderBy('created_at', 'desc')
         ->paginate($paginate);
+
+        //echo "<pre />"; print_r($vehicles); exit;
         if ($request->ajax()) {
           return view('admin.vehicles.data', compact('vehicles', 'status', 'paginate'));
         }
