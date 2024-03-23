@@ -138,7 +138,8 @@ class VehicleController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $vehicle = Vehicle::find($id);
+        return view('admin.vehicles.edit', compact('vehicle'));
     }
 
     /**

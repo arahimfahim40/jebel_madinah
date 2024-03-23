@@ -3,8 +3,8 @@
     <thead class="bg-info">
         <tr>
             <th>#</th>
-            <th>Action</th>
-            <th>Photos</th>
+            <th>Edit</th>
+            <th>Photo Link</th>
             <th>Vehicle Description</th>
             <th>VIN#</th>
             <th>Lot#</th>
@@ -36,7 +36,9 @@
         @foreach ($vehicles as $index => $item)
             <tr id="searchBody">
                 <td>{{ $index + 1 }}</td>
-                <td></td>
+                <td>
+                    <a href="{{ route('vehicles.edit', $item->id) }}"  class="btn btn-info btn-circle btn-sm column"><span class="fa fa-edit"></span></a>
+                </td>
                 <td class="column">
                     <?php
                     $label = 'tag-success';
@@ -44,7 +46,7 @@
                         $label = '';
                     }
                     ?>
-                    <a href="{{ $item->photos_link }}" target="_blank" style="text-align: center; font-size:30px;">
+                    <a href="{{ $item->photos_link }}" target="_blank" style="text-align: center; font-size:25px;">
                         <span class="ti-image  <?= $label ?>">
                             <p style="display: none">{{ $item->photos_link }}</p>
                         </span>
@@ -94,8 +96,8 @@
     <tfoot>
         <tr>
             <th>#</th>
-            <th>Action</th>
-            <th>Photos</th>
+            <th>Edit</th>
+            <th>Photo Link</th>
             <th>Vehicle Description</th>
             <th>VIN#</th>
             <th>Lot#</th>
