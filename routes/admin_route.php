@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\InvoiceController;
 use App\Http\Controllers\Admin\InvoicePaymentController;
 use App\Http\Controllers\Admin\VehicleController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LocationController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -16,10 +17,11 @@ Auth::routes();
     Route::post('/admin_login', 'admin\LoginController@login')->name('admin_login');
     Route::get('/admin_shipment_summary', 'admin\HomeController@shipment_summary')->name('shipment_summary_admin');
     Route::get('/admin_vehicle_summary', 'admin\HomeController@vehicle_summary')->name('vehicle_summary_admin');
-    Route::get('/admin_sidebar_count', 'admin\HomeController@admin_sidebar_count')->name('admin_sidebar_count');
-    Route::get('/admin_sidebar_sub_count', 'admin\HomeController@admin_sidebar_sub_count')->name('admin_sidebar_sub_count');
     Route::get('/admin_message', 'admin\HomeController@message')->name('message_admin');
     Route::get('/delete_vehicle_admin/{id}', 'admin\VehicleController@delete_vehicle')->name('delete_vehicle_admin');
+    
+    Route::get('/admin_sidebar_count', [HomeController::class, 'admin_sidebar_count'])->name('admin_sidebar_count');
+    Route::get('/admin_sidebar_sub_count',  [HomeController::class, 'admin_sidebar_sub_count'])->name('admin_sidebar_sub_count');
 
     // Customers Routes
     Route::get('/admin/customers', [CustomerController::class, 'index'])->name('customers.index');

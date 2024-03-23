@@ -65,8 +65,8 @@ class VehicleController extends Controller
         return [
             'customer_id' => 'required|exists:customers,id',
             'point_of_loading_id' => 'required|exists:locations,id',
-            'vin' => 'required|string|max:255',
-            'lot_number' => 'required|numeric:max:12',
+            'vin' => 'required|string|max:255|unique:vehicles',
+            'lot_number' => 'required|numeric:max:12|unique:vehicles',
             'ship_as' => 'nullable|in:half-cut,complete',
             'is_key' => 'nullable|in:Yes,No',
             'photos_link' => 'nullable|url',
@@ -80,9 +80,7 @@ class VehicleController extends Controller
      */
     public function store(Request $request)
     {
-        $validationRules = array_merge($this->vehicleValidationRules(), [
-            // Extra validation rules should be here
-        ]);
+        $validationRules = $this->vehicleValidationRules();
         // Validate the input data
         $validator = Validator::make($request->all(), $validationRules);
 
@@ -187,10 +185,9 @@ class VehicleController extends Controller
      */
     public function update(Request $request, string $id)
     {
-
-        $validationRules = array_merge($this->vehicleValidationRules(), [
-            // Extra validation rules should be here
-        ]);
+        $validationRules = $this->vehicleValidationRules();
+        $validationRules['vin'] = 'required|string|max:255|unique:vehicles,vin,' . $id;
+        $validationRules['lot_number'] = 'required|string|max:255|unique:vehicles,lot_number,' . $id;
         
         // Validate the input data
         $validator = Validator::make($request->all(), $validationRules);
