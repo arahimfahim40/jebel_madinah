@@ -40,29 +40,37 @@ class VehicleController extends Controller
         return view('admin.vehicles.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        // Validate the input data
-        $validator = Validator::make($request->all(), [
+    private function vehicleValidationRules (){
+        return [
             'customer_id' => 'required|exists:customers,id',
             'point_of_loading_id' => 'required|exists:locations,id',
             'vin' => 'required|string|max:255',
-            'lot_number' => 'required|numeric',
+            'lot_number' => 'required|numeric:max:12',
             'ship_as' => 'nullable|in:half-cut,complete',
             'is_key' => 'nullable|in:Yes,No',
             'photos_link' => 'nullable|url',
             'auction_invoice_link' => 'nullable|url',
             'vehicle_price' => 'nullable|numeric',
+        ];
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $validationRules = array_merge($this->vehicleValidationRules(), [
+            // Extra validation rules should be here
         ]);
+        // Validate the input data
+        $validator = Validator::make($request->all(), $validationRules);
 
         // If validation fails, redirect back with error and old input
         if ($validator->fails()) {
+            $allInputs = array_merge($request->all(), ['customer_name' => $request->customer_id ? Customer::where('id', $request->customer_id)->pluck('name')->first() : null]);
             return redirect()->back()
                 ->withErrors($validator)
-                ->withInput();
+                ->withInput($allInputs);
         }
 
         try {
@@ -128,9 +136,10 @@ class VehicleController extends Controller
         } catch (\Exception $e) {
             // An error occurred, rollback the transaction
             DB::rollBack();
+            $allInputs = array_merge($request->all(), ['customer_name' => $request->customer_id ? Customer::where('id', $request->customer_id)->pluck('name')->first() : null]);
             return redirect()->back()
                 ->withErrors(['error' => $e->getMessage()])
-                ->withInput();
+                ->withInput($allInputs);
         }
 
     }
@@ -157,19 +166,13 @@ class VehicleController extends Controller
      */
     public function update(Request $request, string $id)
     {
+
+        $validationRules = array_merge($this->vehicleValidationRules(), [
+            // Extra validation rules should be here
+        ]);
         
         // Validate the input data
-        $validator = Validator::make($request->all(), [
-            'customer_id' => 'required|exists:customers,id',
-            'point_of_loading_id' => 'required|exists:locations,id',
-            'vin' => 'required|string|max:255',
-            'lot_number' => 'required|numeric',
-            'ship_as' => 'nullable|in:half-cut,complete',
-            'is_key' => 'nullable|in:Yes,No',
-            'photos_link' => 'nullable|url',
-            'auction_invoice_link' => 'nullable|url',
-            'vehicle_price' => 'nullable|numeric',
-        ]);
+        $validator = Validator::make($request->all(), $validationRules);
 
         // If validation fails, redirect back with error and old input
         if ($validator->fails()) {

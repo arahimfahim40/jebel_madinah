@@ -22,12 +22,10 @@
             <th>Licence Number</th>
             <th>Hat Number</th>
             <th>C Remark</th>
-            {{-- <th>Note</th> --}}
             <th>Status</th>
             <th>Ship As</th>
             <th>Payment Date</th>
             <th>Buyer Number</th>
-            
             <th>Vehicle Price</th>
             <th>Auction</th>
         </tr>
@@ -70,7 +68,6 @@
                 <td>{{ $item->licence_number }}</td>
                 <td>{{ $item->hat_number }}</td>
                 <td>{{ $item->customer_remark }}</td>
-                {{-- <td>{{ $item->note }}</td> --}}
                 <td>
                     @if($item->status == 'pending')
                         <span class="tag tag-secondary" >{{ucwords(str_replace('_', ' ', $item->status))}}</span>
@@ -117,7 +114,6 @@
             <th>Licence Number</th>
             <th>Hat Number</th>
             <th>C Remark</th>
-            {{-- <th>Note</th> --}}
             <th>Status</th>
             <th>Ship As</th>
             <th>Payment Date</th>

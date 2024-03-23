@@ -81,6 +81,7 @@
                             
                     </div>
                 </div> --}}
+                @include('errors')
                 <div style="clear: both;"></div>
                 <div class="form-group col-md-3 col-lg-3 col-sm-6 col-xs-12" style="margin:1%;margin-left:0px;">
                     <input type="text" name="search" class="form-control b-a" placeholder="Search for ..."

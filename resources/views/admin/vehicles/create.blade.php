@@ -72,7 +72,9 @@
                                                     name="customer_id"
                                                     class="form-control s2s_customers"
                                                     required
-                                                /></select>
+                                                />
+                                                <option value="{{ old('customer_id', '') }}" selected>{{ old('customer_name', '') }}</option>
+                                                </select>
                                             </div>
                                             <div class="col-md-12 form-group">
                                                 <label >Year</label>
@@ -81,6 +83,7 @@
                                                     name="year" 
                                                     placeholder="Year" 
                                                     class="form-control"
+                                                    value="{{ old('year', '') }}"
                                                 />
                                             </div>
                                             
@@ -91,6 +94,7 @@
                                                     name="make" 
                                                     placeholder="Make" 
                                                     class="form-control"
+                                                    value="{{ old('make', '') }}"
                                                 />
                                             </div>
                                             <div class="col-md-12 form-group">
@@ -100,6 +104,7 @@
                                                     name="model" 
                                                     placeholder="Model" 
                                                     class="form-control"
+                                                    value="{{ old('model', '') }}"
                                                 />
                                             </div>
                                             <div class="col-md-12 form-group">
@@ -109,6 +114,7 @@
                                                     name="color" 
                                                     placeholder="Color" 
                                                     class="form-control"
+                                                    value="{{ old('color', '') }}"
                                                 />
                                             </div>
                                         </div>
@@ -120,6 +126,7 @@
                                                     name="vin"   
                                                     placeholder="Vin"
                                                     class="form-control"
+                                                    value="{{ old('vin', '') }}"
                                                     required
                                                 />
                                             </div>
@@ -129,6 +136,7 @@
                                                     name="lot_number"    
                                                     placeholder="Lot Number" 
                                                     class="form-control"
+                                                    value="{{ old('lot_number', '') }}"
                                                     required
                                                 />
                                             </div>
@@ -138,6 +146,7 @@
                                                     name="container_number" 
                                                     placeholder="Container Number" 
                                                     class="form-control"
+                                                    value="{{ old('container_number', '') }}"
                                                 />
                                             </div>
 
@@ -150,7 +159,9 @@
                                                 >
                                                 <option value="">-- Select Point Of Loading --</option>
                                                 @foreach (@getLocations() as  $location)
-                                                    <option value="{{ $location->id }}">{{ $location->name }}</option>
+                                                <option value="{{ $location->id }}" {{ old('point_of_loading_id', '') == $location->id ? 'selected' : '' }}>
+                                                    {{ $location->name }}
+                                                </option>
                                                 @endforeach
                                                 </select>
                                             </div>
@@ -160,8 +171,8 @@
                                                     class="form-control"
                                                 >
                                                     <option value="">-- Select Ship As --</option>
-                                                    <option value="complete">Complete</option>
-                                                    <option value="half-cut">Half-Cut</option>
+                                                    <option value="complete" {{ old('ship_as', '') == 'complete' ? 'selected' : '' }}>Complete</option>
+                                                    <option value="half-cut" {{ old('ship_as', '') == 'half-cut' ? 'selected' : '' }}>Half-Cut</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -172,6 +183,7 @@
                                                     name="purchase_date"   
                                                     placeholder="Purchase Date"
                                                     class="form-control"
+                                                    value="{{ old('purchase_date', '') }}"
                                                     required
                                                 />
                                             </div>
@@ -181,6 +193,7 @@
                                                     name="payment_date"   
                                                     placeholder="Payment Date"
                                                     class="form-control"
+                                                    value="{{ old('payment_date', '') }}"
                                                 />
                                             </div>
                                             <div class="col-md-12 form-group">
@@ -189,6 +202,7 @@
                                                     name="pickup_date"   
                                                     placeholder="Pick Up Date"
                                                     class="form-control"
+                                                    value="{{ old('pickup_date', '') }}"
                                                 />
                                             </div>
                                             
@@ -198,6 +212,7 @@
                                                     name="deliver_date"   
                                                     placeholder="Deliver Date"
                                                     class="form-control"
+                                                    value="{{ old('deliver_date', '') }}"
                                                 />
                                             </div>
                                             
@@ -207,13 +222,13 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Note</label>
-                                                <textarea name="note" placeholder="Note" rows="6" class="form-control"></textarea>
+                                                <textarea name="note" placeholder="Note" rows="6" class="form-control">{{ old('note', '') }}</textarea>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Customer Remark</label>
-                                                <textarea name="customer_remark" placeholder="Customer Remark" rows="6" class="form-control"></textarea>
+                                                <textarea name="customer_remark" placeholder="Customer Remark" rows="6" class="form-control">{{ old('customer_remark', '') }}</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -235,6 +250,7 @@
                                                     name="hat_number"   
                                                     placeholder="Hat Number"
                                                     class="form-control"
+                                                    value="{{ old('hat_number', '') }}"
                                                 />
                                             </div>
                                             <div class="col-md-12 form-group">
@@ -243,6 +259,7 @@
                                                     name="title_received_date"   
                                                     placeholder="Title Received Date"
                                                     class="form-control"
+                                                    value="{{ old('title_received_date', '') }}"
                                                 />
                                             </div>
                                             <div class="col-md-12 form-group">
@@ -252,6 +269,7 @@
                                                     name="title_number"   
                                                     placeholder="Title Number"
                                                     class="form-control"
+                                                    value="{{ old('title_number', '') }}"
                                                 />
                                             </div>
                                             <div class="col-md-12 form-group">
@@ -261,6 +279,7 @@
                                                     name="title_status"   
                                                     placeholder="Title Number"
                                                     class="form-control"
+                                                    value="{{ old('title_status', '') }}"
                                                 />
                                             </div>
                                            
@@ -272,6 +291,7 @@
                                                     name="weight"    
                                                     placeholder="Weight (KG)"
                                                     class="form-control"
+                                                    value="{{ old('weight', '') }}"
                                                 />
                                             </div>
                                             <div class="col-md-12 form-group">
@@ -280,6 +300,7 @@
                                                     name="buyer_number"   
                                                     placeholder="Buyer Number" 
                                                     class="form-control"
+                                                    value="{{ old('buyer_number', '') }}"
                                                 />
                                             </div>
                                             <div class="col-md-12 form-group">
@@ -288,6 +309,7 @@
                                                     name="auction"   
                                                     placeholder="Auction" 
                                                     class="form-control"
+                                                    value="{{ old('auction', '') }}"
                                                 />
                                             </div>
                                             <div class="col-md-12 form-group">
@@ -296,6 +318,7 @@
                                                     name="auction_city"
                                                     placeholder="Auction City"
                                                     class="form-control"
+                                                    value="{{ old('auction_city', '') }}"
                                                 />
                                             </div>
                                             
@@ -307,8 +330,8 @@
                                                     class="form-control"
                                                 >
                                                     <option value="">-- Select --</option>
-                                                    <option value="Yes">Yes</option>
-                                                    <option value="No">No</option>
+                                                    <option value="Yes" {{ old('is_key', '') == 'Yes' ? 'selected' : '' }}>Yes</option>
+                                                    <option value="No" {{ old('is_key', '') == 'No' ? 'selected' : '' }}>No</option>
                                                 </select>
                                             </div>
                                             <div class="col-md-12 form-group">
@@ -318,6 +341,7 @@
                                                     name="licence_number"   
                                                     placeholder="License plate/Tag Number"
                                                     class="form-control"
+                                                    value="{{ old('licence_number', '') }}"
                                                 />
                                             </div>
                                             <div class="col-md-12 form-group">
@@ -347,18 +371,20 @@
                                     <div class="row">
                                         <div class="col-md-6 form-group">
                                             <label>Photos Link</label>
-                                            <input type="text" 
+                                            <input type="url" 
                                                 name="photos_link"    
                                                 placeholder="Photos Link" 
                                                 class="form-control"
+                                                value="{{ old('photos_link', '') }}"
                                             />
                                         </div>
                                         <div class="col-md-6 form-group">
                                             <label>Auction Invoice (link)</label>
-                                            <input type="text" 
+                                            <input type="url" 
                                                 name="auction_invoice_link"    
                                                 placeholder="Auction Invoice (link)" 
                                                 class="form-control"
+                                                value="{{ old('auction_invoice_link', '') }}"
                                             />
                                         </div>
                                     </div>
@@ -382,6 +408,7 @@
                                                     name="vehicle_price"    
                                                     placeholder="Vehicle Price"
                                                     class="form-control"
+                                                    value="{{ old('vehicle_price', '') }}"
                                                 />
                                             </div>
                                             <div class="col-md-12 form-group">
@@ -390,6 +417,7 @@
                                                     name="towing_charge"     
                                                     placeholder="Towing Charge"
                                                     class="form-control"
+                                                    value="{{ old('towing_charge', '') }}"
                                                 />
                                             </div>
                                             <div class="col-md-12 form-group">
@@ -398,6 +426,7 @@
                                                     name="auction_fee_charge"
                                                     placeholder="Auction Fee charge"
                                                     class="form-control"
+                                                    value="{{ old('auction_fee_charge', '') }}"
                                                 />
                                             </div>
                                             <div class="col-md-12 form-group">
@@ -406,6 +435,7 @@
                                                     name="dismantal_charge"
                                                     placeholder="Dismantal Charge"
                                                     class="form-control"
+                                                    value="{{ old('dismantal_charge', '') }}"
                                                 />
                                             </div>
                                             <div class="col-md-12 form-group">
@@ -414,6 +444,7 @@
                                                     name="shiping_charge"
                                                     placeholder="Ship Charge"
                                                     class="form-control"
+                                                    value="{{ old('shiping_charge', '') }}"
                                                 />
                                             </div>
                                             <div class="col-md-12 form-group">
@@ -422,6 +453,7 @@
                                                     name="storage_charge"
                                                     placeholder="Storage Charge"
                                                     class="form-control"
+                                                    value="{{ old('storage_charge', '') }}"
                                                 />
                                             </div>
                                             <div class="col-md-12 form-group">
@@ -430,6 +462,7 @@
                                                     name="custom_charge"
                                                     placeholder="Custom Charge"
                                                     class="form-control"
+                                                    value="{{ old('custom_charge', '') }}"
                                                 />
                                             </div>
                                             <div class="col-md-12 form-group">
@@ -438,6 +471,7 @@
                                                     name="demurage_charge"
                                                     placeholder="Demurage Charge"
                                                     class="form-control"
+                                                    value="{{ old('demurage_charge', '') }}"
                                                 />
                                             </div>
                                             <div class="col-md-12 form-group">
@@ -446,6 +480,7 @@
                                                     name="other_charge"
                                                     placeholder="Other Charge"
                                                     class="form-control"
+                                                    value="{{ old('other_charge', '') }}"
                                                 />
                                             </div>
                                         </div>
@@ -458,6 +493,7 @@
                                                     name="towing_cost"    
                                                     placeholder="Towing Cost" 
                                                     class="form-control"
+                                                    value="{{ old('towing_cost', '') }}"
                                                 />
                                             </div>
                                             <div class="col-md-12 form-group">
@@ -466,6 +502,7 @@
                                                     name="auction_fee_cost"
                                                     placeholder="Auction Fee Cost"
                                                     class="form-control"
+                                                    value="{{ old('auction_fee_cost', '') }}"
                                                 />
                                             </div>
                                             <div class="col-md-12 form-group">
@@ -474,6 +511,7 @@
                                                     name="dismantal_cost"
                                                     placeholder="Dismantal cost"
                                                     class="form-control"
+                                                    value="{{ old('dismantal_cost', '') }}"
                                                 />
                                             </div>
                                             <div class="col-md-12 form-group">
@@ -482,6 +520,7 @@
                                                     name="ship_cost"
                                                     placeholder="Ship cost"
                                                     class="form-control"
+                                                    value="{{ old('ship_cost', '') }}"
                                                 />
                                             </div>
                                             <div class="col-md-12 form-group">
@@ -490,6 +529,7 @@
                                                     name="storage_cost"
                                                     placeholder="Storage Cost"
                                                     class="form-control"
+                                                    value="{{ old('storage_cost', '') }}"
                                                 />
                                             </div>
                                             <div class="col-md-12 form-group">
@@ -498,6 +538,7 @@
                                                     name="custom_cost"
                                                     placeholder="Custom Cost"
                                                     class="form-control"
+                                                    value="{{ old('custom_cost', '') }}"
                                                 />
                                             </div>
                                             <div class="col-md-12 form-group">
@@ -506,6 +547,7 @@
                                                     name="demurage_cost"
                                                     placeholder="Demurage Cost"
                                                     class="form-control"
+                                                    value="{{ old('demurage_cost', '') }}"
                                                 />
                                             </div>
                                             <div class="col-md-12 form-group">
@@ -514,6 +556,7 @@
                                                     name="other_cost"
                                                     placeholder="Other Cost"
                                                     class="form-control"
+                                                    value="{{ old('other_cost', '') }}"
                                                 />
                                             </div>
                                         </div>
