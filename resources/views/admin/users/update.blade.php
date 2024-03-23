@@ -4,8 +4,6 @@
 <link rel="stylesheet" href="{{ asset('assets/formwizard/css/jquery-ui.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/formwizard/css/style.css') }}" />
 
-
-
 <style>
     .form-group label {
         font-weight: bold;
@@ -55,9 +53,10 @@
             @include('errors')
             <div class="wizard-v4-content w-100">
                 <div class="wizard-form py-2">
-                    <h2 class="mb-1" style="text-align: center;">Add New User</h2>
-                    <form id="create-user-form" class="form-register form-horizontal" method="POST" action="{{ route('user.store')}}" enctype="multipart/form-data">
+                    <h2 class="mb-1" style="text-align: center;">Update User Detail</h2>
+                    <form id="create-user-form" class="form-register form-horizontal" method="POST" action="{{ route('user.update',$user->id)}}" enctype="multipart/form-data">
                         @csrf
+                        @method('PUT')
                         <div class="px-4">
                             <h2>
                                 <span class="step-icon"><i class="ti-user"></i></span>
@@ -67,22 +66,22 @@
                                 <div class="inner">
                                     <div class="form-group">
                                         <label for="fullname">Full name <span class="text-danger">*</span></label>
-                                        <input type="text" name="name" id="fullname" class="form-control" value="" placeholder="Enter fullname" required />
+                                        <input type="text" name="name" id="fullname" class="form-control" value="{{$user->name}}" placeholder="Enter fullname" required />
                                     </div>
 
                                     <div class="form-group">
                                         <label for="username">Username <span class="text-danger">*</span></label>
-                                        <input type="text" name="username" id="username" class="form-control" value="" placeholder="Enter username" required />
+                                        <input type="text" name="username" id="username" class="form-control" value="{{$user->username}}" placeholder="Enter username" required />
                                     </div>
 
                                     <div class="form-group">
                                         <label for="email">Email <span class="text-danger">*</span></label>
-                                        <input type="email" name="email" id="email" class="form-control" value="" placeholder="Enter user email" required/>
+                                        <input type="email" name="email" id="email" class="form-control" value="{{$user->email}}" placeholder="Enter user email" required/>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="password">Password <span class="text-danger">*</span></label>
-                                        <input type="password" name="password" id="password" class="form-control" placeholder="Enter user password" required />
+                                        <label for="password">Password </label>
+                                        <input type="password" name="password" id="password" class="form-control" placeholder="Enter user password" />
                                     </div>
 
                                     <div class="row">
@@ -91,7 +90,7 @@
                                             <select name="time_zone_id" id="timezone" class="form-control s2s_timezone" required>
                                                 <option value="" hidden selected disabled>--- Timezone ---</option>
                                                 @foreach($timezones as $tz)
-                                                    <option value="{{$tz->id}}">
+                                                    <option value="{{$tz->id}}" {{($tz->id == $user->time_zone_id) ? 'selected' : ''}}>
                                                         {{ucfirst($tz->name)}}
                                                     </option>
                                                 @endforeach
@@ -111,7 +110,7 @@
                             <!-- SECTION 2 -->
                             <h2>
                                 <span class="step-icon"><i class="ti-shield" ></i></span>
-                                <span class="step-text">Permissions</span>
+                                <span class="step-text">Roles & Permissions</span>
                             </h2>
                                 <section>
                                 <div class="inner">
@@ -121,7 +120,9 @@
                                             <select name="roles" id="roles" class="form-control">
                                                 <option value="" hidden selected disabled>--- Roles ---</option>
                                                 @foreach($roles as $r)
-                                                    <option value="{{$r->id}}">{{ucfirst($r->name)}}</option>
+                                                    <option value="{{$r->id}}" {{($r->id == @$user->roles[0]->id) ? 'selected' : ''}}>
+                                                        {{ucfirst($r->name)}}
+                                                    </option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -130,10 +131,10 @@
                                     <div class="row" >
                                         <div class="col-md-12">
                                             <div class="font-weight-bold" style="font-size: 20px;"> {{ucfirst($key)}} </div>
-                                            <div style="display:flex; justify-content: space-around; border-bottom:#00000033 solid 1px; margin-bottom: 15px; ">
+                                            <div style="display:flex; justify-content: space-between; border-bottom:#00000033 solid 1px; margin-bottom: 15px;" class="px-2">
                                                 @foreach($p as $key => $per)
                                                     <div>
-                                                        <input type="checkbox" name="permissions[]" id="{{ $key }}" class="form-check-input" value="{{ $key }}">
+                                                        <input type="checkbox" name="permissions[]" id="{{ $key }}"  class="form-check-input" value="{{ $key }}" {{(in_array($key,$has_permissions)) ? 'checked' : ''}}>
                                                         <label for="{{ $key }}">{{ ucfirst(explode("-",$per)[1]) }}</label>
                                                     </div>
                                                 @endforeach

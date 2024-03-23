@@ -6,6 +6,10 @@
             <th>Email</th>
             <th>Time Zone</th>
             <th>Status</th>
+            <th>Created By</th>
+            <th>Updated By</th>
+            <th>Created At</th>
+            <th>Updated At</th>
             <th>Action</th>
         </tr>
     </thead>
@@ -24,10 +28,19 @@
                         <span class="tag tag-warning" >Deactive</span>
                     @endif
                 </td>
+                <td>{{ @$u->createdBy->name }}</td>
+                <td>{{ @$u->updatedBy->name }}</td>
+                <td>{{ (new DateTime($u->created_at))->format('Y-m-d H:i')  }} </td>
+                <td>{{ (new DateTime($u->updated_at))->format('Y-m-d H:i')  }} </td>
                 <td>
                     <div style="display: flex; justify-content: space-around; align-items: center;">
                         <a href="{{ route('user.edit',$u->id) }}"> <i class="fa fa-edit" style="font-size:16px; cursor:pointer;"></i> </a>
-                        <i class="fa fa-trash-o" style="font-size:16px; color:red; cursor:pointer;" data-toggle="modal" data-target="#deleteUser"></i>
+                        <a href="{{ route('user.show',$u->id) }}"> <i class="fa fa-eye" style="font-size:16px; cursor:pointer;"></i> </a>
+                        <form method="POST" id="delete_{{ $u->id }}" action="{{ route('user.destroy',$u->id)}}">
+                            @method('delete')
+                            @csrf
+                            <a onclick="confirmDelete('{{ $u->id }}')" > <i class="fa fa-trash-o" style="font-size:16px; color:red; cursor:pointer;" ></i></a>
+                        </form>
                     </div>
                 </td>
             </tr>
@@ -40,6 +53,10 @@
             <th>Email</th>
             <th>Time Zone</th>
             <th>Status</th>
+            <th>Created By</th>
+            <th>Updated By</th>
+            <th>Created At</th>
+            <th>Updated At</th>
             <th>Action</th>
         </tr>
     </tfoot>
@@ -49,20 +66,12 @@
     {{ $users->appends(Request::All())->links() }}
 @endif
 
-<div class="modal fade" id="deleteUser">
-    <div class="modal-dialog modal-sm">
-      <div class="modal-content">
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 class="modal-title">This action is not reversible.</h4>
-        </div>
-        <!-- Modal body -->
-        <div class="modal-body">
-            <div style="display: flex; justify-content: space-around; align-items: center;">
-                <button type="button" class="btn btn-outline-primary" data-dismiss="modal"><i class="fa fa-times" style="font-size:16px;" ></i> Cancel</button>
-                <button type="button" class="btn btn-outline-danger"><i class="fa fa-trash-o" style="font-size:16px;"></i> Delete</button>
-            </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <script>
+    function confirmDelete(slug) {
+        
+        if (confirm('Data will be deleted. Continue?')) {
+            console.log("Confirmed.",slug);
+            document.getElementById('delete_' + slug).submit();
+        }
+    }
+</script>

@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\admin\LoginController;
 use App\Http\Controllers\admin\UserController;
+use App\Http\Controllers\admin\PermissionController;
+use App\Http\Controllers\admin\RoleController;
 
 Route::get('/',function(){
     return view("welcome");
@@ -23,23 +25,6 @@ Route::get('/admin_login', function () {
     Route::post('/user',[UserController::class,'create'])->name('user.create');
 });   */  
 
-//Route::get('/dashboards', 'admin\HomeController@dashboard')->name('dashboard_admin');
-//Route::post('/admin_login', 'app\Http\Controllers\admin\LoginController@login')->name('admin_login');
-
-/* Route::get('/user_data_admin', 'admin\UserController@user_data')->name('all_vehicle_data_admin');
-Route::get('/search_user', 'admin\UserController@search_user')->name('search_user_admin');
-Route::get('/paginat_user_admin', 'admin\UserController@paginate_user')->name('paginate_user_admin');
-Route::get('/delete_user_admin/{id}', 'admin\UserController@deleteUser')->name('delete_user_admin');
-Route::get('/edit_user_admin/{id}', 'admin\UserController@editUserAdmin')->name('edit_user_admin');
-Route::post('/add_user_admin', 'admin\UserController@add_user')->name('add_user_admin');
-Route::post('/update_user_admin', 'admin\UserController@updateUser')->name('update_user_admin');
-Route::get('/admin_logout', 'admin\LoginController@logout')->name('admin_logout');
-Route::get('/s2s_user', 'admin\UserController@s2sUser')->name('s2s_user');
-Route::get('/s2s_timezone', 'admin\UserController@s2sTimezone')->name('s2s_timezone');
-Route::get('/get_user_permissions', 'admin\UserController@getUserPermissions')->name('get_user_permissions');
-Route::get('/assign_permission_to_user', 'admin\UserController@assignPermissionToUser')->name('assign_permission_to_user');
-Route::get('/edit_my_profile', 'admin\UserController@editMyProfile')->name('edit_my_profile');
-Route::post('/update_my_profile', 'admin\UserController@updateMyProfile')->name('update_my_profile'); */
 
 
 
@@ -887,10 +872,22 @@ Auth::routes();
     Route::post('/admin_login', [LoginController::class, 'login'])->name('admin_login');
     // user section 
     Route::get('admin/user', [UserController::class,'index'])->name('user.index');
-    Route::get('admin/create', [UserController::class,'create'])->name('user.create');
-    Route::post('admin/user', [UserController::class,'store'])->name('user.store');
+    Route::get('admin/user/create', [UserController::class,'create'])->name('user.create');
+    Route::post('admin/user/store', [UserController::class,'store'])->name('user.store');
     Route::get('/admin/user/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
     Route::put('/admin/user/update/{id}', [UserController::class, 'update'])->name('user.update');
+    Route::get('/admin/user/{id}', [UserController::class, 'show'])->name('user.show');
+    Route::delete('/admin/user/delete/{id}', [UserController::class, 'destroy'])->name('user.destroy');
+
+    // User Permissions
+    Route::get('admin/permission', [PermissionController::class,'index'])->name('permission.index');
+
+    // User Roles
+    Route::get('admin/role', [RoleController::class,'index'])->name('role.index');
+    Route::get('admin/role/create', [RoleController::class,'create'])->name('role.create');
+    Route::post('admin/role/store', [RoleController::class,'store'])->name('role.store');
+    Route::get('/admin/role/edit/{id}', [RoleController::class, 'edit'])->name('role.edit');
+    Route::get('/admin/role/{id}', [RoleController::class, 'show'])->name('role.show');
 
 
     Route::get('/dashboards', 'admin\HomeController@dashboard')->name('dashboard_admin');

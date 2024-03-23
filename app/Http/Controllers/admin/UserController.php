@@ -23,14 +23,12 @@ class UserController extends Controller
     public function index(Request $request){
 
         $paginate = $request->paginate ? $request->paginate : 10;
-        $users = User::with('time_zones:id,name')->orderBy('id', 'desc')->paginate($paginate);
-        
-        //echo "<pre />"; print_r($users); exit;
+        $users = User::with(['time_zones:id,name','createdBy:name','updatedBy:name'])->orderBy('id', 'desc')->paginate($paginate);
 
         if ($request->ajax()) {
           return view('admin.user.data', compact('users',  'paginate'));
         }
-        return view('admin.user.list', compact('users',  'paginate'));
+        return view('admin.users.list', compact('users',  'paginate'));
     }
 
     public function create(){
@@ -44,7 +42,7 @@ class UserController extends Controller
             else 
                 $permissions[$p->group_name][$p->id] = $p->name;
         }
-        return view('admin.user.create', compact('timezones','roles','permissions'));
+        return view('admin.users.create', compact('timezones','roles','permissions'));
     }
 
     public function store(Request $request)
@@ -59,7 +57,6 @@ class UserController extends Controller
             'roles.*' => 'exists:roles,id',
             'permissions.*' => 'exists:permissions,id',
         ]);
-
         try {
             $user = User::create([
                 "name" => $request['name'],
@@ -72,9 +69,9 @@ class UserController extends Controller
                 $user->roles()->sync([$request['roles']]);
             }
             $user->permissions()->sync($request['permissions']);
-            return redirect()->back()->with('success', 'Saved successfully!');
+            return redirect()->route('user.show', ['id' => $user->id])->with('success', 'Saved successfully!');
         } catch (Exception $ex) {
-            return redirect()->back()->with('error', 'Something went wrong, cannot save the user.');
+            return redirect()->route('user.index')->with('error', 'Something went wrong, cannot save the user.');
         }
     }
 
@@ -98,43 +95,70 @@ class UserController extends Controller
             array_push($has_permissions, $p->id);
         }
 
-        return view('admin.user.update',compact('user','timezones','roles','permissions','has_permissions'));
+        return view('admin.users.update',compact('user','timezones','roles','permissions','has_permissions'));
     }
 
-    /* public function update(Request $request, $id){
+    public function show($id){
 
-        dd("that is good.");
+        $timezones = DB::table('time_zones')->get();
+        $roles = DB::table('roles')->get();
+        $perms = DB::table('permissions')->orderBy('group_name')->get();
+        $permissions = array();
+
+        foreach ($perms as $p){
+            if(!array_key_exists($p->group_name, $permissions))
+                $permissions[$p->group_name] = [$p->id=>$p->name];
+            else
+                $permissions[$p->group_name][$p->id] = $p->name;
+        }
+
+        $user = User::with(['time_zones:id,name','permissions','roles'])->find($id);
+        $has_permissions = [];
+        foreach($user->permissions as $p){
+            array_push($has_permissions, $p->id);
+        }
+        return view('admin.users.view',compact('user','timezones','roles','permissions','has_permissions'));
+    }
+
+    public function update(Request $request, $id){
         $this->validate($request, [
             'name' => 'required|string',
-            'username' => 'required|unique:users',
-            'email' => 'required|unique:users',
+            'username' => 'required|unique:users,username,'.$id,
+            'email' => 'required|unique:users,email,'.$id,
             'password' => 'nullable',
             'time_zone_id' => 'required|exists:time_zones,id',
             'photo' => 'mimes:jpg,png,jpeg,bmp,gif|max:1024',
             'roles.*' => 'exists:roles,id',
             'permissions.*' => 'exists:permissions,id',
         ]);
-        dd($request);
         try {
+            $user = User::findOrFail($id);
             $password = $request['password']?[ "password" => bcrypt($request['password'])]: [];
-            $user = User::where('id',$id)->update(array_merge( [
+            $user->update(array_merge( [
                 "name" => $request['name'],
                 "username" => $request['username'],
                 "email" => $request['email'],
                 "time_zone_id" => $request['time_zone_id'],
             ],$password));
-            if($request['roles']){
+
+           if($request['roles']){
                 $user->roles()->sync([$request['roles']]);
-            }
+            } 
             $user->permissions()->sync($request['permissions']);
             
-            return redirect()->back()->with('success', 'Saved successfully!');
+            return redirect()->route('user.show', ['id' => $id])->with('success', 'Saved successfully!');
         } catch (Exception $ex) {
-            return redirect()->back()->with('error', 'Something went wrong, cannot save the user.');
+            return redirect()->route('user.show', ['id' => $id])->with('error', 'Something went wrong, cannot save the user.');
         }
-    } */
+    }
+
+    public function destroy($id){
+        try{
+            User::find($id)->delete();
+            return redirect()->route('user.index')->with('success', 'Deleted successfully!');
+        } catch(Exception $ex) {
+            return redirect()->route('user.show', ['id' => $id])->with('error', 'Something went wrong, cannot delete the user.');
+        }
+    }
 }
-
-
 ?>
-

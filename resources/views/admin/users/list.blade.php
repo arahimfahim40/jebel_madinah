@@ -46,7 +46,7 @@
     <div class="content-area py-1">
         <div class="container-fluid" > 
             @include('errors') 
-            <div class=" bg-white table-responsive">
+            <div class="bg-white table-responsive">
             <div style="clear: both;"></div>
                     <div class="row pt-1 pr-1 pl-1">
                         <div class="col-md-12 form-group">
@@ -77,7 +77,7 @@
                         </div>
                     </div>
                 <div class="site table-responsive" id="user_data">
-                    @include('admin.user.data')
+                    @include('admin.users.data')
                 </div>
             </div>
 			

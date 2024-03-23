@@ -27,16 +27,7 @@ class DatabaseSeeder extends Seeder
         ["name"=>"user-edit","group_name"=>"user"],
         ["name"=>"user-delete","group_name"=>"user"],
     ];
-     /* private $permissions = [
-        'role-view',
-        'role-create',
-        'role-edit',
-        'role-delete',
-       'user-view',
-        'user-create',
-        'user-edit',
-        'user-delete',
-     ]; */
+   
 
     /**
      * Seed the application's database.
@@ -68,9 +59,8 @@ class DatabaseSeeder extends Seeder
 
         $role = Role::create(['name' => 'Admin']);
         $permissions = Permission::pluck('id')->all();
-        //$role->syncPermissions($permissions);
-        $role->syncPermission($permissions);
-
+        $role->syncPermissions($permissions);
+        
         $user->assignRole([$role->id]);
 
         \App\Models\Location::insert([

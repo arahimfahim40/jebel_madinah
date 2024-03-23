@@ -115,6 +115,20 @@
                     <span class="s-text">Users</span>
                 </a>
             </li>
+
+            <li>
+                <a href="{{ route('role.index') }}" class="waves-effect  waves-light">
+                    <span class="s-icon"><i class="fa fa-shield"></i></span>
+                    <span class="s-text">Roles</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ route('permission.index') }}" class="waves-effect  waves-light">
+                    <span class="s-icon"><i class="fa fa-warning"></i></span>
+                    <span class="s-text">Permissions</span>
+                </a>
+            </li>
         </ul>
     </div>
 </div>
