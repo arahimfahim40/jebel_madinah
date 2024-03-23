@@ -18,10 +18,31 @@ class VehicleController extends Controller
     {
         $paginate = $request->paginate ? $request->paginate : 10;
         $status = in_array($request->status, Vehicle::VEHICLE_STATUS) ? $request->status : '';
-        // dd($request->status);
+        $searchColumns = [
+            'vin',
+            'lot_number',
+            'year',
+            'make',
+            'model',
+            'color',
+            'container_number',
+            'title_number',
+            'auction',
+            'auction_city',
+            'hat_number',
+            'buyer_number',
+            'licence_number',
+            'customer_remark',
+            'note'
+        ];
         $vehicles = Vehicle::with('location:id,name')
         ->when(!empty($status), function ($q) use ($status) {
             $q->where('status', $status);
+        })
+        ->when(!empty($request->searchValue), function ($q) use ($request, $searchColumns) {
+            foreach ($searchColumns as $value) {
+                $q->orWhere($value, 'LIKE', "%$request->searchValue%");
+            }
         })
         ->orderBy('created_at', 'desc')
         ->paginate($paginate);
