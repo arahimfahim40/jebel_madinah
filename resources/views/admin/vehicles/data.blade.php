@@ -9,6 +9,7 @@
             <th>VIN#</th>
             <th>Lot#</th>
             <th>Container#</th>
+            <th>Customer</th>
             <th>Title Received Date</th>
             <th>Title Number</th>
             <th>Title State</th>
@@ -19,7 +20,7 @@
             <th>Weight</th>
             <th>CBM</th>
             <th>Licence Number</th>
-            <th>HT Number</th>
+            <th>Hat Number</th>
             <th>C Remark</th>
             {{-- <th>Note</th> --}}
             <th>Status</th>
@@ -56,9 +57,10 @@
                 <td>{{ $item->vin }}</td>
                 <td>{{ $item->lot_number }}</td>
                 <td>{{ $item->container_number }}</td>
+                <td>{{ @$item->customer->name }}</td>
                 <td class="text-nowrap">{{ $item->title_received_date }}</td>
                 <td>{{ $item->title_number }}</td>
-                <td>{{ $item->title_state }}</td>
+                <td>{{ $item->title_status }}</td>
                 <td class="text-nowrap">{{ $item->purchase_date }}</td>
                 <td class="text-nowrap">{{ $item->pickup_date }}</td>
                 <td class="text-nowrap">{{ $item->deliver_date }}</td>
@@ -102,6 +104,7 @@
             <th>VIN#</th>
             <th>Lot#</th>
             <th>Container#</th>
+            <th>Customer</th>
             <th>Title Received Date</th>
             <th>Title Number</th>
             <th>Title State</th>
@@ -112,7 +115,7 @@
             <th>Weight</th>
             <th>CBM</th>
             <th>Licence Number</th>
-            <th>HT Number</th>
+            <th>Hat Number</th>
             <th>C Remark</th>
             {{-- <th>Note</th> --}}
             <th>Status</th>

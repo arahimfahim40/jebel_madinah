@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Customer;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class VehicleController extends Controller
 {
@@ -43,8 +45,9 @@ class VehicleController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'customer_id' => 'nullable|exists:customers,id',
+        // Validate the input data
+        $validator = Validator::make($request->all(), [
+            'customer_id' => 'required|exists:customers,id',
             'point_of_loading_id' => 'required|exists:locations,id',
             'vin' => 'required|string|max:255',
             'lot_number' => 'required|numeric',
@@ -54,6 +57,13 @@ class VehicleController extends Controller
             'auction_invoice_link' => 'nullable|url',
             'vehicle_price' => 'nullable|numeric',
         ]);
+
+        // If validation fails, redirect back with error and old input
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
 
         try {
             DB::beginTransaction();
@@ -118,9 +128,9 @@ class VehicleController extends Controller
         } catch (\Exception $e) {
             // An error occurred, rollback the transaction
             DB::rollBack();
-
-            // Handle the exception or return an error response
-            return response()->json(['message' => 'Failed to create vehicle store', 'error' => $e->getMessage()], 500);
+            return redirect()->back()
+                ->withErrors(['error' => $e->getMessage()])
+                ->withInput();
         }
 
     }
@@ -147,7 +157,98 @@ class VehicleController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        
+        // Validate the input data
+        $validator = Validator::make($request->all(), [
+            'customer_id' => 'required|exists:customers,id',
+            'point_of_loading_id' => 'required|exists:locations,id',
+            'vin' => 'required|string|max:255',
+            'lot_number' => 'required|numeric',
+            'ship_as' => 'nullable|in:half-cut,complete',
+            'is_key' => 'nullable|in:Yes,No',
+            'photos_link' => 'nullable|url',
+            'auction_invoice_link' => 'nullable|url',
+            'vehicle_price' => 'nullable|numeric',
+        ]);
+
+        // If validation fails, redirect back with error and old input
+        if ($validator->fails()) {
+            $allInputs = array_merge($request->all(), ['customer_name' => $request->customer_id ? Customer::where('id', $request->customer_id)->pluck('name')->first() : null]);
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput($allInputs);
+        }
+
+        try {
+            DB::beginTransaction();
+
+            // Retrieve the filtered data from the request
+            $filteredData = $request->only([
+                'customer_id',
+                'year',
+                'make',
+                'model',
+                'color',
+                'vin',
+                'lot_number',
+                'container_number',
+                'point_of_loading_id',
+                'ship_as',
+                'purchase_date',
+                'payment_date',
+                'pickup_date',
+                'delivery_date',
+                'note',
+                'customer_remark',
+                'hat_number',
+                'title_received_date',
+                'title_number',
+                'title_status',
+                'weight',
+                'buyer_number',
+                'auction',
+                'auction_city',
+                'is_key',
+                'licence_number',
+                'photos_link',
+                'auction_invoice_link',
+                'vehicle_price',
+                'towing_charge',
+                'auction_fee_charge',
+                'dismantal_charge',
+                'shiping_charge',
+                'storage_charge',
+                'custom_charge',
+                'demurage_charge',
+                'other_charge',
+                'towing_cost',
+                'auction_fee_cost',
+                'dismantal_cost',
+                'ship_cost',
+                'storage_cost',
+                'custom_cost',
+                'demurage_cost',
+                'other_cost'
+            ]);
+
+            // Create a new vehicle store
+            $vehicle = Vehicle::find($id);
+            $vehicle = $vehicle->update($filteredData);
+
+            // Commit the transaction
+            DB::commit();
+
+            // Redirect back with success message
+            return redirect()->route('vehicles.index')->with('success', 'Vehicle Updated successfully');
+        } catch (\Exception $e) {
+            // An error occurred, rollback the transaction
+            DB::rollBack();
+            $allInputs = array_merge($request->all(), ['customer_name' => $request->customer_id ? Customer::where('id', $request->customer_id)->pluck('name')->first() : null]);
+            return redirect()->back()
+                ->withErrors(['error' => $e->getMessage()])
+                ->withInput($allInputs);
+        }
+        
     }
 
     /**
