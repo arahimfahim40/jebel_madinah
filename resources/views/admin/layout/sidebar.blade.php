@@ -126,12 +126,14 @@
                 </a>
             </li>
             @endcan
+            @can('permission-view')
             <li>
                 <a href="{{ route('permission.index') }}" class="waves-effect  waves-light">
                     <span class="s-icon"><i class="fa fa-warning"></i></span>
                     <span class="s-text">Permissions</span>
                 </a>
             </li>
+            @endcan
         </ul>
     </div>
 </div>
