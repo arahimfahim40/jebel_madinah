@@ -129,6 +129,7 @@
                     <div class="form-group col-md-3 col-lg-3 col-sm-6 col-xs-12" >
                         <input type="text" name="search" class="form-control b-a" placeholder="Search for ..." id="search">
                     </div>
+                    @can('vehicle-change-status')
                     <div class="form-group col-md-2">
                         <button 
                             class="btn btn-info"
@@ -138,6 +139,7 @@
                             <i class="fa fa-info-circle"></i> Change Status
                         </button>
                     </div>
+                    @endcan
                     
                     <div class="form-group col-md-1 col-lg-1 col-sm-2 col-xs-12" style="float:right;">
                         <select class="form-control" id="showEntry">

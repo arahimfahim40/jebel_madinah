@@ -3,8 +3,12 @@
     <thead class="bg-info">
         <tr>
             <th>#</th>
+            @can('vehicle-change-status')
             <th><input class="checkbox_all"  onclick="checkAll(this)" type="checkbox" style=" width:25px; height:20px;"></th>
+            @endcan
+            @can('vehicle-edit')
             <th>Edit</th>
+            @endcan
             <th>Photo Link</th>
             <th>Vehicle Description</th>
             <th>VIN#</th>
@@ -36,6 +40,7 @@
         @foreach ($vehicles as $index => $item)
             <tr id="searchBody">
                 <td>{{ $index + 1 }}</td>
+                @can('vehicle-change-status')
                 <td>
                     <input 
                         name="status[{{ $item->id }}]"
@@ -46,9 +51,12 @@
                         data-status="{{ $item->status }}"
                     />
                 </td>
+                @endcan
+                @can('vehicle-edit')
                 <td>
                     <a href="{{ route('vehicles.edit', $item->id) }}"  class="btn btn-info btn-circle btn-sm column"><span class="fa fa-edit"></span></a>
                 </td>
+                @endcan
                 <td class="column">
                     <?php
                     $label = 'tag-success';
@@ -106,8 +114,12 @@
     <tfoot>
         <tr>
             <th>#</th>
+            @can('vehicle-change-status')
             <th><input class="checkbox_all"  onclick="checkAll(this)" type="checkbox" style=" width:25px; height:20px;"></th>
+            @endcan
+            @can('vehicle-edit')
             <th>Edit</th>
+            @endcan
             <th>Photo Link</th>
             <th>Vehicle Description</th>
             <th>VIN#</th>

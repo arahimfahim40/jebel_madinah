@@ -10,7 +10,7 @@
                 </a>
             </li>
             @endcan
-            {{-- @if (Auth::guard('admin')->user()->hasPermissions(['Admin', 'invoices-management'])) --}}
+            @can('vehicle-view')
             <li class="with-sub vehicles_section">
                 <a href="/invoice_admin/5" class="waves-effect  waves-light"
                     onclick="event.preventDefault(); !window.vehicles_section && get_admin_sidebar_sub_count('Vehicle');">
@@ -20,11 +20,11 @@
                     <span class="s-text">Vehicles</span>
                 </a>
                 <ul>
-                    {{-- @if (Auth::guard('admin')->user()->hasPermissions(['Admin', 'add-invoice'])) --}}
+                    @can('vehicle-create')
                         <li>
                             <a href="{{ route('vehicles.create') }}">Add new</a>
                         </li>
-                    {{-- @endif --}}
+                    @endcan
                     <li><a href="{{ route('vehicles.index') }}">All
                             <span class="tag tag-success t_all_vehicle" style="float:right;">0</span>
                         </a></li>
@@ -46,7 +46,8 @@
 
                     <li><a href="{{ route('vehicles.cost_analysis') }}">Cost anlysis</a></li>
                     <li><a href="{{ route('vehicles.dateline') }}">Datelines</a></li>
-
+                    
+                    @can('vehicle-summary')
                     <li class="with-sub">
                         <a href="#" class="waves-effect waves-light"
                             onclick="getVehicleSummaryCounts(event);">
@@ -72,12 +73,13 @@
                             @endforeach
                         </ul>
                     </li>
+                    @endcan
                 </ul>
             </li>
-            {{-- @endif --}}
+            @endcan
 
             {{-- Invoice Section --}}
-            {{-- @if (Auth::guard('admin')->user()->hasPermissions(['Admin', 'invoices-management'])) --}}
+            @can('invoice-view')
             <li class="with-sub invoice_section">
                 <a href="/invoice_admin/5" class="waves-effect  waves-light"
                     onclick="event.preventDefault(); !window.invoice_section && get_admin_sidebar_sub_count('Invoice');">
@@ -87,11 +89,11 @@
                     <span class="s-text">Invoices</span>
                 </a>
                 <ul>
-                    {{-- @if (Auth::guard('admin')->user()->hasPermissions(['Admin', 'add-invoice'])) --}}
+                    @can('invoice-create')
                         <li>
                             <a href="{{ route('invoices.create') }}">Add new</a>
                         </li>
-                    {{-- @endif --}}
+                    @endcan
                     <li><a href="{{ route('invoices.index') }}">All
                             <span class="tag tag-success t_all_invoice" style="float:right;">0</span>
                         </a></li>
@@ -109,7 +111,7 @@
                         </a></li>
                 </ul>
             </li>
-            {{-- @endif --}}
+            @endcan
             @can('user-view')
             <li>
                 <a href="{{ route('user.index') }}" class="waves-effect  waves-light">
