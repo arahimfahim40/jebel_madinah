@@ -70,10 +70,11 @@
                             <!-- <button type="button" class="btn btn-secondary btn-outline-infos waves-effect waves-light float-right" data-toggle="modal" data-target="#add_user" style="height: 33px; margin-top:-5px;">
                                 <i class="fa fa-plus"></i> Add
                             </button> -->
-
+                            @can('user-create')
                             <a href="{{ route('user.create') }}" class="btn btn-secondary btn-outline-info waves-effect waves-light" style="height: 33px; margin-top:-5px;">
                                 <i class="fa fa-plus"></i> Add
                             </a>
+                            @endcan
                         </div>
                     </div>
                 <div class="site table-responsive" id="user_data">

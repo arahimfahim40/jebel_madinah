@@ -10,14 +10,12 @@ use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
-    ///protected $user;
     public function __construct()
     {
-        /* $this->middleware(['permission:user-view|user-create|user-edit|user-delete'], ['only' => ['index', 'show']]);
-        $this->middleware(['permission:user-create'], ['only' => ['create', 'store']]);
-        $this->middleware(['permission:user-edit'], ['only' => ['edit', 'update']]);
-        $this->middleware(['permission:user-delete'], ['only' => ['destroy']]); */
-       // $this->user = $user;
+        //$this->middleware('permission:user-view', ['only' => ['index','show']]);
+        //$this->middleware('permission:user-create', ['only' => ['create','store']]);
+        //$this->middleware('permission:user-edit', ['only' => ['update','edit']]);
+        //$this->middleware('permission:user-delete', ['only' => ['destroy']]);
     }
 
     public function index(Request $request){
@@ -141,9 +139,10 @@ class UserController extends Controller
                 "time_zone_id" => $request['time_zone_id'],
             ],$password));
 
-           if($request['roles']){
-                $user->roles()->sync([$request['roles']]);
-            } 
+            $roles = [];
+           if($request['roles'])$roles = [$request['roles']];
+            
+            $user->roles()->sync($roles);
             $user->permissions()->sync($request['permissions']);
             
             return redirect()->route('user.show', ['id' => $id])->with('success', 'Saved successfully!');

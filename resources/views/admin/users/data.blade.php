@@ -34,13 +34,17 @@
                 <td>{{ (new DateTime($u->updated_at))->format('Y-m-d H:i')  }} </td>
                 <td>
                     <div style="display: flex; justify-content: space-around; align-items: center;">
-                        <a href="{{ route('user.edit',$u->id) }}"> <i class="fa fa-edit" style="font-size:16px; cursor:pointer;"></i> </a>
+                        @can('user-edit')
+                            <a href="{{ route('user.edit',$u->id) }}"> <i class="fa fa-edit" style="font-size:16px; cursor:pointer;"></i> </a>
+                        @endcan
                         <a href="{{ route('user.show',$u->id) }}"> <i class="fa fa-eye" style="font-size:16px; cursor:pointer;"></i> </a>
+                        @can('user-delete')
                         <form method="POST" id="delete_{{ $u->id }}" action="{{ route('user.destroy',$u->id)}}">
                             @method('delete')
                             @csrf
                             <a onclick="confirmDelete('{{ $u->id }}')" > <i class="fa fa-trash-o" style="font-size:16px; color:red; cursor:pointer;" ></i></a>
                         </form>
+                        @endcan
                     </div>
                 </td>
             </tr>

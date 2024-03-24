@@ -19,7 +19,6 @@
     <link rel="stylesheet" href="{{ asset('assets/bootstrap4/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/themify-icons/themify-icons.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/font-awesome/css/font-awesome.min.css') }}">
-
     <!-- Neptune CSS -->
     <link rel="stylesheet" href="{{ asset('assets/css/core.css') }}">
 </head>
@@ -46,22 +45,16 @@
                                 </ul>
                             </div>
                         @endif
-                        <form method="POST" class="form-material mb-1 from-prevent-multiple-submits"
-                            action="{{ route('admin_login') }}">
-                            
-                            {{ csrf_field() }}
+                        <form method="POST" class="form-material mb-1 from-prevent-multiple-submits" action="{{ route('auth.login') }}">
+                             @csrf
                             <div class="form-group">
-                                <input type="email" class="form-control" id="exampleInputEmail" placeholder="Email"
-                                    name="email" required="required">
+                                <input type="email" class="form-control" id="exampleInputEmail" value="{{old('email')}}"  placeholder="Email" name="email" required />
                             </div>
                             <div class="form-group">
-                                <input type="password" class="form-control" id="exampleInputPassword"
-                                    placeholder="Password" name="password" required="required">
+                                <input type="password" class="form-control" id="exampleInputPassword" value="{{old('password')}}" placeholder="Password" name="password" required>
                             </div>
                             <div class="px-2 form-group mb-0">
-                                <button type="submit"
-                                    class="btn btn-purple btn-block text-uppercase from-prevent-multiple-submits"
-                                    id="signin">Sign in</button>
+                                <button type="submit" class="btn btn-purple btn-block text-uppercase from-prevent-multiple-submits" id="signin">Sign in</button>
                             </div>
                         </form>
                         <div class="p-2 text-xs-center text-muted">

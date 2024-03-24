@@ -17,6 +17,8 @@ class DatabaseSeeder extends Seeder
      */
 
      private $permissions = [
+        ["name"=>"dashboard-view","group_name"=>"dashboard"],
+        ["name"=>"permission-view","group_name"=>"permission"],
         ["name"=>"role-view","group_name"=>"role"],
         ["name"=>"role-create","group_name"=>"role"],
         ["name"=>"role-edit","group_name"=>"role"],

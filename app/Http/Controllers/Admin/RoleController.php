@@ -34,7 +34,7 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'role' => 'required|unique:users,name',
+            'role' => 'required|unique:roles,name',
             'permissions' => 'required|array|min:1',
             'permissions.*' => 'exists:permissions,id',
         ]);
@@ -66,26 +66,24 @@ class RoleController extends Controller
         foreach($role->permissions as $p){
             array_push($has_permissions, $p->id);
         }
-
         return view('admin.roles.update', compact('role','permissions','has_permissions'));
   }
 
   public function update(Request $request, $id){
     $this->validate($request, [
-      'role' => 'required|unique:users,name,'.$id,
+      'role' => 'required|unique:roles,name,'.$id,
       'permissions' => 'required|array|min:1',
       'permissions.*' => 'exists:permissions,id',
     ]);
 
     try {
-
         $role = Role::findOrFail($id);
         $role->update(["name" => $request['role']]);
         $role->permissions()->sync($request['permissions']);
         
-        return redirect()->route('user.show', ['id' => $id])->with('success', 'Saved successfully!');
+        return redirect()->route('role.show', ['id' => $id])->with('success', 'Updated successfully!');
     } catch (Exception $ex) {
-        return redirect()->route('user.show', ['id' => $id])->with('error', 'Something went wrong, cannot save the user.');
+        return redirect()->route('role.show', ['id' => $id])->with('error', 'Something went wrong, cannot update the user.');
     }
  }
 

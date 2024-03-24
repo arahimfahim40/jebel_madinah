@@ -20,8 +20,12 @@
                 <td>{{ (new DateTime($r->updated_at))->format('Y-m-d H:i')  }} </td>
                 <td>
                     <div style="display: flex; justify-content: space-around; align-items: center;">
+                        @can('role-edit')
                         <a href="{{ route('role.edit',$r->id) }}"> <i class="fa fa-edit" style="font-size:16px; cursor:pointer;"></i> </a>
+                        @endcan
+                        @can('role-view')
                         <a href="{{ route('role.show',$r->id) }}"> <i class="fa fa-eye" style="font-size:16px; cursor:pointer;"></i> </a>
+                        @endcan
                     </div>
                 </td>
             </tr>

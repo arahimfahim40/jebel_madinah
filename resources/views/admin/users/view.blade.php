@@ -112,9 +112,11 @@
                                             <a href="{{ route('user.index') }}" class="btn btn-secondary btn-outline-info waves-effect waves-light" style="height: 33px; margin-top:-5px;">
                                                 <i class="fa fa fa-arrow-left"></i> Back To List
                                             </a>
+                                            @can('user-edit')
                                             <a href="{{ route('user.edit',$user->id)  }}" class="btn btn-secondary btn-outline-info waves-effect waves-light" style="height: 33px; margin-top:-5px;">
                                                 <i class="fa fa-edit"></i> Edit
                                             </a>
+                                            @endcan
                                         </div>
                                     </div>
                                 </div>

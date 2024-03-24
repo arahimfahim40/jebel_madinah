@@ -118,7 +118,7 @@
                                         <div class="col-md-12">
                                             <label for="roles">Choose Roles</label>
                                             <select name="roles" id="roles" class="form-control">
-                                                <option value="" hidden selected disabled>--- Roles ---</option>
+                                                <option value="" selected>--- Roles ---</option>
                                                 @foreach($roles as $r)
                                                     <option value="{{$r->id}}" {{($r->id == @$user->roles[0]->id) ? 'selected' : ''}}>
                                                         {{ucfirst($r->name)}}
