@@ -21,13 +21,11 @@
                 <span class="hamburger"></span>
             </div>
             <ul class="nav navbar-nav float-md-right">
-                <li class="nav-item dropdown">
+                {{-- <li class="nav-item dropdown">
                     <a class="nav-link" href="#" data-toggle="dropdown" aria-expanded="false">
                         <i class="ti-email message_admin"></i>
                         <span class="hidden-md-up ml-1">Notifications</span>
-                        {{-- <span class="tag tag-danger top count_message_admin"><?=DB::table('notifications')
-                                ->where(['customer_id' => @auth()->guard('admin')->id(), 'type' => 1, 'status' => 0])->count();
-                            ?></span> --}}
+                        <span class="tag tag-danger top count_message_admin">0</span>
                     </a>
                     <div class="dropdown-messages dropdown-tasks dropdown-menu dropdown-menu-right animated fadeInUp meessage_admin_detail">
                         <div class="m-item">
@@ -41,7 +39,7 @@
                             <strong>View all notifications</strong>
                         </a>
                     </div>
-                </li>
+                </li> --}}
                 <li class="nav-item dropdown hidden-sm-down">
                     <a href="#" data-toggle="dropdown" aria-expanded="false">
                         <span class="avatar box-32">
@@ -59,9 +57,6 @@
                         
                          <a class="dropdown-item" href="{{route('auth.logout')}}"><i
                                     class="ti-power-off mr-0-5"></i> Sign out</a>
-                        <a class="dropdown-item text-warning" target="_blank" href="https://oldsystem.pglsystem.com/">
-                            <i class="ti-home mr-0-5"></i> Open Old System
-                        </a>
                     </div>
                 </li>
             </ul>
