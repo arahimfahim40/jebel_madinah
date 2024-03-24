@@ -13,6 +13,24 @@ use function PHPUnit\Framework\throwException;
 
 class VehicleController extends Controller
 {
+    private static $searchColumns = [
+        'vin',
+        'lot_number',
+        'year',
+        'make',
+        'model',
+        'color',
+        'container_number',
+        'title_number',
+        'auction',
+        'auction_city',
+        'hat_number',
+        'buyer_number',
+        'licence_number',
+        'customer_remark',
+        'note'
+    ];
+    
     /**
      * Display a listing of the resource.
      */
@@ -20,31 +38,67 @@ class VehicleController extends Controller
     {
         $paginate = $request->paginate ? $request->paginate : 10;
         $status = in_array($request->status, Vehicle::VEHICLE_STATUS) ? $request->status : '';
-        $searchColumns = [
-            'vin',
-            'lot_number',
-            'year',
-            'make',
-            'model',
-            'color',
-            'container_number',
-            'title_number',
-            'auction',
-            'auction_city',
-            'hat_number',
-            'buyer_number',
-            'licence_number',
-            'customer_remark',
-            'note'
-        ];
         
         $vehicles = Vehicle::with('location:id,name')
         ->when(!empty($status), function ($q) use ($status) {
             $q->where('status', $status);
         })
-        ->when(!empty($request->searchValue), function ($q) use ($request, $searchColumns) {
-            $q->where(function ($query) use ($request, $searchColumns) {
-                foreach ($searchColumns as $value) {
+        ->when(!empty($request->searchValue), function ($q) use ($request) {
+            $q->where(function ($query) use ($request) {
+                foreach (self::$searchColumns as $value) {
+                    $query->orWhere($value, 'LIKE', "%$request->searchValue%");
+                }
+            });
+        })
+        ->orderBy('created_at', 'desc')
+        ->paginate($paginate);
+        
+        if ($request->ajax()) {
+          return view('admin.vehicles.data', compact('vehicles', 'status', 'paginate'));
+        }
+        return view('admin.vehicles.list', compact('vehicles', 'status', 'paginate'));
+    }
+    /**
+     * Display a listing of the resource.
+     */
+    public function cost_analysis (Request $request)
+    {
+        $paginate = $request->paginate ? $request->paginate : 10;
+        $status = in_array($request->status, Vehicle::VEHICLE_STATUS) ? $request->status : '';
+
+        
+        $vehicles = Vehicle::with('location:id,name')
+        ->when(!empty($status), function ($q) use ($status) {
+            $q->where('status', $status);
+        })
+        ->when(!empty($request->searchValue), function ($q) use ($request) {
+            $q->where(function ($query) use ($request) {
+                foreach (self::$searchColumns as $value) {
+                    $query->orWhere($value, 'LIKE', "%$request->searchValue%");
+                }
+            });
+        })
+        ->orderBy('created_at', 'desc')
+        ->paginate($paginate);
+        
+        if ($request->ajax()) {
+          return view('admin.vehicles.data', compact('vehicles', 'status', 'paginate'));
+        }
+        return view('admin.vehicles.list', compact('vehicles', 'status', 'paginate'));
+    }
+    
+    public function dateline (Request $request)
+    {
+        $paginate = $request->paginate ? $request->paginate : 10;
+        $status = in_array($request->status, Vehicle::VEHICLE_STATUS) ? $request->status : '';
+
+        $vehicles = Vehicle::with('location:id,name')
+        ->when(!empty($status), function ($q) use ($status) {
+            $q->where('status', $status);
+        })
+        ->when(!empty($request->searchValue), function ($q) use ($request) {
+            $q->where(function ($query) use ($request) {
+                foreach (self::$searchColumns as $value) {
                     $query->orWhere($value, 'LIKE', "%$request->searchValue%");
                 }
             });

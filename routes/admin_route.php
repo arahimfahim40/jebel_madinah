@@ -53,9 +53,6 @@ Auth::routes();
 
     
     Route::post('/admin/vehicle_change_status', [VehicleController::class, 'change_status'])->name('vehicles.change_status');
-
-    
-
     Route::get('/admin/vehicles_cost_analysis', [VehicleController::class, 'cost_analysis'])->name('vehicles.cost_analysis');
     Route::get('/admin/vehicles_dateline', [VehicleController::class, 'dateline'])->name('vehicles.dateline');
     Route::get('/admin/vehicles_summary', [VehicleController::class, 'summary'])->name('vehicles.summary');
