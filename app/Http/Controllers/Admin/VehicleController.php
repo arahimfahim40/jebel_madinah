@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
+use function PHPUnit\Framework\throwException;
+
 class VehicleController extends Controller
 {
     /**
@@ -35,21 +37,24 @@ class VehicleController extends Controller
             'customer_remark',
             'note'
         ];
+        
         $vehicles = Vehicle::with('location:id,name')
         ->when(!empty($status), function ($q) use ($status) {
             $q->where('status', $status);
         })
         ->when(!empty($request->searchValue), function ($q) use ($request, $searchColumns) {
-            foreach ($searchColumns as $value) {
-                $q->orWhere($value, 'LIKE', "%$request->searchValue%");
-            }
+            $q->where(function ($query) use ($request, $searchColumns) {
+                foreach ($searchColumns as $value) {
+                    $query->orWhere($value, 'LIKE', "%$request->searchValue%");
+                }
+            });
         })
         ->orderBy('created_at', 'desc')
         ->paginate($paginate);
+        
         if ($request->ajax()) {
           return view('admin.vehicles.data', compact('vehicles', 'status', 'paginate'));
         }
-        
         return view('admin.vehicles.list', compact('vehicles', 'status', 'paginate'));
     }
 
@@ -278,5 +283,22 @@ class VehicleController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function change_status(Request  $request){
+        try {
+            DB::beginTransaction();
+            if(empty($request->selectedVehicleIds)){
+                throw new \InvalidArgumentException('No vehicle IDs were specified to change the status.');
+            }
+            Vehicle::whereIn('id', $request->selectedVehicleIds)
+            ->update(['status' => $request->status]);
+            DB::commit();
+            return response()->json(['result' => true, 'message' =>'Vehicles status changed successfully!']);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(['result' => false, 'message' =>'Something went wrong, '. $th->getMessage() ], 400);
+
+        }
     }
 }

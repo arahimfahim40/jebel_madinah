@@ -3,6 +3,7 @@
     <thead class="bg-info">
         <tr>
             <th>#</th>
+            <th><input class="checkbox_all"  onclick="checkAll(this)" type="checkbox" style=" width:25px; height:20px;"></th>
             <th>Edit</th>
             <th>Photo Link</th>
             <th>Vehicle Description</th>
@@ -35,6 +36,16 @@
         @foreach ($vehicles as $index => $item)
             <tr id="searchBody">
                 <td>{{ $index + 1 }}</td>
+                <td>
+                    <input 
+                        name="status[{{ $item->id }}]"
+                        type="checkbox"
+                        style="width:25px; height:20px;"
+                        class="checkbox"
+                        data-id="{{ $item->id }}"
+                        data-status="{{ $item->status }}"
+                    />
+                </td>
                 <td>
                     <a href="{{ route('vehicles.edit', $item->id) }}"  class="btn btn-info btn-circle btn-sm column"><span class="fa fa-edit"></span></a>
                 </td>
@@ -95,6 +106,7 @@
     <tfoot>
         <tr>
             <th>#</th>
+            <th><input class="checkbox_all"  onclick="checkAll(this)" type="checkbox" style=" width:25px; height:20px;"></th>
             <th>Edit</th>
             <th>Photo Link</th>
             <th>Vehicle Description</th>
