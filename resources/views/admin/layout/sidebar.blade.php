@@ -2,12 +2,14 @@
 <div class="site-sidebar">
     <div class="custom-scroll custom-scroll-light">
         <ul class="sidebar-menu">
+            @can('dashboard-view')
             <li>
-                <a href="{{ route('dashboard_admin') }}" class="waves-effect  waves-light">
+                <a href="{{ route('home.index') }}" class="waves-effect  waves-light">
                     <span class="s-icon"><i class="fa fa-home"></i></span>
                     <span class="s-text">Dashboard</span>
                 </a>
             </li>
+            @endcan
             {{-- @if (Auth::guard('admin')->user()->hasPermissions(['Admin', 'invoices-management'])) --}}
             <li class="with-sub vehicles_section">
                 <a href="/invoice_admin/5" class="waves-effect  waves-light"
@@ -108,6 +110,30 @@
                 </ul>
             </li>
             {{-- @endif --}}
+            @can('user-view')
+            <li>
+                <a href="{{ route('user.index') }}" class="waves-effect  waves-light">
+                    <span class="s-icon"><i class="fa fa-users"></i></span>
+                    <span class="s-text">Users</span>
+                </a>
+            </li>
+            @endcan
+            @can('role-view')
+            <li>
+                <a href="{{ route('role.index') }}" class="waves-effect  waves-light">
+                    <span class="s-icon"><i class="fa fa-shield"></i></span>
+                    <span class="s-text">Roles</span>
+                </a>
+            </li>
+            @endcan
+            @can('permission-view')
+            <li>
+                <a href="{{ route('permission.index') }}" class="waves-effect  waves-light">
+                    <span class="s-icon"><i class="fa fa-warning"></i></span>
+                    <span class="s-text">Permissions</span>
+                </a>
+            </li>
+            @endcan
         </ul>
     </div>
 </div>

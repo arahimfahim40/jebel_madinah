@@ -8,13 +8,71 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LocationController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\auth\AuthController;
+use App\Http\Controllers\admin\UserController;
+use App\Http\Controllers\admin\PermissionController;
+use App\Http\Controllers\admin\RoleController;
+use App\Http\Controllers\admin\HomeController;
 
-Auth::routes();
+Route::get('/',function(){
+    return view("auth/login");
+});
+
+Route::get('/login', function () {
+    return view('auth/login');
+});
+
+/* Route::middleware('auth')->group(function(){
+    Route::get('/user',[UserController::class,'user'])->name('user');
+    Route::post('/user',[UserController::class,'create'])->name('user.create');
+});   */  
+
+
+
+
+//Auth::routes();
 
 // Route::middleware('auth:web')->group(function () {
 
-    Route::get('/dashboards', 'admin\HomeController@dashboard')->name('dashboard_admin');
-    Route::post('/admin_login', 'admin\LoginController@login')->name('admin_login');
+Route::get('login', [AuthController::class, 'index'])->name('login');
+Route::post('login', [AuthController::class, 'login'])->name('auth.login');
+
+Route::group(['middleware' => 'auth'], function () {
+
+    Route::get('logout', [AuthController::class, 'logout'])->name('auth.logout');
+
+    // user section 
+    Route::get('admin/dashboard', [HomeController::class, 'index'])->name('home.index')->middleware(['can:dashboard-view']);
+
+    Route::get('admin/user', [UserController::class,'index'])->name('user.index')->middleware(['can:user-view']);
+    Route::get('admin/user/create', [UserController::class,'create'])->name('user.create')->middleware(['can:user-create']);
+    Route::post('admin/user/store', [UserController::class,'store'])->name('user.store')->middleware(['can:user-create']);
+    Route::get('admin/user/edit/{id}', [UserController::class, 'edit'])->name('user.edit')->middleware(['can:user-edit']);
+    Route::put('admin/user/update/{id}', [UserController::class, 'update'])->name('user.update')->middleware(['can:user-edit']);
+    Route::get('admin/user/{id}', [UserController::class, 'show'])->name('user.show')->middleware(['can:user-view']);
+    Route::delete('admin/user/delete/{id}', [UserController::class, 'destroy'])->name('user.destroy')->middleware(['can:user-delete']);
+
+    // User Permissions
+    Route::get('admin/permission', [PermissionController::class,'index'])->name('permission.index')->middleware(['can:permission-view']);
+
+    // User Roles
+    Route::get('admin/role', [RoleController::class,'index'])->name('role.index')->middleware(['can:role-view']);
+    Route::get('admin/role/create', [RoleController::class,'create'])->name('role.create')->middleware(['can:role-create']);
+    Route::post('admin/role/store', [RoleController::class,'store'])->name('role.store')->middleware(['can:role-create']);
+    Route::get('/admin/role/edit/{id}', [RoleController::class, 'edit'])->name('role.edit')->middleware(['can:role-edit']);
+    Route::put('/admin/role/update/{id}', [RoleController::class, 'update'])->name('role.update')->middleware(['can:role-edit']);
+    Route::get('/admin/role/{id}', [RoleController::class, 'show'])->name('role.show')->middleware(['can:role-view']);
+});
+
+    
+    
+    
+    
+
+    
+
+
+
     Route::get('/admin_shipment_summary', 'admin\HomeController@shipment_summary')->name('shipment_summary_admin');
     Route::get('/admin_vehicle_summary', 'admin\HomeController@vehicle_summary')->name('vehicle_summary_admin');
     Route::get('/admin_message', 'admin\HomeController@message')->name('message_admin');
