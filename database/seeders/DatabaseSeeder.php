@@ -41,6 +41,11 @@ class DatabaseSeeder extends Seeder
         ["name"=>"invoice-change-status","group_name"=>"invoice"],
         ["name"=>"invoice-edit","group_name"=>"invoice"],
         ["name"=>"invoice-delete","group_name"=>"invoice"],
+        
+        ["name"=>"location-view","group_name"=>"location"],
+        ["name"=>"location-create","group_name"=>"location"],
+        ["name"=>"location-edit","group_name"=>"location"],
+        ["name"=>"location-delete","group_name"=>"location"],
     ];
    
 
@@ -93,6 +98,7 @@ class DatabaseSeeder extends Seeder
             ['name' => $faker->name, 'email' => $faker->email, 'password' => bcrypt($faker->password) ],
         ]);
 
+        $this->call(InvoiceSeeder::class);
         $this->call(VehicleSeeder::class);
        
     }

@@ -136,6 +136,14 @@
                 </a>
             </li>
             @endcan
+            @can('location-view')
+            <li>
+                <a href="{{ route('locations.index') }}" class="waves-effect  waves-light">
+                    <span class="s-icon"><i class="fa fa-globe"></i></span>
+                    <span class="s-text">Location</span>
+                </a>
+            </li>
+            @endcan
         </ul>
     </div>
 </div>
