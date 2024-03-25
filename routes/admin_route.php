@@ -101,7 +101,6 @@ Route::group(['middleware' => 'auth'], function () {
     
     Route::post('/admin/vehicle_change_status', [VehicleController::class, 'change_status'])->name('vehicles.change_status')->middleware(['can:vehicle-change-status']);
     Route::get('/admin/vehicles_cost_analysis', [VehicleController::class, 'cost_analysis'])->name('vehicles.cost_analysis')->middleware(['can:vehicle-view']);
-    Route::get('/admin/vehicles_dateline', [VehicleController::class, 'dateline'])->name('vehicles.dateline')->middleware(['can:vehicle-view']);
     Route::get('/admin/vehicles_summary', [VehicleController::class, 'summary'])->name('vehicles.summary')->middleware(['can:vehicle-view']);
 
     // Invoice Routes

@@ -43,6 +43,9 @@ class VehicleController extends Controller
         ->when(!empty($status), function ($q) use ($status) {
             $q->where('status', $status);
         })
+        ->when(!empty($request->location_id), function ($q) use ($request) {
+            $q->where('point_of_loading_id', $request->location_id);
+        })
         ->when(!empty($request->searchValue), function ($q) use ($request) {
             $q->where(function ($query) use ($request) {
                 foreach (self::$searchColumns as $value) {
@@ -67,31 +70,6 @@ class VehicleController extends Controller
         $status = in_array($request->status, Vehicle::VEHICLE_STATUS) ? $request->status : '';
 
         
-        $vehicles = Vehicle::with('location:id,name')
-        ->when(!empty($status), function ($q) use ($status) {
-            $q->where('status', $status);
-        })
-        ->when(!empty($request->searchValue), function ($q) use ($request) {
-            $q->where(function ($query) use ($request) {
-                foreach (self::$searchColumns as $value) {
-                    $query->orWhere($value, 'LIKE', "%$request->searchValue%");
-                }
-            });
-        })
-        ->orderBy('created_at', 'desc')
-        ->paginate($paginate);
-        
-        if ($request->ajax()) {
-          return view('admin.vehicles.data', compact('vehicles', 'status', 'paginate'));
-        }
-        return view('admin.vehicles.list', compact('vehicles', 'status', 'paginate'));
-    }
-    
-    public function dateline (Request $request)
-    {
-        $paginate = $request->paginate ? $request->paginate : 10;
-        $status = in_array($request->status, Vehicle::VEHICLE_STATUS) ? $request->status : '';
-
         $vehicles = Vehicle::with('location:id,name')
         ->when(!empty($status), function ($q) use ($status) {
             $q->where('status', $status);

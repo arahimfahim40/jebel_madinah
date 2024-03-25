@@ -15,7 +15,19 @@ class HomeController extends Controller
     
     public function index(Request $request)
     {
-        return view('admin.dashboard');
+        $vehicleSummary = Vehicle::leftJoin('locations', 'locations.id', '=', 'vehicles.point_of_loading_id')
+        ->select(
+            'point_of_loading_id',
+            'locations.name as location_name',
+            DB::raw("SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) AS pending"),
+            DB::raw("SUM(CASE WHEN status = 'on_the_way' THEN 1 ELSE 0 END) AS on_the_way"),
+            DB::raw("SUM(CASE WHEN status = 'on_hand_no_title' THEN 1 ELSE 0 END) AS on_hand_no_title"),
+            DB::raw("SUM(CASE WHEN status = 'on_hand_with_title' THEN 1 ELSE 0 END) AS on_hand_with_title"),
+            DB::raw("SUM(CASE WHEN status = 'shipped' THEN 1 ELSE 0 END) AS shipped"),
+        )
+        ->groupBy('point_of_loading_id')
+        ->get();
+        return view('admin.dashboard', compact('vehicleSummary'));
     }
 
     public function admin_sidebar_count(Request $request){

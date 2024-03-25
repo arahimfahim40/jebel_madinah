@@ -117,7 +117,7 @@
         <div class="container-fluid">
             <div class="row text-xs-center">
                 <div class="col-sm-4 text-sm-left mb-0-5 mb-sm-0">
-                     © 2019-{{date("Y")}} PGL, All rights reserved.
+                     © 2019-{{date("Y")}} AL SADEER, All rights reserved.
                 </div>
                 <div class="col-sm-8 text-sm-right">
                 </div>

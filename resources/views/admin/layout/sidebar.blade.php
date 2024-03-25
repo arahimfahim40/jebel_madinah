@@ -45,7 +45,6 @@
                         </a></li>
 
                     <li><a href="{{ route('vehicles.cost_analysis') }}">Cost anlysis</a></li>
-                    <li><a href="{{ route('vehicles.dateline') }}">Datelines</a></li>
                     
                     @can('vehicle-summary')
                     <li class="with-sub">
@@ -85,7 +84,7 @@
                     onclick="event.preventDefault(); !window.invoice_section && get_admin_sidebar_sub_count('Invoice');">
                     <span class="s-caret"><i class="fa fa-angle-down"></i></span>
                     <span class="tag tag-success t_all_invoice">0</span>
-                    <span class="s-icon"><i class="fa fa-file-text-o"></i></span>
+                    <span class="s-icon"><i class="ti-receipt"></i></span>
                     <span class="s-text">Invoices</span>
                 </a>
                 <ul>
