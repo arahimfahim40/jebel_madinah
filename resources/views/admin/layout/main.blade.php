@@ -142,15 +142,16 @@
             method: "GET",
             dataType: 'json'
         });
-
+        
         $(document).ready(function() {
             // Get location and store in global variables of js
             window.locations = <?php echo json_encode(getLocations()) ?>;
             window.vehicle_section = false;
             window.vehicle_summary_section = false;
             window.invoice_section = false;
-            if ($('.vehicle_section .active').html() != undefined && !vehicle_section) {
-                window.vehicle_section = true;
+            
+            if ($('.vehicles_section .active').html() != undefined && !vehicle_section) {
+                vehicle_section = true;
                 get_admin_sidebar_sub_count('Vehicle');
                 if ($('.vehicle_summary_section .active').html() != undefined && !vehicle_summary_section) {
                     vehicle_summary_section = true;

@@ -5,7 +5,7 @@
             <a class="navbar-brand" href="#">
                 <div class="avatar" style="font-size: 14px;">
                     <i class="status bg-success"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <span class="text-warning">{{Auth::user()->customer_name}}</span>
+                    {{-- <span class="text-warning">{{Auth::user()->name}}</span> --}}
                 </div>
             </a>
             <div class="toggle-button dark sidebar-toggle-first float-xs-left hidden-md-up">

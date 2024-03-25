@@ -12,7 +12,7 @@
             @endcan
             @can('vehicle-view')
             <li class="with-sub vehicles_section">
-                <a href="/invoice_admin/5" class="waves-effect  waves-light"
+                <a href="/admin/vehicles" class="waves-effect  waves-light"
                     onclick="event.preventDefault(); !window.vehicles_section && get_admin_sidebar_sub_count('Vehicle');">
                     <span class="s-caret"><i class="fa fa-angle-down"></i></span>
                     <span class="tag tag-success t_all_vehicle">0</span>
