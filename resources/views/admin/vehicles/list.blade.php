@@ -198,6 +198,7 @@
                 page: page,
                 status: "{{ request()->status }}",
                 location_id: "{{ request()->location_id }}",
+                customer_id: "{{ request()->customer_id }}",
                 // from_date: $('#from_date').val(),
                 // to_date: $('#to_date').val(),
                 searchValue: $('#search').val(),

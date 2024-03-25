@@ -46,6 +46,9 @@ class VehicleController extends Controller
         ->when(!empty($request->location_id), function ($q) use ($request) {
             $q->where('point_of_loading_id', $request->location_id);
         })
+        ->when(!empty($request->customer_id), function ($q) use ($request) {
+            $q->where('customer_id', $request->customer_id);
+        })
         ->when(!empty($request->searchValue), function ($q) use ($request) {
             $q->where(function ($query) use ($request) {
                 foreach (self::$searchColumns as $value) {
@@ -88,6 +91,33 @@ class VehicleController extends Controller
           return view('admin.vehicles.data', compact('vehicles', 'status', 'paginate'));
         }
         return view('admin.vehicles.list', compact('vehicles', 'status', 'paginate'));
+    }
+
+    public function summary (Request $request)
+    {
+        $vehicleSummary = Customer::leftJoin('vehicles', 'vehicles.customer_id', '=', 'customers.id')
+        ->select(
+            'customer_id',
+            'customers.name as customer_name',
+            DB::raw("SUM(CASE WHEN vehicles.status = 'pending' THEN 1 ELSE 0 END) AS pending"),
+            DB::raw("SUM(CASE WHEN vehicles.status = 'on_the_way' THEN 1 ELSE 0 END) AS on_the_way"),
+            DB::raw("SUM(CASE WHEN vehicles.status = 'on_hand_no_title' THEN 1 ELSE 0 END) AS on_hand_no_title"),
+            DB::raw("SUM(CASE WHEN vehicles.status = 'on_hand_with_title' THEN 1 ELSE 0 END) AS on_hand_with_title"),
+            DB::raw("SUM(CASE WHEN vehicles.status = 'shipped' THEN 1 ELSE 0 END) AS shipped"),
+        )
+        ->when(!empty($request->searchValue), function ($q) use ($request) {
+            $q->orWhere('customers.name', 'LIKE', "%$request->searchValue%");
+        })
+        ->when(!empty($request->location_id), function ($q) use ($request) {
+            $q->where('point_of_loading_id', $request->location_id);
+        })
+        ->groupBy('customer_id')
+        ->get();
+        
+        if ($request->ajax()) {
+          return view('admin.vehicles.summary_data', compact('vehicleSummary'));
+        }
+        return view('admin.vehicles.summary', compact('vehicleSummary'));
     }
 
     /**

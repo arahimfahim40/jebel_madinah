@@ -57,7 +57,7 @@
                         </a>
                         <ul>
                             <li>
-                                <a href="{{ url('vehicle_summary') }}">All
+                                <a href="{{ route('vehicles.summary') }}">All
                                     <span class="tag tag-info" style="float:right;" id="vl-all">0</span>
                                 </a>
                             </li>
