@@ -18,11 +18,13 @@ class VehicleSeeder extends Seeder
 
         for ($i = 0; $i < 350; $i++) {
             Vehicle::create([
+                'customer_id' => $faker->numberBetween(1, 5),
+                'invoice_id' => $faker->numberBetween(1, 100),
                 'year' => $faker->year,
                 'container_number' => $faker->lexify('???####'),
                 'title_received_date' => $faker->date(),
                 'title_number' => $faker->lexify('?????####'),
-                'title_state' => $faker->state,
+                'title_status' => $faker->state,
                 'purchase_date' => $faker->date(),
                 'pickup_date' => $faker->date(),
                 'deliver_date' => $faker->date(),
@@ -30,10 +32,10 @@ class VehicleSeeder extends Seeder
                 'color' => $faker->colorName,
                 'model' => $faker->word,
                 'vin' => $faker->lexify('?????????????????'),
-                'weight' => $faker->randomNumber(4) . ' kg',
+                'weight' => $faker->randomNumber(4),
                 'cbm' => $faker->randomFloat(2, 1, 10),
                 'licence_number' => $faker->lexify('???####'),
-                'lot_number' => $faker->lexify('LOT#####'),
+                'lot_number' => $faker->numberBetween(2900000323, 9000120030),
                 'hat_number' => $faker->lexify('HT#####'),
                 'customer_remark' => $faker->sentence,
                 'make' => $faker->word,
@@ -49,7 +51,6 @@ class VehicleSeeder extends Seeder
                 'photos_link' => $faker->url,
                 'auction' => $faker->word,
                 'auction_city' => $faker->city,
-                'title_status' => $faker->word,
 
                 'vehicle_price' => $faker->randomFloat(2, 0, 999999.99),
                 'towing_charge' => $faker->randomFloat(2, 0, 999999.99),

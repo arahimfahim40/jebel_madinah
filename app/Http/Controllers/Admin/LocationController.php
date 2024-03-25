@@ -3,17 +3,27 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Customer;
+use App\Models\Location;
 use Illuminate\Http\Request;
 
-class CustomerController extends Controller
+class LocationController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $paginate = $request->paginate ? $request->paginate : 10;
+        
+        $locations = Location::when(!empty($request->searchValue), function ($q) use ($request) {
+            $q->where('name', 'LIKE', "%$request->searchValue%");
+        })
+        ->orderBy('created_at', 'desc')
+        ->paginate($paginate);
+        if ($request->ajax()) {
+          return view('admin.locations.data', compact('locations', 'paginate'));
+        }
+        return view('admin.locations.list', compact('locations', 'paginate'));
     }
 
     /**
@@ -59,25 +69,8 @@ class CustomerController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request, string $search)
+    public function destroy(string $id)
     {
         //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function s2s_customers(Request $request)
-    {
-        $search = $request->search;
-    
-        $response = Customer::where('name', 'like', "%{$search}%")
-          ->orderBy('id', 'desc')
-          ->select('id', 'name as text')
-          ->limit(20)
-          ->get();
-    
-        return response()->json($response);
-
     }
 }

@@ -18,29 +18,28 @@ return new class extends Migration
             $table->unsignedBigInteger('point_of_loading_id')->nullable();
 
             $table->integer('year')->nullable();
-            $table->string('make')->nullable();
-            $table->string('model')->nullable();
-            $table->string('color')->nullable();
-            $table->string('vin')->nullable();
-            $table->string('lot_number');
-            $table->string('container_number')->nullable();
+            $table->string('make', 64)->nullable();
+            $table->string('model', 64)->nullable();
+            $table->string('color', 64)->nullable();
+            $table->string('vin', 32)->nullable();
+            $table->unsignedBigInteger('lot_number');
+            $table->string('container_number', 16)->nullable();
             $table->string('title_status')->nullable();
             
-            $table->string('title_number')->nullable();
-            $table->string('title_state')->nullable();
+            $table->string('title_number', 128)->nullable();
             $table->string('title_received_date')->nullable();
-            $table->string('auction')->nullable();
-            $table->string('auction_city')->nullable();
+            $table->string('auction', 128)->nullable();
+            $table->string('auction_city', 128)->nullable();
             
             $table->date('purchase_date')->nullable();
-            $table->string('pickup_date')->nullable();
-            $table->string('deliver_date')->nullable();
+            $table->date('pickup_date')->nullable();
+            $table->date('deliver_date')->nullable();
             $table->date('payment_date')->nullable();
 
-            $table->string('hat_number')->nullable();
-            $table->string('buyer_number')->nullable();
-            $table->string('licence_number')->nullable();
-            $table->string('weight')->nullable();
+            $table->string('hat_number', 128)->nullable();
+            $table->string('buyer_number', 64)->nullable();
+            $table->string('licence_number', 64)->nullable();
+            $table->decimal('weight', 10, 0)->nullable();
             $table->text('cbm')->nullable();
             
             $table->text('photos_link')->nullable();
@@ -52,23 +51,23 @@ return new class extends Migration
             $table->enum('ship_as', ['half-cut', 'complete'])->nullable()->default('complete');
             $table->enum('is_key', ['Yes', 'No'])->nullable()->default('No');
 
-            $table->decimal('vehicle_price', 10)->nullable();
-            $table->decimal('towing_charge', 10)->nullable();
-            $table->decimal('auction_fee_charge', 10)->nullable();
-            $table->decimal('dismantal_charge', 10)->nullable();
-            $table->decimal('shiping_charge', 10)->nullable();
-            $table->decimal('storage_charge', 10)->nullable();
-            $table->decimal('custom_charge', 10)->nullable();
-            $table->decimal('demurage_charge', 10)->nullable();
-            $table->decimal('other_charge', 10)->nullable();
-            $table->decimal('towing_cost', 10)->nullable();
-            $table->decimal('auction_fee_cost', 10)->nullable();
-            $table->decimal('dismantal_cost', 10)->nullable();
-            $table->decimal('ship_cost', 10)->nullable();
-            $table->decimal('storage_cost', 10)->nullable();
-            $table->decimal('custom_cost', 10)->nullable();
-            $table->decimal('demurage_cost', 10)->nullable();
-            $table->decimal('other_cost', 10)->nullable();
+            $table->decimal('vehicle_price', 10, 0)->nullable();
+            $table->decimal('towing_charge', 10, 0)->nullable();
+            $table->decimal('auction_fee_charge', 10, 0)->nullable();
+            $table->decimal('dismantal_charge', 10, 0)->nullable();
+            $table->decimal('shiping_charge', 10, 0)->nullable();
+            $table->decimal('storage_charge', 10, 0)->nullable();
+            $table->decimal('custom_charge', 10, 0)->nullable();
+            $table->decimal('demurage_charge', 10, 0)->nullable();
+            $table->decimal('other_charge', 10, 0)->nullable();
+            $table->decimal('towing_cost', 10, 0)->nullable();
+            $table->decimal('auction_fee_cost', 10, 0)->nullable();
+            $table->decimal('dismantal_cost', 10, 0)->nullable();
+            $table->decimal('ship_cost', 10, 0)->nullable();
+            $table->decimal('storage_cost', 10, 0)->nullable();
+            $table->decimal('custom_cost', 10, 0)->nullable();
+            $table->decimal('demurage_cost', 10, 0)->nullable();
+            $table->decimal('other_cost', 10, 0)->nullable();
             
             $table->timestamps();
             $table->timestamp('deleted_at')->nullable();
@@ -85,7 +84,6 @@ return new class extends Migration
             $table->index('created_by');
             $table->index('updated_by');
             $table->index('deleted_by');
-            
             $table->foreign('created_by')->references('id')->on('users')->onDelete('set null');
             $table->foreign('updated_by')->references('id')->on('users')->onDelete('set null');
             $table->foreign('deleted_by')->references('id')->on('users')->onDelete('set null');

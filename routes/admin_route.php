@@ -4,7 +4,7 @@ use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\InvoiceController;
 use App\Http\Controllers\Admin\InvoicePaymentController;
 use App\Http\Controllers\Admin\VehicleController;
-use App\Http\Controllers\LocationController;
+use App\Http\Controllers\Admin\LocationController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\auth\AuthController;
@@ -61,23 +61,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/admin/role/edit/{id}', [RoleController::class, 'edit'])->name('role.edit')->middleware(['can:role-edit']);
     Route::put('/admin/role/update/{id}', [RoleController::class, 'update'])->name('role.update')->middleware(['can:role-edit']);
     Route::get('/admin/role/{id}', [RoleController::class, 'show'])->name('role.show')->middleware(['can:role-view']);
-});
-
-    
-    
-    
-    
-
-    
-
-
 
     Route::get('/admin_shipment_summary', 'admin\HomeController@shipment_summary')->name('shipment_summary_admin');
     Route::get('/admin_vehicle_summary', 'admin\HomeController@vehicle_summary')->name('vehicle_summary_admin');
-    Route::get('/admin_sidebar_count', 'admin\HomeController@admin_sidebar_count')->name('admin_sidebar_count');
-    Route::get('/admin_sidebar_sub_count', 'admin\HomeController@admin_sidebar_sub_count')->name('admin_sidebar_sub_count');
     Route::get('/admin_message', 'admin\HomeController@message')->name('message_admin');
     Route::get('/delete_vehicle_admin/{id}', 'admin\VehicleController@delete_vehicle')->name('delete_vehicle_admin');
+    
+    Route::get('/admin_sidebar_count', [HomeController::class, 'admin_sidebar_count'])->name('admin_sidebar_count');
+    Route::get('/admin_sidebar_sub_count',  [HomeController::class, 'admin_sidebar_sub_count'])->name('admin_sidebar_sub_count');
 
     // Customers Routes
     Route::get('/admin/customers', [CustomerController::class, 'index'])->name('customers.index');
@@ -93,23 +84,25 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/admin/locations', [LocationController::class, 'index'])->name('locations.index');
     Route::get('/admin/locations/create', [LocationController::class, 'create'])->name('locations.create');
     Route::post('/admin/locations', [LocationController::class, 'store'])->name('locations.store');
-    Route::get('/admin/locations/{customer}', [LocationController::class, 'show'])->name('locations.show');
-    Route::get('/admin/locations/{customer}/edit', [LocationController::class, 'edit'])->name('locations.edit');
-    Route::put('/admin/locations/{customer}', [LocationController::class, 'update'])->name('locations.update');
-    Route::delete('/admin/locations/{customer}', [LocationController::class, 'destroy'])->name('locations.destroy');
+    Route::get('/admin/locations/{location}', [LocationController::class, 'show'])->name('locations.show');
+    Route::get('/admin/locations/{location}/edit', [LocationController::class, 'edit'])->name('locations.edit');
+    Route::put('/admin/locations/{location}', [LocationController::class, 'update'])->name('locations.update');
+    Route::delete('/admin/locations/{location}', [LocationController::class, 'destroy'])->name('locations.destroy');
     
     // Vehicles Routes
-    Route::get('/admin/vehicles', [VehicleController::class, 'index'])->name('vehicles.index');
-    Route::get('/admin/vehicles/create', [VehicleController::class, 'create'])->name('vehicles.create');
-    Route::post('/admin/vehicles', [VehicleController::class, 'store'])->name('vehicles.store');
-    Route::get('/admin/vehicles/{vehicle}', [VehicleController::class, 'show'])->name('vehicles.show');
-    Route::get('/admin/vehicles/{vehicle}/edit', [VehicleController::class, 'edit'])->name('vehicles.edit');
-    Route::put('/admin/vehicles/{vehicle}', [VehicleController::class, 'update'])->name('vehicles.update');
-    Route::delete('/admin/vehicles/{vehicle}', [VehicleController::class, 'destroy'])->name('vehicles.destroy');
+    Route::get('/admin/vehicles', [VehicleController::class, 'index'])->name('vehicles.index')->middleware(['can:vehicle-view']);
+    Route::get('/admin/vehicles/create', [VehicleController::class, 'create'])->name('vehicles.create')->middleware(['can:vehicle-create']);
+    Route::post('/admin/vehicles', [VehicleController::class, 'store'])->name('vehicles.store')->middleware(['can:vehicle-create']);
+    Route::get('/admin/vehicles/{vehicle}', [VehicleController::class, 'show'])->name('vehicles.show')->middleware(['can:vehicle-view']);
+    Route::get('/admin/vehicles/{vehicle}/edit', [VehicleController::class, 'edit'])->name('vehicles.edit')->middleware(['can:vehicle-edit']);
+    Route::put('/admin/vehicles/{vehicle}', [VehicleController::class, 'update'])->name('vehicles.update')->middleware(['can:vehicle-edit']);
+    Route::delete('/admin/vehicles/{vehicle}', [VehicleController::class, 'destroy'])->name('vehicles.destroy')->middleware(['can:vehicle-delete']);
 
-    Route::get('/admin/vehicles_cost_analysis', [VehicleController::class, 'cost_analysis'])->name('vehicles.cost_analysis');
-    Route::get('/admin/vehicles_dateline', [VehicleController::class, 'dateline'])->name('vehicles.dateline');
-    Route::get('/admin/vehicles_summary', [VehicleController::class, 'summary'])->name('vehicles.summary');
+    
+    Route::post('/admin/vehicle_change_status', [VehicleController::class, 'change_status'])->name('vehicles.change_status')->middleware(['can:vehicle-change-status']);
+    Route::get('/admin/vehicles_cost_analysis', [VehicleController::class, 'cost_analysis'])->name('vehicles.cost_analysis')->middleware(['can:vehicle-view']);
+    Route::get('/admin/vehicles_dateline', [VehicleController::class, 'dateline'])->name('vehicles.dateline')->middleware(['can:vehicle-view']);
+    Route::get('/admin/vehicles_summary', [VehicleController::class, 'summary'])->name('vehicles.summary')->middleware(['can:vehicle-view']);
 
     // Invoice Routes
     Route::get('/admin/invoices', [InvoiceController::class, 'index'])->name('invoices.index');
@@ -129,4 +122,4 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('/admin/invoice_payments/{invoice_payment}', [InvoicePaymentController::class, 'update'])->name('invoice_payments.update');
     Route::delete('/admin/invoice_payments/{invoice_payment}', [InvoicePaymentController::class, 'destroy'])->name('invoices.destroy');
 
-// });
+});

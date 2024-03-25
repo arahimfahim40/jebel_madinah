@@ -28,6 +28,24 @@ class DatabaseSeeder extends Seeder
         ["name"=>"user-create","group_name"=>"user"],
         ["name"=>"user-edit","group_name"=>"user"],
         ["name"=>"user-delete","group_name"=>"user"],
+
+        ["name"=>"vehicle-view","group_name"=>"vehicle"],
+        ["name"=>"vehicle-create","group_name"=>"vehicle"],
+        ["name"=>"vehicle-change-status","group_name"=>"vehicle"],
+        ["name"=>"vehicle-edit","group_name"=>"vehicle"],
+        ["name"=>"vehicle-delete","group_name"=>"vehicle"],
+        ["name"=>"vehicle-summary","group_name"=>"vehicle"],
+
+        ["name"=>"invoice-view","group_name"=>"invoice"],
+        ["name"=>"invoice-create","group_name"=>"invoice"],
+        ["name"=>"invoice-change-status","group_name"=>"invoice"],
+        ["name"=>"invoice-edit","group_name"=>"invoice"],
+        ["name"=>"invoice-delete","group_name"=>"invoice"],
+        
+        ["name"=>"location-view","group_name"=>"location"],
+        ["name"=>"location-create","group_name"=>"location"],
+        ["name"=>"location-edit","group_name"=>"location"],
+        ["name"=>"location-delete","group_name"=>"location"],
     ];
    
 
@@ -80,6 +98,7 @@ class DatabaseSeeder extends Seeder
             ['name' => $faker->name, 'email' => $faker->email, 'password' => bcrypt($faker->password) ],
         ]);
 
+        $this->call(InvoiceSeeder::class);
         $this->call(VehicleSeeder::class);
        
     }

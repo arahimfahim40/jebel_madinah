@@ -14,3 +14,4 @@
 
 
 require_once('admin_route.php');
+require_once('customer_route.php');
