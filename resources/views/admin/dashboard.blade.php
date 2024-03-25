@@ -67,12 +67,8 @@
 
             <div class="row">
                 <div class="col-md-12">
-                    <ul class="nav nav-tabs" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link text-muted" id="ship_summary"><b>Vehicle Summary</b></a>
-                        </li>
-                    </ul>
-                    <div class="box box-block bg-white b-t-0 mb-2">
+                    <div class="box box-block bg-white mb-2">
+						<h4 class="py-1">Vehicle Summary</h4>
                         <div class="tables-responsive">
                             <table class="table table-grey-head mb-md-0 tables-responsive">
 								<thead>
