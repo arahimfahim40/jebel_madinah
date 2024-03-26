@@ -81,6 +81,7 @@ Route::middleware('auth:user')->group(function () {
     Route::get('/admin/invoices/{invoice}/edit', [InvoiceController::class, 'edit'])->name('invoices.edit');
     Route::put('/admin/invoices/{invoice}', [InvoiceController::class, 'update'])->name('invoices.update');
     Route::delete('/admin/invoices/{invoice}', [InvoiceController::class, 'destroy'])->name('invoices.destroy');
+    Route::get('/get_vehicles_open_of_customer', [InvoiceController::class, 'get_vehicles_open_of_customer'])->name('get_vehicles_open_of_customer');
 
     // Invoice Payment Routes
     Route::get('/admin/invoice_payments', [InvoicePaymentController::class, 'index'])->name('invoice_payments.index');

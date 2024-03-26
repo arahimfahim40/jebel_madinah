@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Invoice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Customer;
+use Illuminate\Support\Facades\Log;
 
 class InvoiceController extends Controller
 {
@@ -116,5 +118,32 @@ class InvoiceController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function get_vehicles_open_of_customer(Request $request){
+        try {
+            $customer = Customer::findOrFail($request->id);
+            
+            $customerVehicles = $customer->vehicles()->select([
+                'id',
+                'auction_fee_charge',
+                'storage_charge',
+                'towing_charge',
+                'dismantal_charge',
+                'shiping_charge',
+                'custom_charge',
+                'demurage_charge',
+                'other_charge',
+                'lot_number',
+                'vin'
+            ])->get();
+ 
+            return response()->json($customerVehicles);
+        } catch (\Exception $e) {
+            Log::error('Failed to retrieve customer vehicles.', [
+                'error' => $e->getMessage(),
+            ]);
+            return response()->json(['error' => 'Failed to retrieve customer vehicles.'], 500);
+        }
     }
 }

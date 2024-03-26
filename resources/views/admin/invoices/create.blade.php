@@ -64,17 +64,17 @@
                             <section>
                                 <div class="inner">
                                     <div class="row">
-                                        <div class="col-md-4 px-0">
-                                            <div class="col-md-12 form-group">
+                                        <div class="col-md-12 px-0">
+                                            <div class="col-md-6 form-group">
                                                 <label class="required">Select Customer</label>
                                                 <select 
-                                                    {{-- onchange="onCantainerChange(this)" --}}
+                                                    onchange="onCustomerChange(this)"
                                                     name="customer_id"
                                                     class="form-control s2s_customers"
                                                     required
                                                 /></select>
                                             </div>
-                                            <div class="col-md-12 form-group">
+                                            <div class="col-md-6 form-group">
                                                 <label>Status</label>
                                                 <select name="status"
                                                     class="form-control"
@@ -86,19 +86,60 @@
                                                     <option value="paid">paid</option>
                                                 </select>
                                             </div>
-                                            
-                                            <div class="col-md-12 form-group">
-                                                <label >Discount</label>
-                                                <input 
-                                                    type="number" 
-                                                    name="discount" 
-                                                    placeholder="Discount" 
-                                                    class="form-control"
-                                                />
+                                        </div>
+                                        <div class="col-md-12 px-0">
+                                        <div class="col-md-12 form-group">
+                                                <input type="hidden" name="vehicles" value="" />
+                                                <label for="VehicleSelect">Vehicle</label>
+                                                <div class="input-group">
+                                                    <select id='VehicleSelect' class="form-control s2s_vehicles"
+                                                        aria-describedby="basic-addon2">
+                                                    </select>
+                                                    <span class="input-group-btn">
+                                                        <button id="basic-addon2" onclick="addVehicleToList()"
+                                                            class="btn btn-success bootstrap-touchspin-up" type="button">
+                                                            Add <i class="fa fa-plus"></i>
+                                                        </button>
+                                                    </span>
+                                                </div>
+                                                <div class="card mt-1">
+                                                    <h5 class="card-header">List Of Vehicles</h5>
+                                                    <div class="card-body">
+                                                        <ul class="vehicle_list list-group m-1"> No item in list</ul>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-4 px-0">
-                                            <div class="col-md-12 form-group">
+                                        <div class="col-md-12 px-0">
+                                            <div class="col-md-4 form-group">
+                                                <label>Move To Open Date</label>
+                                                <input type="date" 
+                                                name="move_to_open_date"   
+                                                placeholder="Move To Open Date"
+                                                class="form-control"
+                                                required
+                                                />
+                                            </div>
+                                            <div class="col-md-4 form-group">
+                                                <label>Invoice Date</label>
+                                                <input type="date" 
+                                                name="invoice_date"   
+                                                placeholder="Invoice Date"
+                                                class="form-control"
+                                                />
+                                            </div>
+                                            <div class="col-md-4 form-group">
+                                                <label>Due Date</label>
+                                                <input type="date" 
+                                                name="invoice_due_date"   
+                                                placeholder="Due Date"
+                                                class="form-control"
+                                                />
+                                            </div>
+                                            
+                                        </div>
+                                        <div class="col-md-12 px-0"> 
+                                            <div class="col-md-4 form-group">
                                                 <label class="required">Exchange Rate</label>
                                                 <input 
                                                     type="number" 
@@ -108,38 +149,20 @@
                                                     required
                                                 />
                                             </div>
-                                        </div>
-                                        <div class="col-md-4 px-0">
-                                            <div class="col-md-12 form-group">
-                                                <label>Move To Open Date</label>
-                                                <input type="date" 
-                                                    name="move_to_open_date"   
-                                                    placeholder="Move To Open Date"
-                                                    class="form-control"
-                                                    required
-                                                />
-                                            </div>
-                                            <div class="col-md-12 form-group">
-                                                <label>Invoice Date</label>
-                                                <input type="date" 
-                                                    name="invoice_date"   
-                                                    placeholder="Invoice Date"
-                                                    class="form-control"
-                                                />
-                                            </div>
-                                            <div class="col-md-12 form-group">
-                                                <label>Due Date</label>
-                                                <input type="date" 
-                                                    name="invoice_due_date"   
-                                                    placeholder="Due Date"
-                                                    class="form-control"
-                                                />
-                                            </div>
                                             
+                                            <div class="col-md-4 form-group">
+                                                <label >Discount</label>
+                                                <input 
+                                                    type="number" 
+                                                    name="discount" 
+                                                    placeholder="Discount" 
+                                                    class="form-control"
+                                                />
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>Description</label>
                                                 <textarea name="description" placeholder="Description" rows="6" class="form-control"></textarea>
@@ -168,6 +191,7 @@
 <script>
 
     var form = $("#create-invoice-form");
+    var vehiclesIds = new Map(Object.entries(<?= json_encode(old('vehicle_list') ?? []) ?>));
     form.children("div").steps({
         headerTag: "h2",
         bodyTag: "section",
@@ -199,6 +223,76 @@
         }
     });
 
+    // Add vehicle to the list
+    function addVehicleToList() {
+        const vehicle_input = $("#VehicleSelect");
+        if (vehicle_input.val() != null) {
+            vehiclesIds.set(vehicle_input.val(), vehicle_input.text());
+            vehicle_input.val('').text('');
+            renderVehicleList();
+        }
+    }
+
+    function renderVehicleList() {
+        $("input[name=vehicles]").val(Array.from(vehiclesIds.keys()));
+        if (vehiclesIds.size == 0) {
+            $('.vehicle_list').html('No item in list');
+        } else {
+            $('.vehicle_list').html('');
+        }
+        vehiclesIds.forEach((item, key) => {
+            $('.vehicle_list').append(`<li class="list-group-item px-1" >${item}
+        <button onClick="removeVehicle(${key})" class="close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        </li>`);
+        });
+    }
+
+    function removeVehicle(id) {
+        vehiclesIds.delete(id.toString());
+        renderVehicleList();
+    }
+
+    function onCustomerChange(event) {
+        console.log("event:", event.value)
+        if (event.value) {
+            $.ajax({
+                url: "{{route('get_vehicles_open_of_customer')}}",
+                method: 'GET',
+                data: {
+                    id: event.value
+                },
+                success: function(response) {
+                    console.log("response:", response)
+                    renderVehicleOptions(response);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    Swal.fire("Error!", jqXHR.statusText, "error");
+                    console.log("Error : " + jqXHR.responseText + " Status: " + textStatus + " Http error:" + errorThrown);
+                }
+            });
+        }
+    }
+    
+    function renderVehicleOptions(vehicles) {
+        let selectOptions = '<option value="">Select Vehicle</option>';
+        vehicles.forEach(vehicle => {
+            let totalCharges = parseFloat(vehicle.auction_fee_charge) +
+                            parseFloat(vehicle.storage_charge) +
+                            parseFloat(vehicle.towing_charge) +
+                            parseFloat(vehicle.dismantal_charge) +
+                            parseFloat(vehicle.shiping_charge) +
+                            parseFloat(vehicle.custom_charge) +
+                            parseFloat(vehicle.demurage_charge) +
+                            parseFloat(vehicle.other_charge);
+            
+            selectOptions += `<option value="${vehicle.id}" data-total-charges="${totalCharges}">${vehicle.vin} | ${vehicle.lot_number}    -    $${totalCharges.toFixed(2)}</option>`;
+        });
+
+        $('#VehicleSelect').html(selectOptions);
+    }
+    
     function onFormSubmit(){
         form.validate().settings.ignore = ":disabled";
         if(form.valid()){
