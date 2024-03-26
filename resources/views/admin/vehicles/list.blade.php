@@ -143,7 +143,6 @@
                     
                     <div class="form-group col-md-1 col-lg-1 col-sm-2 col-xs-12" style="float:right;">
                         <select class="form-control" id="showEntry">
-                            <option value="10">10</option>
                             <option value="20">20</option>
                             <option value="50">50</option>
                             <option value="100">100</option>

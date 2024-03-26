@@ -85,9 +85,9 @@ class VehicleController extends Controller
         ->paginate($paginate);
         
         if ($request->ajax()) {
-          return view('admin.vehicles.data', compact('vehicles', 'status', 'paginate'));
+          return view('admin.vehicles.cost_analysis_data', compact('vehicles', 'status', 'paginate'));
         }
-        return view('admin.vehicles.list', compact('vehicles', 'status', 'paginate'));
+        return view('admin.vehicles.cost_analysis', compact('vehicles', 'status', 'paginate'));
     }
 
     public function summary (Request $request)
