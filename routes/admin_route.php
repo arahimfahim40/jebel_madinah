@@ -36,10 +36,10 @@ Route::get('/login', function () {
 Route::get('login', [AuthController::class, 'index'])->name('login');
 Route::post('login', [AuthController::class, 'login'])->name('auth.login');
 
-Route::group(['middleware' => 'auth'], function () {
+//Route::group(['middleware' => 'auth:user'], function () {
+Route::middleware('auth:user')->group(function () {
 
-    Route::get('logout', [AuthController::class, 'logout'])->name('auth.logout');
-
+    Route::get('logout', [AuthController::class, 'logout_user'])->name('user.logout');
     Route::get('admin/dashboard', [HomeController::class, 'index'])->name('home.index')->middleware(['can:dashboard-view']);
 
     // user section 
@@ -57,7 +57,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/admin/customers', [CustomerController::class, 'store'])->name('customer.store')->middleware(['can:customer-create']);
     Route::get('/admin/customers/{id}', [CustomerController::class, 'show'])->name('customer.show')->middleware(['can:customer-view']);
     Route::get('/admin/customers/{id}/edit', [CustomerController::class, 'edit'])->name('customer.edit')->middleware(['can:customer-edit']);
-    Route::put('/admin/customers/{id}', [CustomerController::class, 'update'])->name('customer.update')->middleware(['can:customer-edit']);
+    Route::put('admin/customers/{id}', [CustomerController::class, 'update'])->name('customer.update')->middleware(['can:customer-edit']);
     Route::delete('/admin/customers/{id}', [CustomerController::class, 'destroy'])->name('customer.destroy')->middleware(['can:customer-delete']);
     Route::get('/admin/s2s_customers', [CustomerController::class, 's2s_customers'])->name('s2s_customer');
 

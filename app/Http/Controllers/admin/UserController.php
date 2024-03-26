@@ -5,24 +5,18 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 //use Intervention\Image\Facades\Image;
 //use Image;
 
 class UserController extends Controller
 {
-    public function __construct()
-    {
-        //$this->middleware('permission:user-view', ['only' => ['index','show']]);
-        //$this->middleware('permission:user-create', ['only' => ['create','store']]);
-        //$this->middleware('permission:user-edit', ['only' => ['update','edit']]);
-        //$this->middleware('permission:user-delete', ['only' => ['destroy']]);
-    }
-
     public function index(Request $request){
 
         $paginate = $request->paginate ? $request->paginate : 10;
-        $users = User::with(['time_zones:id,name','createdBy:name','updatedBy:name'])->orderBy('id', 'desc')->paginate($paginate);
+        $users = User::with(['time_zones','createdBy','updatedBy'])->orderBy('id', 'desc')->paginate($paginate);
 
+        //dd($users);
         if ($request->ajax()) {
           return view('admin.user.data', compact('users',  'paginate'));
         }
@@ -55,6 +49,8 @@ class UserController extends Controller
             'roles.*' => 'exists:roles,id',
             'permissions.*' => 'exists:permissions,id',
         ]);
+        
+        $user = Auth::user();
         try {
             $user = User::create([
                 "name" => $request['name'],
@@ -62,6 +58,8 @@ class UserController extends Controller
                 "email" => $request['email'],
                 "time_zone_id" => $request['time_zone_id'],
                 "password" => bcrypt($request['password']),
+                "created_by" =>$user->id,
+                "updated_by" =>$user->id,
             ]);
             if($request['roles']){
                 $user->roles()->sync([$request['roles']]);
@@ -137,6 +135,7 @@ class UserController extends Controller
                 "username" => $request['username'],
                 "email" => $request['email'],
                 "time_zone_id" => $request['time_zone_id'],
+                "updated_by" =>$this->user_id,
             ],$password));
 
             $roles = [];
