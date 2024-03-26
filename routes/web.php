@@ -1,6 +1,4 @@
 <?php
-
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,5 +10,12 @@
 |
 */
 
+use App\Http\Controllers\auth\AuthController;
+use Illuminate\Support\Facades\Route;
+
+Route::get('/', [AuthController::class, 'index'])->name('login');
+Route::get('login', [AuthController::class, 'index'])->name('login');
+Route::post('login', [AuthController::class, 'login'])->name('auth.login');
 
 require_once('admin_route.php');
+require_once('customer_route.php');

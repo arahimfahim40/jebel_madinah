@@ -8,19 +8,17 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class Location extends Model
+class TimeZone extends Model
 {
-    //protected $connection = 'mysql';
     protected $table = 'time_zones';
-
     protected $fillable = [
         "name",
     ];
 
     protected $guarded = ['id'];
-
-    public function users()
+    public function user()
     {
         return $this->hasMany(User::class, 'time_zone_id', 'id');
+        
     }
 }

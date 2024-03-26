@@ -10,7 +10,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Invoice extends Model
 {
-    use HasFactory, LogsActivity, SoftDeletes;
+    use HasFactory, SoftDeletes;
     //protected $connection = 'mysql';
     protected $table = 'invoices';
 
@@ -19,7 +19,6 @@ class Invoice extends Model
     protected $fillable = [
         "customer_id",
         "exchange_rate",
-        "move_to_open_date",
         "invoice_date",
         "invoice_due_date",
         "status",
