@@ -3,9 +3,8 @@
     <nav class="navbar navbar-light">
         <div class="navbar-left" style="text-align:left !important; padding-left:1%;">
             <a class="navbar-brand" href="#">
-                <div class="avatar" style="font-size: 14px;">
-                    <i class="status bg-success"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    {{-- <span class="text-warning">{{Auth::user()->name}}</span> --}}
+                <div class="avatar text-warning mt-1" style="font-size: 16pxpx;">
+                    {{ ucwords(Auth::user()->name) }}
                 </div>
             </a>
             <div class="toggle-button dark sidebar-toggle-first float-xs-left hidden-md-up">

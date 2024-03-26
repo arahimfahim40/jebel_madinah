@@ -42,7 +42,8 @@
 			display: none;
 		}
 		.bg-primary {
-			background-color: #7b9fd0 !important;
+			color: #eee !important;
+			background-color: #3d85c6 !important;
 		}
 	</style>
 	@stack('style')
