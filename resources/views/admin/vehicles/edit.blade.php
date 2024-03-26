@@ -50,6 +50,9 @@
         <div class="container-fluid">
 
             @include('errors')
+            @php
+                $customer_name = old('customer_id',  @$vehicle->customer_id) ? DB::table('customers')-find(old('customer_id',  @$vehicle->customer_id))->name : '';
+            @endphp
 
             <div class="wizard-v4-content w-100">
                 <div class="wizard-form py-2">
@@ -73,7 +76,7 @@
                                                     class="form-control s2s_customers"
                                                     required
                                                 />
-                                                    <option value="{{ old('customer_id', @$vehicle->customer_id) }}" selected>{{ old('customer_name', @$vehicle->customer->name) }}</option>
+                                                    <option value="{{ old('customer_id', @$vehicle->customer_id) }}" selected>{{ $customer_name }}</option>
                                                 </select>
                                             </div>
                                             <div class="col-md-12 form-group">

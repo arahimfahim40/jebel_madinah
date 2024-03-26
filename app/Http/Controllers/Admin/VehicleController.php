@@ -7,9 +7,6 @@ use App\Models\Customer;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
-
-use function PHPUnit\Framework\throwException;
 
 class VehicleController extends Controller
 {
@@ -155,16 +152,7 @@ class VehicleController extends Controller
     {
         $validationRules = $this->vehicleValidationRules();
         // Validate the input data
-        $validator = Validator::make($request->all(), $validationRules);
-
-        // If validation fails, redirect back with error and old input
-        if ($validator->fails()) {
-            $allInputs = array_merge($request->all(), ['customer_name' => $request->customer_id ? Customer::where('id', $request->customer_id)->pluck('name')->first() : null]);
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput($allInputs);
-        }
-
+        $this->validate($request, $validationRules);
         try {
             DB::beginTransaction();
 
@@ -228,10 +216,9 @@ class VehicleController extends Controller
         } catch (\Exception $e) {
             // An error occurred, rollback the transaction
             DB::rollBack();
-            $allInputs = array_merge($request->all(), ['customer_name' => $request->customer_id ? Customer::where('id', $request->customer_id)->pluck('name')->first() : null]);
             return redirect()->back()
                 ->withErrors(['error' => $e->getMessage()])
-                ->withInput($allInputs);
+                ->withInput($request->all());
         }
 
     }
@@ -263,15 +250,7 @@ class VehicleController extends Controller
         $validationRules['lot_number'] = 'required|string|max:255|unique:vehicles,lot_number,' . $id;
         
         // Validate the input data
-        $validator = Validator::make($request->all(), $validationRules);
-
-        // If validation fails, redirect back with error and old input
-        if ($validator->fails()) {
-            $allInputs = array_merge($request->all(), ['customer_name' => $request->customer_id ? Customer::where('id', $request->customer_id)->pluck('name')->first() : null]);
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput($allInputs);
-        }
+        $this->validate($request, $validationRules);
 
         try {
             DB::beginTransaction();
@@ -337,10 +316,9 @@ class VehicleController extends Controller
         } catch (\Exception $e) {
             // An error occurred, rollback the transaction
             DB::rollBack();
-            $allInputs = array_merge($request->all(), ['customer_name' => $request->customer_id ? Customer::where('id', $request->customer_id)->pluck('name')->first() : null]);
             return redirect()->back()
                 ->withErrors(['error' => $e->getMessage()])
-                ->withInput($allInputs);
+                ->withInput($request->all());
         }
         
     }
