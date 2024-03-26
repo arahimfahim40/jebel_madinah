@@ -21,16 +21,7 @@ Route::get('/login', function () {
     return view('auth/login');
 });
 
-/* Route::middleware('auth')->group(function(){
-    Route::get('/user',[UserController::class,'user'])->name('user');
-    Route::post('/user',[UserController::class,'create'])->name('user.create');
-});   */  
-
-
-
-
 //Auth::routes();
-
 // Route::middleware('auth:web')->group(function () {
 
 Route::get('login', [AuthController::class, 'index'])->name('login');
@@ -39,49 +30,41 @@ Route::post('login', [AuthController::class, 'login'])->name('auth.login');
 //Route::group(['middleware' => 'auth:user'], function () {
 Route::middleware('auth:user')->group(function () {
 
-    Route::get('logout', [AuthController::class, 'logout_user'])->name('user.logout');
+    Route::get('logout', [AuthController::class, 'logout_user'])->name('users.logout');
     Route::get('admin/dashboard', [HomeController::class, 'index'])->name('home.index')->middleware(['can:dashboard-view']);
 
     // user section 
-    Route::get('admin/user', [UserController::class,'index'])->name('user.index')->middleware(['can:user-view']);
-    Route::get('admin/user/create', [UserController::class,'create'])->name('user.create')->middleware(['can:user-create']);
-    Route::post('admin/user/store', [UserController::class,'store'])->name('user.store')->middleware(['can:user-create']);
-    Route::get('admin/user/edit/{id}', [UserController::class, 'edit'])->name('user.edit')->middleware(['can:user-edit']);
-    Route::put('admin/user/update/{id}', [UserController::class, 'update'])->name('user.update')->middleware(['can:user-edit']);
-    Route::get('admin/user/{id}', [UserController::class, 'show'])->name('user.show')->middleware(['can:user-view']);
-    Route::delete('admin/user/delete/{id}', [UserController::class, 'destroy'])->name('user.destroy')->middleware(['can:user-delete']);
+    Route::get('admin/users', [UserController::class,'index'])->name('users.index')->middleware(['can:user-view']);
+    Route::get('admin/users/create', [UserController::class,'create'])->name('users.create')->middleware(['can:user-create']);
+    Route::post('admin/users/store', [UserController::class,'store'])->name('users.store')->middleware(['can:user-create']);
+    Route::get('admin/users/edit/{id}', [UserController::class, 'edit'])->name('users.edit')->middleware(['can:user-edit']);
+    Route::put('admin/users/update/{id}', [UserController::class, 'update'])->name('users.update')->middleware(['can:user-edit']);
+    Route::get('admin/users/{id}', [UserController::class, 'show'])->name('users.show')->middleware(['can:user-view']);
+    Route::delete('admin/users/delete/{id}', [UserController::class, 'destroy'])->name('users.destroy')->middleware(['can:user-delete']);
 
     // Customers Routes
-    Route::get('/admin/customers', [CustomerController::class, 'index'])->name('customer.index')->middleware(['can:customer-view']);
-    Route::get('/admin/customers/create', [CustomerController::class, 'create'])->name('customer.create')->middleware(['can:customer-create']);
-    Route::post('/admin/customers', [CustomerController::class, 'store'])->name('customer.store')->middleware(['can:customer-create']);
-    Route::get('/admin/customers/{id}', [CustomerController::class, 'show'])->name('customer.show')->middleware(['can:customer-view']);
-    Route::get('/admin/customers/{id}/edit', [CustomerController::class, 'edit'])->name('customer.edit')->middleware(['can:customer-edit']);
-    Route::put('admin/customers/{id}', [CustomerController::class, 'update'])->name('customer.update')->middleware(['can:customer-edit']);
-    Route::delete('/admin/customers/{id}', [CustomerController::class, 'destroy'])->name('customer.destroy')->middleware(['can:customer-delete']);
-    Route::get('/admin/s2s_customers', [CustomerController::class, 's2s_customers'])->name('s2s_customer');
+    Route::get('/admin/customers', [CustomerController::class, 'index'])->name('customers.index')->middleware(['can:customer-view']);
+    Route::get('/admin/customers/create', [CustomerController::class, 'create'])->name('customers.create')->middleware(['can:customer-create']);
+    Route::post('/admin/customers', [CustomerController::class, 'store'])->name('customers.store')->middleware(['can:customer-create']);
+    Route::get('/admin/customers/{id}', [CustomerController::class, 'show'])->name('customers.show')->middleware(['can:customer-view']);
+    Route::get('/admin/customers/{id}/edit', [CustomerController::class, 'edit'])->name('customers.edit')->middleware(['can:customer-edit']);
+    Route::put('admin/customers/{id}', [CustomerController::class, 'update'])->name('customers.update')->middleware(['can:customer-edit']);
+    Route::delete('/admin/customers/{id}', [CustomerController::class, 'destroy'])->name('customers.destroy')->middleware(['can:customer-delete']);
+    Route::get('/admin/s2s_customers', [CustomerController::class, 's2s_customers'])->name('s2s_customers');
 
     // User Permissions
-    Route::get('admin/permission', [PermissionController::class,'index'])->name('permission.index')->middleware(['can:permission-view']);
+    Route::get('admin/permissions', [PermissionController::class,'index'])->name('permissions.index')->middleware(['can:permission-view']);
 
     // User Roles
-    Route::get('admin/role', [RoleController::class,'index'])->name('role.index')->middleware(['can:role-view']);
-    Route::get('admin/role/create', [RoleController::class,'create'])->name('role.create')->middleware(['can:role-create']);
-    Route::post('admin/role/store', [RoleController::class,'store'])->name('role.store')->middleware(['can:role-create']);
-    Route::get('/admin/role/edit/{id}', [RoleController::class, 'edit'])->name('role.edit')->middleware(['can:role-edit']);
-    Route::put('/admin/role/update/{id}', [RoleController::class, 'update'])->name('role.update')->middleware(['can:role-edit']);
-    Route::get('/admin/role/{id}', [RoleController::class, 'show'])->name('role.show')->middleware(['can:role-view']);
-
-    
-
-    //Route::get('/admin_shipment_summary', 'admin\HomeController@shipment_summary')->name('shipment_summary_admin');
-    //Route::get('/admin_vehicle_summary', 'admin\HomeController@vehicle_summary')->name('vehicle_summary_admin');
-    //Route::get('/admin_message', 'admin\HomeController@message')->name('message_admin');
-    //Route::get('/delete_vehicle_admin/{id}', 'admin\VehicleController@delete_vehicle')->name('delete_vehicle_admin');
+    Route::get('admin/roles', [RoleController::class,'index'])->name('roles.index')->middleware(['can:role-view']);
+    Route::get('admin/roles/create', [RoleController::class,'create'])->name('roles.create')->middleware(['can:role-create']);
+    Route::post('admin/roles/store', [RoleController::class,'store'])->name('roles.store')->middleware(['can:role-create']);
+    Route::get('/admin/roles/edit/{id}', [RoleController::class, 'edit'])->name('roles.edit')->middleware(['can:role-edit']);
+    Route::put('/admin/roles/update/{id}', [RoleController::class, 'update'])->name('roles.update')->middleware(['can:role-edit']);
+    Route::get('/admin/roles/{id}', [RoleController::class, 'show'])->name('roles.show')->middleware(['can:role-view']);
     
     Route::get('/admin_sidebar_count', [HomeController::class, 'admin_sidebar_count'])->name('admin_sidebar_count');
     Route::get('/admin_sidebar_sub_count',  [HomeController::class, 'admin_sidebar_sub_count'])->name('admin_sidebar_sub_count');
-
 
     // Locations Routes
     Route::get('/admin/locations', [LocationController::class, 'index'])->name('locations.index');
@@ -102,7 +85,7 @@ Route::middleware('auth:user')->group(function () {
     Route::delete('/admin/vehicles/{vehicle}', [VehicleController::class, 'destroy'])->name('vehicles.destroy')->middleware(['can:vehicle-delete']);
 
     
-    Route::post('/admin/vehicle_change_status', [VehicleController::class, 'change_status'])->name('vehicles.change_status')->middleware(['can:vehicle-change-status']);
+    Route::post('/admin/vehicles_change_status', [VehicleController::class, 'change_status'])->name('vehicles.change_status')->middleware(['can:vehicle-change-status']);
     Route::get('/admin/vehicles_cost_analysis', [VehicleController::class, 'cost_analysis'])->name('vehicles.cost_analysis')->middleware(['can:vehicle-view']);
     Route::get('/admin/vehicles_summary', [VehicleController::class, 'summary'])->name('vehicles.summary')->middleware(['can:vehicle-view']);
 

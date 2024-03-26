@@ -58,7 +58,7 @@
             <div class="wizard-v4-content w-100">
                 <div class="wizard-form py-2">
                     <h2 class="mb-1" style="text-align: center;">Create Role</h2>
-                    <form id="create-role" class="px-3" action="{{ route('role.store')}}" method="post">
+                    <form id="create-role" class="px-3" action="{{ route('roles.store')}}" method="post">
                         @csrf
                         <section>
                             <div class="inner">

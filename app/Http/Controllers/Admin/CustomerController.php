@@ -68,9 +68,9 @@ class CustomerController extends Controller
             $customer->updated_by = $user->id;
             $customer->save();
            
-            return redirect()->route('customer.show', ['id' => $customer->id])->with('success', 'Saved successfully!');
+            return redirect()->route('customers.show', ['id' => $customer->id])->with('success', 'Saved successfully!');
         } catch (Exception $ex) {
-            return redirect()->route('customer.index')->with('error', 'Something went wrong, cannot save the user.');
+            return redirect()->route('customers.index')->with('error', 'Something went wrong, cannot save the user.');
         }
     }
 
@@ -129,9 +129,9 @@ class CustomerController extends Controller
             $customer->about = $request->about;
             $customer->updated_by = $user->id;
             $customer->save();
-            return redirect()->route('customer.show', ['id' => $id])->with('success', 'Saved successfully!');
+            return redirect()->route('customers.show', ['id' => $id])->with('success', 'Saved successfully!');
         } catch (Exception $ex) {
-            return redirect()->route('customer.show', ['id' => $id])->with('error', 'Something went wrong, cannot save the user.');
+            return redirect()->route('customers.show', ['id' => $id])->with('error', 'Something went wrong, cannot save the user.');
         }
     }
 

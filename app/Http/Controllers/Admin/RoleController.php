@@ -42,9 +42,9 @@ class RoleController extends Controller
           $role = Role::create(["name" => $request['role']]);
           $role->permissions()->sync($request['permissions']);
 
-          return redirect()->route('role.show', ['id' => $role->id])->with('success', 'Saved successfully!');
+          return redirect()->route('roles.show', ['id' => $role->id])->with('success', 'Saved successfully!');
         } catch (Exception $ex) {
-            return redirect()->route('role.index')->with('error', 'Something went wrong, cannot save the user.');
+            return redirect()->route('roles.index')->with('error', 'Something went wrong, cannot save the user.');
         }
     }
 
@@ -81,9 +81,9 @@ class RoleController extends Controller
         $role->update(["name" => $request['role']]);
         $role->permissions()->sync($request['permissions']);
         
-        return redirect()->route('role.show', ['id' => $id])->with('success', 'Updated successfully!');
+        return redirect()->route('roles.show', ['id' => $id])->with('success', 'Updated successfully!');
     } catch (Exception $ex) {
-        return redirect()->route('role.show', ['id' => $id])->with('error', 'Something went wrong, cannot update the user.');
+        return redirect()->route('roles.show', ['id' => $id])->with('error', 'Something went wrong, cannot update the user.');
     }
  }
 

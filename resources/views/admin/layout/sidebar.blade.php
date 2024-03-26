@@ -102,7 +102,7 @@
             @endcan
             @can('user-view')
             <li>
-                <a href="{{ route('user.index') }}" class="waves-effect  waves-light">
+                <a href="{{ route('users.index') }}" class="waves-effect  waves-light">
                     <span class="s-icon"><i class="fa fa-users"></i></span>
                     <span class="s-text">Users</span>
                 </a>
@@ -110,7 +110,7 @@
             @endcan
             @can('customer-view')
             <li>
-                <a href="{{ route('customer.index') }}" class="waves-effect  waves-light">
+                <a href="{{ route('customers.index') }}" class="waves-effect  waves-light">
                     <span class="s-icon"><i class="fa fa-users"></i></span>
                     <span class="s-text">Customers</span>
                 </a>
@@ -118,7 +118,7 @@
             @endcan
             @can('role-view')
             <li>
-                <a href="{{ route('role.index') }}" class="waves-effect  waves-light">
+                <a href="{{ route('roles.index') }}" class="waves-effect  waves-light">
                     <span class="s-icon"><i class="fa fa-shield"></i></span>
                     <span class="s-text">Roles</span>
                 </a>
@@ -126,7 +126,7 @@
             @endcan
             @can('permission-view')
             <li>
-                <a href="{{ route('permission.index') }}" class="waves-effect  waves-light">
+                <a href="{{ route('permissions.index') }}" class="waves-effect  waves-light">
                     <span class="s-icon"><i class="fa fa-warning"></i></span>
                     <span class="s-text">Permissions</span>
                 </a>

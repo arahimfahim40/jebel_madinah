@@ -29,11 +29,11 @@
                 <td>
                     <div style="display: flex; justify-content: space-around; align-items: center;">
                         @can('customer-edit')
-                            <a href="{{ route('customer.edit',$c->id) }}"> <i class="fa fa-edit" style="font-size:16px; cursor:pointer;"></i> </a>
+                            <a href="{{ route('customers.edit',$c->id) }}"> <i class="fa fa-edit" style="font-size:16px; cursor:pointer;"></i> </a>
                         @endcan
-                        <a href="{{ route('customer.show',$c->id) }}"> <i class="fa fa-eye" style="font-size:16px; cursor:pointer;"></i> </a>
+                        <a href="{{ route('customers.show',$c->id) }}"> <i class="fa fa-eye" style="font-size:16px; cursor:pointer;"></i> </a>
                         @can('customer-delete')
-                        <form method="POST" id="delete_{{ $c->id }}" action="{{ route('customer.destroy',$c->id)}}">
+                        <form method="POST" id="delete_{{ $c->id }}" action="{{ route('customers.destroy',$c->id)}}">
                             @method('delete')
                             @csrf
                             <a onclick="confirmDelete('{{ $c->id }}')" > <i class="fa fa-trash-o" style="font-size:16px; color:red; cursor:pointer;" ></i></a>

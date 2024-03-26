@@ -1,11 +1,11 @@
 <script type="text/javascript">
 $(document).ready(function() {
     // select2 search of only customers.
-    $(".s2s_customer").select2({
+    $(".s2s_customers").select2({
         placeholder: 'Search by Customer name',
         allowClear: true,
         ajax: {
-            url: "{{ route('s2s_customer') }}",
+            url: "{{ route('s2s_customers') }}",
             type: "get",
             dataType: 'json',
             data: function(params) {

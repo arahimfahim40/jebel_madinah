@@ -65,9 +65,9 @@ class UserController extends Controller
                 $user->roles()->sync([$request['roles']]);
             }
             $user->permissions()->sync($request['permissions']);
-            return redirect()->route('user.show', ['id' => $user->id])->with('success', 'Saved successfully!');
+            return redirect()->route('users.show', ['id' => $user->id])->with('success', 'Saved successfully!');
         } catch (Exception $ex) {
-            return redirect()->route('user.index')->with('error', 'Something went wrong, cannot save the user.');
+            return redirect()->route('users.index')->with('error', 'Something went wrong, cannot save the user.');
         }
     }
 
@@ -144,18 +144,18 @@ class UserController extends Controller
             $user->roles()->sync($roles);
             $user->permissions()->sync($request['permissions']);
             
-            return redirect()->route('user.show', ['id' => $id])->with('success', 'Saved successfully!');
+            return redirect()->route('users.show', ['id' => $id])->with('success', 'Saved successfully!');
         } catch (Exception $ex) {
-            return redirect()->route('user.show', ['id' => $id])->with('error', 'Something went wrong, cannot save the user.');
+            return redirect()->route('users.show', ['id' => $id])->with('error', 'Something went wrong, cannot save the user.');
         }
     }
 
     public function destroy($id){
         try{
             User::find($id)->delete();
-            return redirect()->route('user.index')->with('success', 'Deleted successfully!');
+            return redirect()->route('users.index')->with('success', 'Deleted successfully!');
         } catch(Exception $ex) {
-            return redirect()->route('user.show', ['id' => $id])->with('error', 'Something went wrong, cannot delete the user.');
+            return redirect()->route('users.show', ['id' => $id])->with('error', 'Something went wrong, cannot delete the user.');
         }
     }
 }

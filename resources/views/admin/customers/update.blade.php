@@ -58,7 +58,7 @@
             <div class="wizard-v4-content w-100">
                 <div class="wizard-form py-2">
                     <h2 class="mb-1" style="text-align: center;">Update Customer</h2>
-                    <form id="update-customer" class="px-3" action="{{ route('customer.update',$customer->id)}}" method="post">
+                    <form id="update-customer" class="px-3" action="{{ route('customers.update',$customer->id)}}" method="post">
                         @csrf
                         @method('PUT')
                         <section>
@@ -156,7 +156,7 @@
                                         <button type="submit" class="btn btn-success btn-rounded" style="float:right; margin-left:5px;">
                                             <i class="fa fa-pencil"></i> Update
                                         </button>
-                                        <a href="{{ route('customer.index') }}" class="btn btn-danger btn-rounded" style="float:right;">
+                                        <a href="{{ route('customers.index') }}" class="btn btn-danger btn-rounded" style="float:right;">
                                             <i class="fa fa-times"></i> Cancel
                                         </a>
                                     </div>

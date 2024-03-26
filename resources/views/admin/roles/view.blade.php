@@ -79,10 +79,10 @@
                                 <div class="row" >
                                     <div class="col-md-12">
                                         <div style="display:flex; justify-content: space-between; border-top:1px solid gray;" class="pt-2">
-                                            <a href="{{ route('role.index') }}" class="btn btn-secondary btn-outline-warning " style="height: 33px; margin-top:-5px;">
+                                            <a href="{{ route('roles.index') }}" class="btn btn-secondary btn-outline-warning " style="height: 33px; margin-top:-5px;">
                                                 <i class="fa fa fa-arrow-left"></i> Back To List
                                             </a>
-                                            <a href="{{ route('role.edit',$role->id)  }}" class="btn btn-secondary btn-outline-info " style="height: 33px; margin-top:-5px;">
+                                            <a href="{{ route('roles.edit',$role->id)  }}" class="btn btn-secondary btn-outline-info " style="height: 33px; margin-top:-5px;">
                                                 <i class="fa fa-edit"></i> Edit
                                             </a>
                                         </div>

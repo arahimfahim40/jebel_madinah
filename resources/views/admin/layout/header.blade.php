@@ -55,7 +55,7 @@
                             <i class="ti-user mr-0-5"></i> Profile
                         </a> --}}
                         
-                         <a class="dropdown-item" href="{{route('user.logout')}}"><i
+                         <a class="dropdown-item" href="{{route('users.logout')}}"><i
                                     class="ti-power-off mr-0-5"></i> Sign out</a>
                     </div>
                 </li>

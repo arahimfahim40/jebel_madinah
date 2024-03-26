@@ -54,7 +54,7 @@
             <div class="wizard-v4-content w-100">
                 <div class="wizard-form py-2">
                     <h2 class="mb-1" style="text-align: center;">Update User Detail</h2>
-                    <form id="create-user-form" class="form-register form-horizontal" method="POST" action="{{ route('user.update',$user->id)}}" enctype="multipart/form-data">
+                    <form id="create-user-form" class="form-register form-horizontal" method="POST" action="{{ route('users.update',$user->id)}}" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div class="px-4">

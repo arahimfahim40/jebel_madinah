@@ -64,7 +64,7 @@
                                 <i class="fa fa-plus"></i> Add
                             </button> -->
                             @can('customer-create')
-                            <a href="{{ route('customer.create') }}" class="btn btn-secondary btn-outline-info waves-effect waves-light" style="height: 33px; margin-top:-5px;">
+                            <a href="{{ route('customers.create') }}" class="btn btn-secondary btn-outline-info waves-effect waves-light" style="height: 33px; margin-top:-5px;">
                                 <i class="fa fa-plus"></i> Add
                             </a>
                             @endcan

@@ -54,7 +54,7 @@
                         <i class="fa fa-plus"></i> Add
                     </button> -->
                     @can('role-create')
-                    <a href="{{ route('role.create') }}" class="btn btn-secondary btn-outline-info waves-effect waves-light" style="height: 33px; margin-top:-5px;">
+                    <a href="{{ route('roles.create') }}" class="btn btn-secondary btn-outline-info waves-effect waves-light" style="height: 33px; margin-top:-5px;">
                         <i class="fa fa-plus"></i> Add
                     </a>
                     @endcan
