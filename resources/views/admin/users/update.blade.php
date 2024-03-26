@@ -66,22 +66,22 @@
                                 <div class="inner">
                                     <div class="form-group">
                                         <label for="fullname">Full name <span class="text-danger">*</span></label>
-                                        <input type="text" name="name" id="fullname" class="form-control" value="{{$user->name}}" placeholder="Enter fullname" required />
+                                        <input type="text" name="name" id="fullname" class="form-control" value="{{old('name',$user->name)}}" placeholder="Enter fullname" required />
                                     </div>
 
                                     <div class="form-group">
                                         <label for="username">Username <span class="text-danger">*</span></label>
-                                        <input type="text" name="username" id="username" class="form-control" value="{{$user->username}}" placeholder="Enter username" required />
+                                        <input type="text" name="username" id="username" class="form-control" value="{{old('username',$user->username)}}" placeholder="Enter username" required />
                                     </div>
 
                                     <div class="form-group">
                                         <label for="email">Email <span class="text-danger">*</span></label>
-                                        <input type="email" name="email" id="email" class="form-control" value="{{$user->email}}" placeholder="Enter user email" required/>
+                                        <input type="email" name="email" id="email" class="form-control" value="{{old('email',$user->email) }}" placeholder="Enter user email" required/>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="password">Password </label>
-                                        <input type="password" name="password" id="password" class="form-control" placeholder="Enter user password" />
+                                        <input type="password" name="password" id="password" class="form-control" value="{{old('password','') }}" placeholder="Enter user password" />
                                     </div>
 
                                     <div class="row">

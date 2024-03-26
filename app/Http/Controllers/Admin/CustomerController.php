@@ -138,9 +138,16 @@ class CustomerController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request, string $search)
+    public function destroy(Request $request, string $id)
     {
-        //
+        $user = Auth::user();
+        try{
+            Customer::where('id',$id)->update(['deleted_by' => $user->id]);
+            Customer::find($id)->delete();
+            return redirect()->route('customers.index')->with('success', 'Deleted successfully!');
+        } catch(Exception $ex) {
+            return redirect()->route('customers.show', ['id' => $id])->with('error', 'Something went wrong, cannot delete the user.');
+        }
     }
 
     /**

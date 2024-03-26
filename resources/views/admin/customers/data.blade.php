@@ -63,3 +63,13 @@
 @if ($customers instanceof \Illuminate\Pagination\LengthAwarePaginator)
     {{ $customers->appends(Request::All())->links() }}
 @endif
+
+
+<script>
+    function confirmDelete(slug) {
+        if (confirm('Data will be deleted. Continue?')) {
+            console.log("Confirmed.",slug);
+            document.getElementById('delete_' + slug).submit();
+        }
+    }
+</script>

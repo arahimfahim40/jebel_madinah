@@ -67,13 +67,13 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="name"> Name <span class="text-danger">*</span></label>
-                                            <input type="text" name="name" id="name" class="form-control" value="{{$customer->name}}" placeholder="Enter customer name" required/>
+                                            <input type="text" name="name" id="name" class="form-control" value="{{old('name',$customer->name)}}" placeholder="Enter customer name" required/>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="address"> Address <span class="text-danger">*</span></label>
-                                            <input type="text" name="address" id="address" class="form-control" value="{{$customer->address}}" placeholder="Enter customer address" required/>
+                                            <input type="text" name="address" id="address" class="form-control" value="{{old('address',$customer->address)}}" placeholder="Enter customer address" required/>
                                         </div>
                                     </div>
                                 </div>
@@ -105,22 +105,22 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="email"> Email <span class="text-danger">*</span></label>
-                                            <input type="email" name="email" id="email" class="form-control" value="{{$customer->email}}" placeholder="Enter customer email" required/>
+                                            <input type="email" name="email" id="email" class="form-control" value="{{old('email',$customer->email)}}" placeholder="Enter customer email" required/>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="password">Password <span class="text-danger">*</span></label>
-                                            <input type="password" name="password" id="password" class="form-control" value="{{old('password')}}" placeholder="Enter customer password" />
+                                            <input type="password" name="password" id="password" class="form-control" value="{{old('password','')}}" placeholder="Enter customer password" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="phone"> Phone <span class="text-danger">*</span></label>
-                                            <input type="text" name="phone" id="phone" class="form-control" value="{{$customer->phone}}" placeholder="Enter customer phone" required/>
+                                            <input type="text" name="phone" id="phone" class="form-control" value="{{old('phone',$customer->phone)}}" placeholder="Enter customer phone" required/>
                                         </div>
                                         <div class="form-group">
                                             <label for="join_date"> Join Date <span class="text-danger">*</span></label>
-                                            <input type="date" name="join_date" id="join_date" class="form-control" value="{{$customer->join_date}}" placeholder="Join Date" required/>
+                                            <input type="date" name="join_date" id="join_date" class="form-control" value="{{old('join_date',$customer->join_date)}}" placeholder="Join Date" required/>
                                         </div>                                                
                                     </div>
                                 </div>
@@ -128,19 +128,19 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="second_email"> Second Email <span class="text-danger">*</span></label>
-                                            <input type="email" name="second_email" id="second_email" class="form-control" value="{{$customer->second_email}}" placeholder="Enter customer second email" required/>
+                                            <input type="email" name="second_email" id="second_email" class="form-control" value="{{old('second_email',$customer->second_email)}}" placeholder="Enter customer second email" required/>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="second_phone"> Second Phone </label>
-                                            <input type="text" name="second_phone" id="second_phone" class="form-control" value="{{$customer->second_phone}}" placeholder="Enter customer second phone"/>
+                                            <input type="text" name="second_phone" id="second_phone" class="form-control" value="{{old('second_phone',$customer->second_phone)}}" placeholder="Enter customer second phone"/>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="about"> About </label>
-                                    <textarea name="about" id="about" class="form-control" placeholder="About customer"> {{$customer->about}} </textarea>
+                                    <textarea name="about" id="about" class="form-control" placeholder="About customer">  {{old('about',$customer->about) }} </textarea>
                                 </div>   
                                 <!-- <div class="box box-block bg-white">
                                     <div class="row">

@@ -19,18 +19,18 @@ class AuthController extends Controller
         if ($validation->fails()) {
             return back()->withErrors($validation);
         } 
-
         $credentials = $request->only('email','password');
-
-
         if(Auth::guard('user')->attempt($credentials)) 
         {
             $request->session()->regenerate();
-            return redirect()->intended(route('home.index'));
+            return redirect()->intended(route('user.home.index'));
         }
         else if(Auth::guard('customer')->attempt($credentials))
-        {}
-
+        {
+            $request->session()->regenerate();
+            return redirect()->intended(route('customer.home.index'));
+        }
+        else
         return redirect()->back()->withErrors("Your Email or Password is Incorrect."); 
     }
 
