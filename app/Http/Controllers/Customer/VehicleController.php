@@ -29,7 +29,7 @@ class VehicleController extends Controller
         
         $vehicles = Vehicle::with('location:id,name')
         ->where('status', '!=', 'pending')
-        // ->where('customer_id', '=', auth()->id())
+        ->where('customer_id', '=', auth()->id())
         ->when(!empty($status), function ($q) use ($status) {
             $q->where('status', $status);
         })

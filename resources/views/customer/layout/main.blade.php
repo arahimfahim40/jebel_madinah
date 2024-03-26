@@ -41,6 +41,9 @@
 		table.dataTable thead th.sorting:after {
 			display: none;
 		}
+		.bg-primary {
+			background-color: #7b9fd0 !important;
+		}
 	</style>
 	@stack('style')
 </head>
