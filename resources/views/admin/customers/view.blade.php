@@ -95,7 +95,7 @@
                                 </div>
                                 <div class="row my-1">
                                     <div class="col-md-6">
-                                        <label class="font-weight-bold"> Created By : </label> {{ @$customer->createdBy->name }} 
+                                        <label class="font-weight-bold"> Created By : </label> {{ @$customer->createdBy->name }}
                                     </div>
                                     <div class="col-md-6">
                                         <label class="font-weight-bold"> Updated By : </label> {{ @$customer->updatedBy->name }}

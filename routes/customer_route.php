@@ -30,7 +30,10 @@ Route::get('/login', function () {
 Route::get('login', [AuthController::class, 'index'])->name('login');
 Route::post('login', [AuthController::class, 'login'])->name('auth.login');
 
-// Route::group(['middleware' => 'auth'], function () {
+//Route::group(['middleware' => 'auth:customer'], function () {
+Route::middleware('auth:customer')->group(function () {
+
+    Route::get('/customer/logout', [AuthController::class, 'logout_customer'])->name('customer.logout');
 
     Route::get('/customer/dashboard', [HomeController::class, 'index'])->name('customer.home.index');
     // Vehicles Routes
@@ -41,9 +44,8 @@ Route::post('login', [AuthController::class, 'login'])->name('auth.login');
     Route::get('/customer/vehicles_dateline', [VehicleController::class, 'dateline'])->name('customer.vehicles.dateline');
     Route::get('/customer/vehicles_summary', [VehicleController::class, 'summary'])->name('customer.vehicles.summary');
 
-
     // Invoice Routes
     Route::get('/customer/invoices', [InvoiceController::class, 'index'])->name('customer.invoices.index');
     Route::get('/customer/invoices/{invoice}', [InvoiceController::class, 'show'])->name('customer.invoices.show');
 
-// });
+ });

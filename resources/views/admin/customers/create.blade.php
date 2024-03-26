@@ -135,8 +135,8 @@
                                             <label for="second_phone"> Second Phone </label>
                                             <input type="text" name="second_phone" id="second_phone" class="form-control" value="{{old('second_phone')}}" placeholder="Enter customer second phone"/>
                                         </div>
-                                    </div>    
-                                </div>    
+                                    </div>
+                                </div>
                                 <div class="form-group">
                                     <label for="about"> About </label>
                                     <textarea name="about" id="about" class="form-control" placeholder="About customer"> {{old('about')}} </textarea>
@@ -155,9 +155,9 @@
                                         <button type="submit" class="btn btn-success btn-rounded" style="float:right; margin-left:5px;">
                                             <i class="fa fa-plus"></i> Save
                                         </button>
-                                        <button type="button" class="btn btn-danger btn-rounded" style="float:right;">
+                                        <a href="{{ route('customer.index') }}" class="btn btn-danger btn-rounded" style="float:right;">
                                             <i class="fa fa-times"></i> Cancel
-                                        </button>
+                                        </a>
                                     </div>
                                 </div>
                             </div>

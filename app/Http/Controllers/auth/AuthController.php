@@ -21,17 +21,30 @@ class AuthController extends Controller
         } 
 
         $credentials = $request->only('email','password');
-        if(Auth::attempt($credentials)) 
+
+
+        if(Auth::guard('user')->attempt($credentials)) 
         {
             $request->session()->regenerate();
             return redirect()->intended(route('home.index'));
         }
+        else if(Auth::guard('customer')->attempt($credentials))
+        {}
+
         return redirect()->back()->withErrors("Your Email or Password is Incorrect."); 
     }
 
-    function logout(Request $request)
+    function logout_user(Request $request)
     {
-        Auth::logout();
+        Auth::guard('user')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/');
+    }
+
+    function logout_customer(Request $request)
+    {
+        Auth::guard('customer')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect('/');
