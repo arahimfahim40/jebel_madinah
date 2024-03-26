@@ -70,7 +70,7 @@
                         <div class="text text-warning"><b>Vehicle Summary</b></div>
                     </div>
                 </div>
-                <div class="site table-responsive" id="user_data">
+                <div class="site table-responsive" id="vehicle_summary_data">
                     @include('admin.vehicles.summary_data')
                 </div>
             </div>
@@ -102,8 +102,8 @@
     });
 
     function updateVehicleSummary(page=0) {
-        $('#searchBody').html(
-            "<div style='position:fixed; margin-top:7%; margin-left:40%;'><img width='70px' src='img/loading.gif' alt='Loading ...'> </div> "
+        $('#content_loader').html(
+            "<div style='position:fixed; margin-top:15%; margin-left:40%;'><img width='100px' src='/img/loading.gif' alt='Loading ...'> </div> "
         );
         var request = $.ajax({
             url: "{{ route('vehicles.summary') }}",
@@ -114,12 +114,12 @@
             },
         });
         request.done(function(msg) {
-            $('#searchBody').html('');
-            $('#user_data').html(msg);
+            $('#content_loader').html('');
+            $('#vehicle_summary_data').html(msg);
         });
         request.fail(function(jqXHR, textStatus) {
-            $('#searchBody').html('');
-            $('#user_data').append(textStatus);
+            $('#content_loader').html('');
+            $('#vehicle_summary_data').append(textStatus);
         });
     }
 

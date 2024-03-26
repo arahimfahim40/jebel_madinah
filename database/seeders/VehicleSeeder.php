@@ -59,7 +59,7 @@ class VehicleSeeder extends Seeder
                 'ship_charge' => $faker->randomFloat(2, 0, 999999),
                 'storage_charge' => $faker->randomFloat(2, 0, 999999),
                 'custom_charge' => $faker->randomFloat(2, 0, 999999),
-                'tds_charges' => $faker->randomFloat(2, 0, 999999),
+                'tds_charge' => $faker->randomFloat(2, 0, 999999),
                 'other_charge' => $faker->randomFloat(2, 0, 999999),
 
                 'towing_cost' => $faker->randomFloat(2, 0, 999999),

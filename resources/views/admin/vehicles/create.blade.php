@@ -462,10 +462,10 @@
                                             <div class="col-md-12 form-group">
                                                 <label>TDS Charge</label>
                                                 <input type="number"
-                                                    name="tds_charges"
+                                                    name="tds_charge"
                                                     placeholder="TDS Charge"
                                                     class="form-control"
-                                                    value="{{ old('tds_charges', '') }}"
+                                                    value="{{ old('tds_charge', '') }}"
                                                 />
                                             </div>
                                             <div class="col-md-12 form-group">

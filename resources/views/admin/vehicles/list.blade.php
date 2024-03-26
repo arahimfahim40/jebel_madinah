@@ -187,8 +187,8 @@
     });
 
     function updateVehicleList(page=0) {
-        $('#searchBody').html(
-            "<div style='position:fixed; margin-top:7%; margin-left:40%;'><img width='70px' src='img/loading.gif' alt='Loading ...'> </div> "
+        $('#content_loader').html(
+            "<div style='position:fixed; margin-top:15%; margin-left:40%;'><img width='100px' src='/img/loading.gif' alt='Loading ...'> </div> "
         );
         var request = $.ajax({
             url: "{{ route('vehicles.index') }}",
@@ -205,11 +205,11 @@
             },
         });
         request.done(function(msg) {
-            $('#searchBody').html('');
+            $('#content_loader').html('');
             $('#user_data').html(msg);
         });
         request.fail(function(jqXHR, textStatus) {
-            $('#searchBody').html('');
+            $('#content_loader').html('');
             $('#user_data').append(textStatus);
         });
     }

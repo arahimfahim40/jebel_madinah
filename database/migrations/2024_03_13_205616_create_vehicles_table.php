@@ -58,7 +58,7 @@ return new class extends Migration
             $table->decimal('ship_charge', 10, 0)->nullable();
             $table->decimal('storage_charge', 10, 0)->nullable();
             $table->decimal('custom_charge', 10, 0)->nullable();
-            $table->decimal('tds_charges', 10, 0)->nullable();
+            $table->decimal('tds_charge', 10, 0)->nullable();
             $table->decimal('other_charge', 10, 0)->nullable();
             $table->text('invoice_description')->nullable();
             // Vehicle Costs

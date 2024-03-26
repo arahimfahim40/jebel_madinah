@@ -1,4 +1,4 @@
-
+<div id="content_loader"></div>
 <table class="table table-bordered table-hover content-table bg-white" >
     <thead class="bg-info">
         <tr>
@@ -38,7 +38,7 @@
     <tbody>
         <?php $id = 1; ?>
         @foreach ($vehicles as $index => $item)
-            <tr id="searchBody">
+            <tr>
                 <td>{{ $index + 1 }}</td>
                 @can('vehicle-change-status')
                 <td>
