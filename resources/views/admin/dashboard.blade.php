@@ -48,7 +48,7 @@
                             <h6 class="text-uppercase mb-1">Customers</h6>
                             <h1 class="mb-1">{{getDashboardCounts()['customers']}}</h1>
                             <i class="fa fa-users text-success mr-0-5"></i><span><a
-                                    href="{{route('customers.index')}}">View Customers</a></span>
+                                    href="{{route('customer.index')}}">View Customers</a></span>
                         </div>
                     </div>
                 </div>
