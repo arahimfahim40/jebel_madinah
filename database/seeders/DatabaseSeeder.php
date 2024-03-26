@@ -29,6 +29,11 @@ class DatabaseSeeder extends Seeder
         ["name"=>"user-edit","group_name"=>"user"],
         ["name"=>"user-delete","group_name"=>"user"],
 
+        ["name"=>"customer-view","group_name"=>"customer"],
+        ["name"=>"customer-create","group_name"=>"customer"],
+        ["name"=>"customer-edit","group_name"=>"customer"],
+        ["name"=>"customer-delete","group_name"=>"customer"],
+
         ["name"=>"vehicle-view","group_name"=>"vehicle"],
         ["name"=>"vehicle-create","group_name"=>"vehicle"],
         ["name"=>"vehicle-change-status","group_name"=>"vehicle"],

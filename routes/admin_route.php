@@ -40,9 +40,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('logout', [AuthController::class, 'logout'])->name('auth.logout');
 
-    // user section 
     Route::get('admin/dashboard', [HomeController::class, 'index'])->name('home.index')->middleware(['can:dashboard-view']);
 
+    // user section 
     Route::get('admin/user', [UserController::class,'index'])->name('user.index')->middleware(['can:user-view']);
     Route::get('admin/user/create', [UserController::class,'create'])->name('user.create')->middleware(['can:user-create']);
     Route::post('admin/user/store', [UserController::class,'store'])->name('user.store')->middleware(['can:user-create']);
@@ -50,6 +50,16 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('admin/user/update/{id}', [UserController::class, 'update'])->name('user.update')->middleware(['can:user-edit']);
     Route::get('admin/user/{id}', [UserController::class, 'show'])->name('user.show')->middleware(['can:user-view']);
     Route::delete('admin/user/delete/{id}', [UserController::class, 'destroy'])->name('user.destroy')->middleware(['can:user-delete']);
+
+    // Customers Routes
+    Route::get('/admin/customers', [CustomerController::class, 'index'])->name('customer.index')->middleware(['can:customer-view']);
+    Route::get('/admin/customers/create', [CustomerController::class, 'create'])->name('customer.create')->middleware(['can:customer-create']);
+    Route::post('/admin/customers', [CustomerController::class, 'store'])->name('customer.store')->middleware(['can:customer-create']);
+    Route::get('/admin/customers/{id}', [CustomerController::class, 'show'])->name('customer.show')->middleware(['can:customer-view']);
+    Route::get('/admin/customers/{id}/edit', [CustomerController::class, 'edit'])->name('customer.edit')->middleware(['can:customer-edit']);
+    Route::put('/admin/customers/{id}', [CustomerController::class, 'update'])->name('customer.update')->middleware(['can:customer-edit']);
+    Route::delete('/admin/customers/{id}', [CustomerController::class, 'destroy'])->name('customer.destroy')->middleware(['can:customer-delete']);
+    Route::get('/admin/s2s_customers', [CustomerController::class, 's2s_customers'])->name('s2s_customer');
 
     // User Permissions
     Route::get('admin/permission', [PermissionController::class,'index'])->name('permission.index')->middleware(['can:permission-view']);
@@ -62,6 +72,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('/admin/role/update/{id}', [RoleController::class, 'update'])->name('role.update')->middleware(['can:role-edit']);
     Route::get('/admin/role/{id}', [RoleController::class, 'show'])->name('role.show')->middleware(['can:role-view']);
 
+    
+
     Route::get('/admin_shipment_summary', 'admin\HomeController@shipment_summary')->name('shipment_summary_admin');
     Route::get('/admin_vehicle_summary', 'admin\HomeController@vehicle_summary')->name('vehicle_summary_admin');
     Route::get('/admin_message', 'admin\HomeController@message')->name('message_admin');
@@ -70,15 +82,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/admin_sidebar_count', [HomeController::class, 'admin_sidebar_count'])->name('admin_sidebar_count');
     Route::get('/admin_sidebar_sub_count',  [HomeController::class, 'admin_sidebar_sub_count'])->name('admin_sidebar_sub_count');
 
-    // Customers Routes
-    Route::get('/admin/customers', [CustomerController::class, 'index'])->name('customers.index');
-    Route::get('/admin/customers/create', [CustomerController::class, 'create'])->name('customers.create');
-    Route::post('/admin/customers', [CustomerController::class, 'store'])->name('customers.store');
-    Route::get('/admin/customers/{customer}', [CustomerController::class, 'show'])->name('customers.show');
-    Route::get('/admin/customers/{customer}/edit', [CustomerController::class, 'edit'])->name('customers.edit');
-    Route::put('/admin/customers/{customer}', [CustomerController::class, 'update'])->name('customers.update');
-    Route::delete('/admin/customers/{customer}', [CustomerController::class, 'destroy'])->name('customers.destroy');
-    Route::get('/admin/s2s_customers', [CustomerController::class, 's2s_customers'])->name('s2s_customers');
+    
 
     // Locations Routes
     Route::get('/admin/locations', [LocationController::class, 'index'])->name('locations.index');

@@ -120,6 +120,14 @@
                 </a>
             </li>
             @endcan
+            @can('customer-view')
+            <li>
+                <a href="{{ route('customer.index') }}" class="waves-effect  waves-light">
+                    <span class="s-icon"><i class="fa fa-users"></i></span>
+                    <span class="s-text">Customers</span>
+                </a>
+            </li>
+            @endcan
             @can('role-view')
             <li>
                 <a href="{{ route('role.index') }}" class="waves-effect  waves-light">
