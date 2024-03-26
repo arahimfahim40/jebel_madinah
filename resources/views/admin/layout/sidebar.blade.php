@@ -48,27 +48,16 @@
                     
                     @can('vehicle-summary')
                     <li class="with-sub">
-                        <a href="#" class="waves-effect waves-light"
-                            onclick="getVehicleSummaryCounts(event);">
+                        <a href="#" class="waves-effect waves-light">
                             <span class="tag tag-warning" style="float:right; border-radius: 3px;"></span>
                             <span class="s-icon"><i class="fa fa-scribd"></i></span>
                             <span class="s-text">Summary</span>
                             <span class="s-caret pull-right"><i class="fa fa-angle-down"></i></span>
                         </a>
                         <ul>
-                            <li>
-                                <a href="{{ route('vehicles.summary') }}">All
-                                    <span class="tag tag-info" style="float:right;" id="vl-all">0</span>
-                                </a>
-                            </li>
+                            <li><a href="{{ route('vehicles.summary') }}">All</a></li>
                             @foreach (getLocations() as $location)
-                                <li>
-                                    <a
-                                        href="{{ route('vehicles.summary') }}?location_id={{ $location->id }}">{{ $location->name }}
-                                        <span class="tag tag-info" style="float:right;"
-                                            id="vl-{{ $location->id }}">0</span>
-                                    </a>
-                                </li>
+                                <li><a href="{{ route('vehicles.summary') }}?location_id={{ $location->id }}">{{ $location->name }}</a></li>
                             @endforeach
                         </ul>
                     </li>

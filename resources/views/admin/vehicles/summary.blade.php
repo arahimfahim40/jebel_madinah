@@ -56,15 +56,14 @@
                         <input type="text" name="search" class="form-control b-a" placeholder="Search for ..." id="search">
                     </div>
                     
-                    <div class="form-group col-md-1 col-lg-1 col-sm-2 col-xs-12" style="float:right;">
-                        <select class="form-control" id="showEntry">
-                            <option value="10">10</option>
-                            <option value="20">20</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                            <option value="300">300</option>
-                            <option value="500">500</option>
-                            <option value="500">1000</option>
+                    <div class="form-group col-md-2 col-lg-2 col-sm-3 col-xs-12" style="float:right;">
+                        <select class="form-control" id="vehicleStatus">
+                            <option value="">All</option>
+                            <option value="4categories">4 Category Vehicle</option>
+                            <option value="pending">Pending</option>
+                            <option value="on_the_way">On The Way</option>
+                            <option value="on_hand_no_title">On Hand No Title</option>
+                            <option value="on_hand_with_title">On Hand With Title</option>
                         </select>
                     </div>
                     <div style="float: right; padding-top: 8px;">
@@ -94,7 +93,7 @@
         }
     });
     // Change Pagination
-    $('#showEntry').change(function() {
+    $('#vehicleStatus').change(function() {
         updateVehicleSummary();
     });
     // Appliy Filtering
@@ -111,6 +110,7 @@
             method: "GET",
             data: {
                 searchValue: $('#search').val(),
+                vehicleStatus: $('#vehicleStatus').val(),
             },
         });
         request.done(function(msg) {

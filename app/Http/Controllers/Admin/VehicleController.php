@@ -95,6 +95,7 @@ class VehicleController extends Controller
 
     public function summary (Request $request)
     {
+        $status = $request->vehicleStatus == '4categories' ? [ 'pending', 'on_the_way', 'on_hand_no_title', 'on_hand_with_title']: [$request->vehicleStatus];
         $vehicleSummary = Customer::leftJoin('vehicles', 'vehicles.customer_id', '=', 'customers.id')
         ->select(
             'customer_id',
@@ -106,12 +107,17 @@ class VehicleController extends Controller
             DB::raw("SUM(CASE WHEN vehicles.status = 'shipped' THEN 1 ELSE 0 END) AS shipped"),
         )
         ->when(!empty($request->searchValue), function ($q) use ($request) {
-            $q->orWhere('customers.name', 'LIKE', "%$request->searchValue%");
+            $q->where('customers.name', 'LIKE', "%$request->searchValue%");
         })
+        
         ->when(!empty($request->location_id), function ($q) use ($request) {
             $q->where('point_of_loading_id', $request->location_id);
         })
         ->groupBy('customer_id')
+        ->when(!empty($request->vehicleStatus), function ($q) use ($request) {
+            // $q->whereIn('vehicles.status', $status);
+            $q->having($request->vehicleStatus, '>', 0);
+        })
         ->get();
         
         if ($request->ajax()) {
