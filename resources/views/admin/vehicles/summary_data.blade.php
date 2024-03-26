@@ -14,10 +14,12 @@
         </tr>
     </thead>
     <tbody>
-        <?php $id = 1; ?>
+        @php
+            $count = 1;
+        @endphp
         @foreach ($vehicleSummary as $index => $item)
             <tr>
-                <td>{{ $index + 1 }}</td>
+                <td>{{ $count++ }}</td>
                 <td>{{ $item->customer_name ? $item->customer_name : 'Unknown' }}</td>
                 <td>
                     <a href="{{route('vehicles.index')}}?status=pending&customer_id={{ $item->customer_id }}&location_id={{ request()->location_id }}">

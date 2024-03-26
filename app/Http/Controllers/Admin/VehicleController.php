@@ -92,7 +92,6 @@ class VehicleController extends Controller
 
     public function summary (Request $request)
     {
-        $status = $request->vehicleStatus == '4categories' ? [ 'pending', 'on_the_way', 'on_hand_no_title', 'on_hand_with_title']: [$request->vehicleStatus];
         $vehicleSummary = Customer::leftJoin('vehicles', 'vehicles.customer_id', '=', 'customers.id')
         ->select(
             'customer_id',
@@ -106,16 +105,20 @@ class VehicleController extends Controller
         ->when(!empty($request->searchValue), function ($q) use ($request) {
             $q->where('customers.name', 'LIKE', "%$request->searchValue%");
         })
-        
         ->when(!empty($request->location_id), function ($q) use ($request) {
             $q->where('point_of_loading_id', $request->location_id);
         })
         ->groupBy('customer_id')
-        ->when(!empty($request->vehicleStatus), function ($q) use ($request) {
-            // $q->whereIn('vehicles.status', $status);
+        ->when(!empty($request->vehicleStatus) && $request->vehicleStatus != '4categories', function ($q) use ($request) {
             $q->having($request->vehicleStatus, '>', 0);
         })
         ->get();
+
+        if($request->vehicleStatus == '4categories'){
+            $vehicleSummary = $vehicleSummary->filter(function ($item) {
+                return $item->pending > 0 || $item->on_the_way > 0 || $item->on_hand_no_title > 0 || $item->on_hand_with_title > 0;
+            });
+        }
         
         if ($request->ajax()) {
           return view('admin.vehicles.summary_data', compact('vehicleSummary'));

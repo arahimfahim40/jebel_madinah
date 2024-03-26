@@ -51,7 +51,7 @@
 
             @include('errors')
             @php
-                $customer_name = old('customer_id', '') ? DB::table('customers')-find(old('customer_id', ''))->name : '';
+                $customer_name = old('customer_id', '') ? DB::table('customers')->find(old('customer_id', ''))->name : '';
             @endphp
 
             <div class="wizard-v4-content w-100">
