@@ -4,7 +4,7 @@
         <ul class="sidebar-menu">
             @can('dashboard-view')
             <li>
-                <a href="{{ route('home.index') }}" class="waves-effect  waves-light">
+                <a href="{{ route('user.home.index') }}" class="waves-effect  waves-light">
                     <span class="s-icon"><i class="fa fa-home"></i></span>
                     <span class="s-text">Dashboard</span>
                 </a>

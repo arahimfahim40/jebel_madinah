@@ -127,6 +127,7 @@ class UserController extends Controller
             'roles.*' => 'exists:roles,id',
             'permissions.*' => 'exists:permissions,id',
         ]);
+        $user = Auth::user();
         try {
             $user = User::findOrFail($id);
             $password = $request['password']?[ "password" => bcrypt($request['password'])]: [];
@@ -135,7 +136,7 @@ class UserController extends Controller
                 "username" => $request['username'],
                 "email" => $request['email'],
                 "time_zone_id" => $request['time_zone_id'],
-                "updated_by" =>$this->user_id,
+                "updated_by" =>$user->id,
             ],$password));
 
             $roles = [];
@@ -151,7 +152,10 @@ class UserController extends Controller
     }
 
     public function destroy($id){
+        $user = Auth::user();
+        if($user->id == $id) return redirect()->route('users.show', ['id' => $id])->with('error', 'Something went wrong, cannot delete the user.');
         try{
+            User::where('id',$id)->update(['deleted_by' => $user->id]);
             User::find($id)->delete();
             return redirect()->route('users.index')->with('success', 'Deleted successfully!');
         } catch(Exception $ex) {

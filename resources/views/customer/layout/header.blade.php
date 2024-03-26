@@ -54,7 +54,7 @@
                         <a class="dropdown-item" href="#">
                             <i class="ti-user mr-0-5"></i> Profile
                         </a>
-                        <a class="dropdown-item" href="{{route('auth.logout')}}"><i class="ti-power-off mr-0-5"></i> Sign out</a>
+                        <a class="dropdown-item" href="{{route('customer.logout')}}"><i class="ti-power-off mr-0-5"></i> Sign out</a>
                     </div>
                 </li>
             </ul>

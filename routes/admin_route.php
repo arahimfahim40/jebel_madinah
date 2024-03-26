@@ -16,7 +16,7 @@ use App\Http\Controllers\admin\HomeController;
 Route::middleware('auth:user')->group(function () {
 
     Route::get('logout', [AuthController::class, 'logout_user'])->name('users.logout');
-    Route::get('admin/dashboard', [HomeController::class, 'index'])->name('home.index')->middleware(['can:dashboard-view']);
+    Route::get('admin/dashboard', [HomeController::class, 'index'])->name('user.home.index')->middleware(['can:dashboard-view']);
 
     // user section 
     Route::get('admin/users', [UserController::class,'index'])->name('users.index')->middleware(['can:user-view']);
