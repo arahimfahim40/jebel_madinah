@@ -21,12 +21,12 @@
     <link rel="stylesheet" type="text/css" href="{{asset('assets/jvectormap/jquery-jvectormap-2.0.3.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('assets/select2/dist/css/select2.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('assets/toastr/toastr.min.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{asset('assets/DataTables-1.10.12/datatables.min.css')}}" />
+    {{-- <link rel="stylesheet" type="text/css" href="{{asset('assets/DataTables-1.10.12/datatables.min.css')}}" /> --}}
     <link rel="stylesheet" type="text/css" href="{{asset('assets/css/core.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('assets/css/custom-style.css')}}">
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Roboto+Condensed:wght@300;400;700&display=swap">
 
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.0.3/css/buttons.dataTables.min.css">
+    {{-- <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.0.3/css/buttons.dataTables.min.css"> --}}
     <!-- Neptune CSS -->
 
     <style>
@@ -127,12 +127,12 @@
     <script type="text/javascript" src="{{asset('assets/jvectormap/jquery-jvectormap-world-mill.js')}}"></script>
     <script type="text/javascript" src="{{asset('assets/peity/jquery.peity.js')}}"></script>
     <script type="text/javascript" src="{{asset('assets/select2/dist/js/select2.min.js')}}"></script>
-    <script type="text/javascript" src="{{asset('assets/DataTables-1.10.12/datatables.min.js')}}"></script>
+    {{-- <script type="text/javascript" src="{{asset('assets/DataTables-1.10.12/datatables.min.js')}}"></script> --}}
     <script type="text/javascript" src="{{asset('assets/sweetalert2v11/sweetalert2.min.js')}}"></script>
     <script type="text/javascript" src="{{asset('assets/js/app.js')}}"></script>
     <script type="text/javascript" src="{{asset('assets/notify/notify.js')}}"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
+    {{-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script> --}}
 
     @stack('js')
 
@@ -142,15 +142,16 @@
             method: "GET",
             dataType: 'json'
         });
-
+        
         $(document).ready(function() {
             // Get location and store in global variables of js
             window.locations = <?php echo json_encode(getLocations()) ?>;
             window.vehicle_section = false;
             window.vehicle_summary_section = false;
             window.invoice_section = false;
-            if ($('.vehicle_section .active').html() != undefined && !vehicle_section) {
-                window.vehicle_section = true;
+            
+            if ($('.vehicles_section .active').html() != undefined && !vehicle_section) {
+                vehicle_section = true;
                 get_admin_sidebar_sub_count('Vehicle');
                 if ($('.vehicle_summary_section .active').html() != undefined && !vehicle_summary_section) {
                     vehicle_summary_section = true;
