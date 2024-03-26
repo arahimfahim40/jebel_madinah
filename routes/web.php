@@ -12,6 +12,19 @@
 |
 */
 
+use App\Http\Controllers\auth\AuthController;
+use Illuminate\Support\Facades\Route;
+
+Route::get('/',function(){
+    return view("auth/login");
+});
+
+Route::get('/login', function () {
+    return view('auth/login');
+});
+
+Route::get('login', [AuthController::class, 'index'])->name('login');
+Route::post('login', [AuthController::class, 'login'])->name('auth.login');
 
 require_once('admin_route.php');
 require_once('customer_route.php');

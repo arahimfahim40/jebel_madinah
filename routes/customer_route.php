@@ -7,30 +7,7 @@ use App\Http\Controllers\Customer\VehicleController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\auth\AuthController;
 
-Route::get('/',function(){
-    return view("auth/login");
-});
-
-Route::get('/login', function () {
-    return view('auth/login');
-});
-
-/* Route::middleware('auth')->group(function(){
-    Route::get('/user',[UserController::class,'user'])->name('user');
-    Route::post('/user',[UserController::class,'create'])->name('users.create');
-});   */  
-
-
-
-
 //Auth::routes();
-
-// Route::middleware('auth:web')->group(function () {
-
-Route::get('login', [AuthController::class, 'index'])->name('login');
-Route::post('login', [AuthController::class, 'login'])->name('auth.login');
-
-//Route::group(['middleware' => 'auth:customer'], function () {
 Route::middleware('auth:customer')->group(function () {
 
     Route::get('/customer/logout', [AuthController::class, 'logout_customer'])->name('customer.logout');

@@ -5,7 +5,6 @@ use App\Http\Controllers\Admin\InvoiceController;
 use App\Http\Controllers\Admin\InvoicePaymentController;
 use App\Http\Controllers\Admin\VehicleController;
 use App\Http\Controllers\Admin\LocationController;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\auth\AuthController;
 use App\Http\Controllers\admin\UserController;
@@ -13,21 +12,7 @@ use App\Http\Controllers\admin\PermissionController;
 use App\Http\Controllers\admin\RoleController;
 use App\Http\Controllers\admin\HomeController;
 
-Route::get('/',function(){
-    return view("auth/login");
-});
-
-Route::get('/login', function () {
-    return view('auth/login');
-});
-
 //Auth::routes();
-// Route::middleware('auth:web')->group(function () {
-
-Route::get('login', [AuthController::class, 'index'])->name('login');
-Route::post('login', [AuthController::class, 'login'])->name('auth.login');
-
-//Route::group(['middleware' => 'auth:user'], function () {
 Route::middleware('auth:user')->group(function () {
 
     Route::get('logout', [AuthController::class, 'logout_user'])->name('users.logout');
