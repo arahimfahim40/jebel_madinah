@@ -16,7 +16,6 @@ class UserController extends Controller
         $paginate = $request->paginate ? $request->paginate : 10;
         $users = User::with(['time_zones','createdBy','updatedBy'])->orderBy('id', 'desc')->paginate($paginate);
 
-        //dd($users);
         if ($request->ajax()) {
           return view('admin.user.data', compact('users',  'paginate'));
         }
@@ -41,8 +40,8 @@ class UserController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|string',
-            'username' => 'required|unique:users',
-            'email' => 'required|unique:users',
+            'username' => 'required|unique:users|unique:customers,email',
+            'email' => 'required|unique:users|unique:customers,email',
             'password' => 'required',
             'time_zone_id' => 'required|exists:time_zones,id',
             'photo' => 'mimes:jpg,png,jpeg,bmp,gif|max:1024',
@@ -119,8 +118,8 @@ class UserController extends Controller
     public function update(Request $request, $id){
         $this->validate($request, [
             'name' => 'required|string',
-            'username' => 'required|unique:users,username,'.$id,
-            'email' => 'required|unique:users,email,'.$id,
+            'username' => 'required|unique:customers,email|unique:users,username,'.$id.'',
+            'email' => 'required|unique:customers,email|unique:users,email,'.$id,
             'password' => 'nullable',
             'time_zone_id' => 'required|exists:time_zones,id',
             'photo' => 'mimes:jpg,png,jpeg,bmp,gif|max:1024',

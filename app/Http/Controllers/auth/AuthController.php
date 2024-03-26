@@ -9,7 +9,15 @@ use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller
 {
     public function index(){
+        if (Auth::guard('user')->check()) {
+            return redirect()->intended(route('user.home.index'));
+        }
+        else if(Auth::guard('customer')->check())
+        {
+            return redirect()->intended(route('customer.home.index'));
+        } else{
         return view('auth.login');
+        }
     }
     public function login(Request $request)
     {
@@ -30,8 +38,9 @@ class AuthController extends Controller
             $request->session()->regenerate();
             return redirect()->intended(route('customer.home.index'));
         }
-        else
+        else{
         return redirect()->back()->withErrors("Your Email or Password is Incorrect."); 
+        }
     }
 
     function logout_user(Request $request)
