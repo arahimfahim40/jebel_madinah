@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
@@ -22,6 +21,7 @@ class CustomerController extends Controller
         }
         return view('admin.customers.list', compact('customers',  'paginate'));
     }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -40,7 +40,7 @@ class CustomerController extends Controller
             'address' => 'required|string',
             'gender' => 'required|string|in:Male,Female',
             'status' => 'required|string|in:Active,Inactive',
-            'email' => 'required|email|unique:customers',
+            'email' => 'required|email|unique:customers,email|unique:users,email',
             'password' => 'required|string',
             'phone' => 'required|string',
             'join_date' => 'nullable|date',
@@ -102,7 +102,7 @@ class CustomerController extends Controller
             'address' => 'required|string',
             'gender' => 'required|string|in:Male,Female',
             'status' => 'required|string|in:Active,Inactive',
-            'email' => 'required|email|unique:customers,email,'.$id,
+            'email' => 'required|email|unique:users,email|unique:customers,email,'.$id,
             'password' => 'nullable|string',
             'phone' => 'required|string',
             'join_date' => 'nullable|date',

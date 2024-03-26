@@ -7,7 +7,6 @@ use App\Http\Controllers\Customer\VehicleController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\auth\AuthController;
 
-//Auth::routes();
 Route::middleware('auth:customer')->group(function () {
 
     Route::get('customer/logout', [AuthController::class, 'logout_customer'])->name('customer.logout');

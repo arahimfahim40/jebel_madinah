@@ -12,7 +12,6 @@ use App\Http\Controllers\admin\PermissionController;
 use App\Http\Controllers\admin\RoleController;
 use App\Http\Controllers\admin\HomeController;
 
-//Auth::routes();
 Route::middleware('auth:user')->group(function () {
 
     Route::get('logout', [AuthController::class, 'logout_user'])->name('users.logout');
