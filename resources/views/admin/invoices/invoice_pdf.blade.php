@@ -49,45 +49,42 @@
                         <th style="background-color: unset;">Mix Shipping Invoice</th>
                     </tr>
                     @php
-                    $names = $invoice->msvehicles->flatMap(function ($vehicle) {
+                    $names = $invoice->vehicles->flatMap(function ($vehicle) {
                         return $vehicle->charges->pluck('name');
                     })->unique()->toArray();
-                    $currency = $invoice->currency == 'AED' ? 'AED' : $invoice->currency;
+                    $currency = 'AED';
                     @endphp
-                    <?php $comp_profile = DB::table('pgl_profile')->first();
+                    <?php
                     $total_amount_aed = 0;
                     $due_balance = 0;
-                    foreach ($invoice->msvehicles as $vehicle) {
+                    foreach ($invoice->vehicles as $vehicle) {
                         $total_amount_aed += round(($vehicle->freight + $vehicle->clearance + $vehicle->tow_amount + $vehicle->vat_and_custom + $vehicle->charges->sum('value')) * $invoice->exchange_rate, 2);
                     }
-                    $due_balance = $total_amount_aed - ((float) @$invoice->msvehicles->sum('payment_amount') + (float) @$invoice->msvehicles->sum('discount') + (float) @$invoice->msvehicles->sum('irrecoverable_debt')); ?>
+                    $due_balance = $total_amount_aed; ?>
                     <tr>
-                        <td>{{ $comp_profile->street }} <br>
-                            {{ $comp_profile->city }}, {{ $comp_profile->state }}, {{ $comp_profile->zip_code }}
-                            <br>accounting@peacegl.com
+                        <td>{{ A Street }} <br>
+                            {{ B City }}, {{ C State }}, {{ D Zip Code }}
+                            <br>test@als.com
                         </td>
-                        <td>INV#: <b>{{ sprintf("PGLMS%'.04d\n", @$invoice->id) }}</b>
-                            <br>Issue Date: {{ @$invoice->inv_date }}
-                            <br>Due Date: {{ @$invoice->inv_due_date }}
+                        <td>INV#: <b>{{ sprintf("ALSMS%'.04d\n", @$invoice->id) }}</b>
+                            <br>Issue Date: {{ @$invoice->invoice_date }}
+                            <br>Due Date: {{ @$invoice->invoice_due_date }}
                             <?php $today = Carbon\Carbon::parse(Carbon\Carbon::today());
-                            $inv_date_due = Carbon\Carbon::parse(@$invoice->inv_due_date);
+                            $inv_date_due = Carbon\Carbon::parse(@$invoice->invoice_due_date);
                             ?>
                             <br>Past Due Days:
-                            {{ $today > $inv_date_due && $due_balance > 0 ? $today->diffInDays($inv_date_due) : '' }}
+                            {{ $today > $invoice_date_due && $due_balance > 0 ? $today->diffInDays($invoice_date_due) : '' }}
                         </td>
                     </tr>
                     <tr>
                         <td></td>
                         <td>
                             Payment Date:
-                            {{ join(', ', array_unique($invoice->msvehicles->pluck('payment_date')->toArray())) }}
+                            {{ join(', ', array_unique($invoice->vehicles->pluck('payment_date')->toArray())) }}
                             <br>
                             Payment Received :
-                            {{ $invoice->msvehicles->count() > 0 ? number_format(@$invoice->msvehicles->sum('payment_amount'), 2) . ' ' . $currency : '' }}
+                            <!-- {{ $invoice->vehicles->count() > 0 ? number_format(@$invoice->vehicles->sum('payment_amount'), 2) . ' ' . $currency : '' }} -->
                             <br>
-                            @if (@$invoice->irrecoverable_debt > 0)
-                                Irrecoverable Debt: {{ number_format((float) $invoice->irrecoverable_debt, 2) }} {{ $currency }}
-                            @endif
                         </td>
                     </tr>
                     <tr>
@@ -96,12 +93,12 @@
                         </th>
                     </tr>
                     <tr>
-                        <td colspan="2">{{ @$invoice->company->name }}
-                            <br>
+                        <td colspan="2">{{ @$invoice->customer->name }}
+                            <!-- <br>
                             {{ @$invoice->company->customer_address }}, {{ @$invoice->company->comp_city }},
                             {{ @$invoice->company->zip_code }}
                             <br>
-                            {{ @$invoice->company->country }} &nbsp;Phone: {{ @$invoice->company->customer_phone }}
+                            {{ @$invoice->company->country }} &nbsp;Phone: {{ @$invoice->company->customer_phone }} -->
                         </td>
 
                     </tr>
@@ -153,7 +150,7 @@
                             $TotalAmounAED = 0;
                             ?>
 
-                            @foreach ($invoice->msvehicles as $key => $vehicle)
+                            @foreach ($invoice->vehicles as $key => $vehicle)
                                 <tr>
                                     <td class="td1">{{ $key + 1 }}</td>
                                     <td class="td1" style="min-width: 30vw;">
