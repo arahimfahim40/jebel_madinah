@@ -16,10 +16,10 @@ class VehicleSeeder extends Seeder
     {
         $faker = Factory::create();
 
-        for ($i = 0; $i < 350; $i++) {
+        for ($i = 0; $i < 100; $i++) {
             Vehicle::create([
                 'customer_id' => $faker->numberBetween(1, 5),
-                'invoice_id' => $faker->numberBetween(1, 100),
+                'invoice_id' => $faker->numberBetween(1, 50),
                 'year' => $faker->year,
                 'container_number' => $faker->lexify('???####'),
                 'title_received_date' => $faker->date(),

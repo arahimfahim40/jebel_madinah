@@ -89,18 +89,17 @@ class DatabaseSeeder extends Seeder
         $user->assignRole([$role->id]);
 
         \App\Models\Location::insert([
-            ['name' => $faker->name],
-            ['name' => $faker->name],
-            ['name' => $faker->name],
-            ['name' => $faker->name],
-            ['name' => $faker->name],
+            ['name' => 'Savannah, GA'],
+            ['name' => 'Houston, TX'],
+            ['name' => 'Baltimore, MD'],
+            ['name' => 'New Jersey, NJ'],
+            ['name' => 'Los Angeles, CA'],
+            ['name' => 'Canada'],
         ]);
         \App\Models\Customer::insert([
             ['name' => $faker->name, 'email' => $faker->email, 'password' => bcrypt($faker->password) ],
             ['name' => $faker->name, 'email' => $faker->email, 'password' => bcrypt($faker->password) ],
-            ['name' => $faker->name, 'email' => $faker->email, 'password' => bcrypt($faker->password) ],
-            ['name' => $faker->name, 'email' => $faker->email, 'password' => bcrypt($faker->password) ],
-            ['name' => $faker->name, 'email' => $faker->email, 'password' => bcrypt($faker->password) ],
+            ['name' => 'customer', 'email' => 'customer@gmail.com', 'password' => bcrypt('password') ],
         ]);
 
         $this->call(InvoiceSeeder::class);
