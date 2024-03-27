@@ -95,4 +95,127 @@
 
 </body>
 
+<script type="text/javascript">
+	var request = $.ajax({
+		url: "{{route('customer_sidebar_count')}}",
+		method: "GET",
+		dataType: 'json'
+	});
+	
+	$(document).ready(function() {
+		// Get location and store in global variables of js
+		window.vehicle_section = false;
+		window.invoice_section = false;
+		
+		if ($('.vehicles_section .active').html() != undefined && !vehicle_section) {
+			vehicle_section = true;
+			get_admin_sidebar_sub_count('Vehicle');
+		} else if ($('.invoice_section .active').html() != undefined && !invoice_section) {
+			invoice_section = true;
+			get_admin_sidebar_sub_count('Invoice');
+		}
+
+	});
+
+	request.done(function(msg) {
+		$('.t_all_vehicle').text(msg.t_all_vehicle);
+		$('.t_all_invoice').text(msg.t_all_invoice);
+	});
+
+
+	function get_admin_sidebar_sub_count(type = 'Vehicle') {
+		var vehicle_sub_count = $.ajax({
+			url: "{{route('customer_sidebar_sub_count')}}",
+			method: "GET",
+			dataType: 'json',
+			data: {
+				type: type
+			}
+		});
+		vehicle_sub_count.done(function(msg) {
+			if (type == 'Vehicle') {
+				window.vehicle_section = true;
+				$('.t_pending_vehicle').text(msg.t_pending);
+				$('.t_on_the_way_vehicle').text(msg.t_on_the_way);
+				$('.t_on_hand_no_title_vehicle').text(msg.t_on_hand_no_title);
+				$('.t_on_hand_with_title_vehicle').text(msg.t_on_hand_with_title);
+				$('.t_shipped_vehicle').text(msg.t_shipped);
+			} else if (type == 'Invoice') {
+				window.invoice_section = true;
+				$('.t_pending_invoice').text(msg.t_pending_invoice);
+				$('.t_open_invoice').text(msg.t_open_invoice);
+				$('.t_past_due_invoice').text(msg.t_past_due_invoice);
+				$('.t_paid_invoice').text(msg.t_paid_invoice);
+			}
+		});
+
+		vehicle_sub_count.fail(function(jqXHR, textStatus) {
+			alert('fail to load the vehicle summary total.');
+			console.log(msg, jqXHR);
+		});
+	}
+
+
+	$(document).ready(function() {
+		$('#example th, .client_side_sorting_table th').each(function(col) {
+			$(this).click(function() {
+				if ($(this).is('.asc')) {
+					$(this).removeClass('asc sorting_asc');
+					$(this).addClass('selected desc sorting_desc');
+					sortOrder = -1;
+				} else {
+					$(this).addClass('selected asc sorting_asc');
+					$(this).removeClass('desc sorting_desc');
+					sortOrder = 1;
+				}
+				$(this).siblings().removeClass('selected asc sorting_asc');
+				$(this).siblings().removeClass('selected desc sorting_desc');
+				var arrData = $('table').find('tbody >tr:has(td)').get();
+				arrData.sort(function(a, b) {
+					var val1 = $(a).children('td').eq(col).text();
+					var val2 = $(b).children('td').eq(col).text();
+					var val1Numeric = val1.replace(/[$,DH]/g, '');
+					var val2Numeric = val2.replace(/[$,DH]/g, '');
+					var dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+					if ($.isNumeric(val1Numeric) && $.isNumeric(val2Numeric) &&  !(dateRegex.test(val1) || dateRegex.test(val2) )) {
+						console.log(val1Numeric, val2Numeric);
+						// Sort numerically
+						return sortOrder == 1 ? val1Numeric - val2Numeric : val2Numeric - val1Numeric;
+					}else{
+						return (val1 < val2) ? -sortOrder : (val1 > val2) ? sortOrder : 0;
+					}
+				});
+				$.each(arrData, function(index, row) {
+					$('tbody').append(row);
+				});
+			});
+		});
+		$('.excel').click(function() {
+			$("#example").tableHTMLExport({
+				type: 'csv',
+				filename: 'sample.csv',
+				separator: ',',
+				newline: '\r\n',
+				trimContent: true,
+				quoteFields: true,
+				ignoreColumns: '.column',
+				ignoreRows: '.bottom',
+				htmlContent: false,
+				consoleLog: false,
+			});
+		});
+
+	});
+
+	$(document).ready(function() {
+		$(".select2").select2();
+	});
+
+
+	$(document).on('select2:open', () => {
+		document.querySelector('.select2-search__field').focus();
+	});
+
+</script>
+
 </html>

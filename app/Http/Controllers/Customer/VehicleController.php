@@ -49,5 +49,26 @@ class VehicleController extends Controller
         return view('customer.vehicles.list', compact('vehicles', 'status', 'paginate'));
     }
 
+    public function cost_analysis (Request $request)
+    {
+        $paginate = $request->paginate ? $request->paginate : 20;
+        $vehicles = Vehicle::with('location:id,name')
+        ->where('customer_id', '=', auth()->id())
+        ->when(!empty($request->searchValue), function ($q) use ($request) {
+            $q->where(function ($query) use ($request) {
+                foreach (self::$searchColumns as $value) {
+                    $query->orWhere($value, 'LIKE', "%$request->searchValue%");
+                }
+            });
+        })
+        ->orderBy('created_at', 'desc')
+        ->paginate($paginate);
+        
+        if ($request->ajax()) {
+          return view('customer.vehicles.cost_analysis_data', compact('vehicles', 'paginate'));
+        }
+        return view('customer.vehicles.cost_analysis', compact('vehicles', 'paginate'));
+    }
+
 
 }
