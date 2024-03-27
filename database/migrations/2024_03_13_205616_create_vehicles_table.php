@@ -13,76 +13,84 @@ return new class extends Migration
     {
         Schema::create('vehicles', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('customer_id');
-            $table->unsignedBigInteger('invoice_id');
-            $table->string('year')->nullable();
-            $table->string('container_number')->nullable();
+            $table->unsignedBigInteger('customer_id')->nullable();
+            $table->unsignedBigInteger('invoice_id')->nullable();
+            $table->unsignedBigInteger('point_of_loading_id')->nullable();
+
+            $table->integer('year')->nullable();
+            $table->string('make', 64)->nullable();
+            $table->string('model', 64)->nullable();
+            $table->string('color', 64)->nullable();
+            $table->string('vin', 32)->nullable();
+            $table->unsignedBigInteger('lot_number');
+            $table->string('container_number', 16)->nullable();
+            $table->string('title_status')->nullable();
+            
+            $table->string('title_number', 128)->nullable();
             $table->string('title_received_date')->nullable();
-            $table->string('title_number')->nullable();
-            $table->string('title_state')->nullable();
+            $table->string('auction', 128)->nullable();
+            $table->string('auction_city', 128)->nullable();
+            
             $table->date('purchase_date')->nullable();
-            $table->string('pickup_date')->nullable();
-            $table->string('deliver_date')->nullable();
-            $table->text('note')->nullable();
-            $table->string('color')->nullable();
-            $table->string('model')->nullable();
-            $table->string('vin')->default('0');
-            $table->string('weight')->nullable();
+            $table->date('pickup_date')->nullable();
+            $table->date('deliver_date')->nullable();
+            $table->date('payment_date')->nullable();
+
+            $table->string('hat_number', 128)->nullable();
+            $table->string('buyer_number', 64)->nullable();
+            $table->string('licence_number', 64)->nullable();
+            $table->decimal('weight', 10, 0)->nullable();
             $table->text('cbm')->nullable();
-            $table->string('value')->nullable();
-            $table->string('licence_number')->nullable();
-            $table->string('storage_amount')->nullable();
-            $table->string('check_number')->nullable();
-            $table->string('add_charges')->nullable();
-            $table->string('lot_number')->nullable();
-            $table->string('htnumber')->nullable();
-            $table->text('c_remark')->nullable();
-            $table->string('make')->nullable();
-            $table->string('towed_from')->nullable();
-            $table->string('tow_amount')->nullable();
+            
+            $table->text('photos_link')->nullable();
+            $table->text('auction_invoice_link')->nullable();
+            $table->text('customer_remark')->nullable();
+            $table->text('note')->nullable();
+            
+            $table->enum('status', ['pending', 'on_the_way', 'on_hand_with_title', 'on_hand_no_title', 'shipped'])->default('on_the_way');
+            $table->enum('ship_as', ['half-cut', 'complete'])->nullable()->default('complete');
+            $table->enum('is_key', ['Yes', 'No'])->nullable()->default('No');
+
+            // Vehicle Charges
+            $table->decimal('vehicle_price', 10, 0)->nullable();
+            $table->decimal('towing_charge', 10, 0)->nullable();
+            $table->decimal('clearance_charge', 10, 0)->nullable();
+            $table->decimal('ship_charge', 10, 0)->nullable();
+            $table->decimal('storage_charge', 10, 0)->nullable();
+            $table->decimal('custom_charge', 10, 0)->nullable();
+            $table->decimal('tds_charge', 10, 0)->nullable();
+            $table->decimal('other_charge', 10, 0)->nullable();
+            $table->text('invoice_description')->nullable();
+            // Vehicle Costs
+            $table->decimal('towing_cost', 10, 0)->nullable();
+            $table->decimal('clearance_cost', 10, 0)->nullable();
+            $table->decimal('ship_cost', 10, 0)->nullable();
+            $table->decimal('storage_cost', 10, 0)->nullable();
+            $table->decimal('custom_cost', 10, 0)->nullable();
+            $table->decimal('tds_cost', 10, 0)->nullable();
+            $table->decimal('other_cost', 10, 0)->nullable();
+            
+            $table->timestamps();
+            $table->softDeletes();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
-            $table->enum('status', ['pending', 'on_the_way', 'on_hand_with_title', 'on_hand_no_title', 'shipped'])->default('on_the_way');
-            $table->enum('vehicle_type', ['half-cut', 'complete'])->default('complete');
-            $table->date('payment_date')->nullable();
-            $table->string('shipas')->nullable();
-            $table->integer('port_of_loading_id')->nullable();
-            $table->string('buyer_number')->nullable();
-            $table->text('photos_link')->nullable();
-            $table->integer('storage_cost')->default(0);
-            $table->integer('vehicle_price')->nullable();
-            $table->string('auction_fee')->nullable();
-            $table->integer('tow_amounts')->nullable();
-            $table->integer('dismantal_cost')->nullable();
-            $table->integer('ship_cost')->nullable();
-            $table->integer('dubai_custom_cost')->nullable();
-            $table->integer('dubai_storage_cost')->nullable();
-            $table->integer('dubai_demurage')->nullable();
-            $table->integer('other_cost')->nullable();
-            $table->integer('sales_cost')->nullable();
-            $table->integer('profit')->nullable();
-            $table->string('percent_profit')->nullable();
-            $table->string('auction')->nullable();
-            $table->string('auction_city')->nullable();
-            $table->string('title')->nullable();
-            $table->string('pickup_due_date')->nullable();
-            $table->string('title_status')->nullable();
-            $table->tinyInteger('is_key')->default(0);
-            $table->text('customer_note')->nullable();
-            $table->timestamp('deleted_at')->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();
 
-            $table->unique('vin');
+            $table->unique('vin')->index();
+            $table->index('lot_number');
+            $table->index('container_number');
+            $table->index('invoice_id');
+            $table->index('point_of_loading_id');
             $table->index('created_by');
             $table->index('updated_by');
             $table->index('deleted_by');
-            
             $table->foreign('created_by')->references('id')->on('users')->onDelete('set null');
             $table->foreign('updated_by')->references('id')->on('users')->onDelete('set null');
             $table->foreign('deleted_by')->references('id')->on('users')->onDelete('set null');
 
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
             $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('cascade');
+            $table->foreign('point_of_loading_id')->references('id')->on('locations')->onDelete('cascade');
 
         });
     }

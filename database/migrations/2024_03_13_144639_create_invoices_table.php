@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('customer_id');
             $table->decimal('exchange_rate', 8);
-            $table->date('move_to_open_date')->nullable();
             $table->date('invoice_date')->nullable();
             $table->date('invoice_due_date')->nullable();
             $table->enum('status', ['pending', 'open', 'past_due', 'paid'])->nullable();
@@ -25,6 +24,7 @@ return new class extends Migration
             $table->timestamps();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();
+            $table->softDeletes();
 
             $table->foreign('customer_id')->references('id')->on('customers');
             $table->foreign('created_by')->references('id')->on('users');
