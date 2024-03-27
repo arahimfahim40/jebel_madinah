@@ -54,7 +54,7 @@
             <div class="wizard-v4-content w-100">
                 <div class="wizard-form py-2">
                     <h2 class="mb-1" style="text-align: center;">Add New Invoice</h2>
-                    <form id="create-invoice-form" class="form-register form-horizontal" method="POST" action="{{ route('invoices.store')}}">
+                    <form id="create-invoice-form" class="form-register form-horizontal" method="POST" action="{{ route('invoices.store')}}" onsubmit="return validateForm()">
                         @csrf
                         <div>
                             <h2>
@@ -72,10 +72,10 @@
                                                     name="customer_id"
                                                     class="form-control s2s_customers"
                                                     required
-                                                /></select>
+                                                ></select>
                                             </div>
                                             <div class="col-md-6 form-group">
-                                                <label>Status</label>
+                                                <label class="required">Status</label>
                                                 <select name="status"
                                                     class="form-control"
                                                 >
@@ -88,11 +88,11 @@
                                             </div>
                                         </div>
                                         <div class="col-md-12 px-0">
-                                        <div class="col-md-12 form-group">
+                                            <div class="col-md-12 form-group">
                                                 <input type="hidden" name="vehicles" value="" />
                                                 <label for="VehicleSelect">Vehicle</label>
                                                 <div class="input-group">
-                                                    <select id='VehicleSelect' class="form-control s2s_vehicles"
+                                                    <select id='VehicleSelect' class="form-control"
                                                         aria-describedby="basic-addon2">
                                                     </select>
                                                     <span class="input-group-btn">
@@ -103,16 +103,20 @@
                                                     </span>
                                                 </div>
                                                 <div class="card mt-1">
-                                                    <h5 class="card-header">List Of Vehicles</h5>
+                                                    <h5 class="card-header">List Of Vehicles<label class="required"></label></h5>
+                                                    
                                                     <div class="card-body">
                                                         <ul class="vehicle_list list-group m-1"> No item in list</ul>
                                                     </div>
                                                 </div>
+                                                @error('vehicles')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
                                             </div>
                                         </div>
                                         <div class="col-md-12 px-0">
                                             <div class="col-md-4 form-group">
-                                                <label>Move To Open Date</label>
+                                                <label class="required">Move To Open Date</label>
                                                 <input type="date" 
                                                 name="move_to_open_date"   
                                                 placeholder="Move To Open Date"
@@ -121,19 +125,21 @@
                                                 />
                                             </div>
                                             <div class="col-md-4 form-group">
-                                                <label>Invoice Date</label>
+                                                <label class="required">Invoice Date</label>
                                                 <input type="date" 
                                                 name="invoice_date"   
                                                 placeholder="Invoice Date"
                                                 class="form-control"
+                                                required
                                                 />
                                             </div>
                                             <div class="col-md-4 form-group">
-                                                <label>Due Date</label>
+                                                <label class="required">Due Date</label>
                                                 <input type="date" 
                                                 name="invoice_due_date"   
                                                 placeholder="Due Date"
                                                 class="form-control"
+                                                required
                                                 />
                                             </div>
                                             
@@ -157,6 +163,7 @@
                                                     name="discount" 
                                                     placeholder="Discount" 
                                                     class="form-control"
+                                                    value="0"
                                                 />
                                             </div>
                                         </div>
@@ -225,10 +232,13 @@
 
     // Add vehicle to the list
     function addVehicleToList() {
-        const vehicle_input = $("#VehicleSelect");
-        if (vehicle_input.val() != null) {
-            vehiclesIds.set(vehicle_input.val(), vehicle_input.text());
-            vehicle_input.val('').text('');
+        const vehicleSelect = document.getElementById("VehicleSelect");
+        const selectedOption = vehicleSelect.options[vehicleSelect.selectedIndex];
+        const vehicleId = selectedOption.value;
+        const vehicleDetails = selectedOption.text;
+
+        if (vehicleId && !vehiclesIds.has(vehicleId)) {
+            vehiclesIds.set(vehicleId, vehicleDetails);
             renderVehicleList();
         }
     }
@@ -287,10 +297,18 @@
                             parseFloat(vehicle.demurage_charge) +
                             parseFloat(vehicle.other_charge);
             
-            selectOptions += `<option value="${vehicle.id}" data-total-charges="${totalCharges}">${vehicle.vin} | ${vehicle.lot_number}    -    $${totalCharges.toFixed(2)}</option>`;
+            selectOptions += `<option value="${vehicle.id}" data-total-charges="${totalCharges}">${vehicle.vin} | ${vehicle.lot_number}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$${totalCharges.toFixed(2)}</option>`;
         });
 
         $('#VehicleSelect').html(selectOptions);
+    }
+
+    function validateForm() {
+        if (vehiclesIds.size === 0) {
+            alert('Please select at least one vehicle.');
+            return false; 
+        }
+        return true;
     }
     
     function onFormSubmit(){

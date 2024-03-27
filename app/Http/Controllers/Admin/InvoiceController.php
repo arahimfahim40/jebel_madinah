@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Customer;
 use Illuminate\Support\Facades\Log;
+use App\Models\Vehicle;
+use Illuminate\Support\Facades\Auth;
 
 class InvoiceController extends Controller
 {
@@ -53,11 +55,13 @@ class InvoiceController extends Controller
             'discount' => 'nullable|numeric',
             'invoice_date' => 'required|date',
             'move_to_open_date' => 'required|date',
-            'invoice_due_date' => 'required|date'
+            'invoice_due_date' => 'required|date',
+            'vehicles' => 'required|string',
         ]);
 
         try {
             DB::beginTransaction();
+            $user = Auth::user();
 
             // Retrieve the filtered data from the request
             $filteredData = $request->only([
@@ -71,10 +75,16 @@ class InvoiceController extends Controller
                 'description',
             ]);
 
-            // Create a new invoice store
+            $filteredData['created_by'] = $user->id;
             $invoice = Invoice::create($filteredData);
 
-            // Commit the transaction
+            $vehicles = explode(',', $request->vehicles);
+            foreach ($vehicles as $vehicleId) {
+                $vehicle = Vehicle::findOrFail($vehicleId);
+                $vehicle->invoice()->associate($invoice);
+                $vehicle->save();
+            }
+
             DB::commit();
 
             // Redirect back with success message

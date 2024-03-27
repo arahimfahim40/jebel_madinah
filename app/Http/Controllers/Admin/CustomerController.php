@@ -69,7 +69,7 @@ class CustomerController extends Controller
             $customer->save();
            
             return redirect()->route('customers.show', ['id' => $customer->id])->with('success', 'Saved successfully!');
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             return redirect()->route('customers.index')->with('error', 'Something went wrong, cannot save the user.');
         }
     }
@@ -130,7 +130,7 @@ class CustomerController extends Controller
             $customer->updated_by = $user->id;
             $customer->save();
             return redirect()->route('customers.show', ['id' => $id])->with('success', 'Saved successfully!');
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             return redirect()->route('customers.show', ['id' => $id])->with('error', 'Something went wrong, cannot save the user.');
         }
     }
@@ -145,7 +145,7 @@ class CustomerController extends Controller
             Customer::where('id',$id)->update(['deleted_by' => $user->id]);
             Customer::find($id)->delete();
             return redirect()->route('customers.index')->with('success', 'Deleted successfully!');
-        } catch(Exception $ex) {
+        } catch(\Exception $ex) {
             return redirect()->route('customers.show', ['id' => $id])->with('error', 'Something went wrong, cannot delete the user.');
         }
     }
