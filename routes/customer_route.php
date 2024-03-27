@@ -15,10 +15,7 @@ Route::middleware('auth:customer')->group(function () {
     // Vehicles Routes
     Route::get('customer/vehicles', [VehicleController::class, 'index'])->name('customer.vehicles.index');
     Route::get('customer/vehicles/{vehicle}', [VehicleController::class, 'show'])->name('customer.vehicles.show');
-
     Route::get('customer/vehicles_cost_analysis', [VehicleController::class, 'cost_analysis'])->name('customer.vehicles.cost_analysis');
-    Route::get('customer/vehicles_dateline', [VehicleController::class, 'dateline'])->name('customer.vehicles.dateline');
-    Route::get('customer/vehicles_summary', [VehicleController::class, 'summary'])->name('customer.vehicles.summary');
 
     // Invoice Routes
     Route::get('customer/invoices', [InvoiceController::class, 'index'])->name('customer.invoices.index');
