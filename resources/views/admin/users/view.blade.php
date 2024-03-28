@@ -86,7 +86,7 @@
 
                                 <div class="row">
                                     <div class="col-md-3 font-weight-bold">Status </div>
-                                    <div class="col-md-6 "> 
+                                    <div class="col-md-6">
                                         @if($user->status == 'Active')
                                             <span class="tag tag-success" >{{$user->status}}</span>
                                         @else

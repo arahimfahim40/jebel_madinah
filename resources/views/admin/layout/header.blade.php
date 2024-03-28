@@ -41,6 +41,7 @@
                     </div>
                 </li> --}}
                 <li class="nav-item dropdown hidden-sm-down">
+                    <span class="mx-2 font-weight-bold"> <i class="fa fa-user" aria-hidden="true"></i>&nbsp;{{ ucfirst(Auth::user()->name) }}</span>
                     <a href="#" data-toggle="dropdown" aria-expanded="false">
                         <span class="avatar box-32">
                             @php $profileImgReplacement = asset('img/avatars/profile.png'); @endphp
@@ -51,12 +52,11 @@
                         <!-- <a class="dropdown-item" href="#">
                             <i class="ti-email mr-0-5"></i> Inbox
                         </a> -->
-                        {{-- <a class="dropdown-item" href="{{route('edit_my_profile')}}">
+                        <a class="dropdown-item" href="{{route('users.profile')}}">
                             <i class="ti-user mr-0-5"></i> Profile
-                        </a> --}}
+                        </a>
                         
-                         <a class="dropdown-item" href="{{route('users.logout')}}"><i
-                                    class="ti-power-off mr-0-5"></i> Sign out</a>
+                         <a class="dropdown-item" href="{{route('users.logout')}}"><i class="ti-power-off mr-0-5"></i> Sign out</a>
                     </div>
                 </li>
             </ul>

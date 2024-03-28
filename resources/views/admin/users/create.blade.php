@@ -80,7 +80,7 @@
 
                                     <div class="form-group">
                                         <label for="password">Password <span class="text-danger">*</span></label>
-                                        <input type="password" name="password" id="password" class="form-control" value="{{old('password')}}" placeholder="Enter user password" required />
+                                        <input type="password" name="password" id="password" class="form-control" minlength="6" value="{{old('password')}}" placeholder="Enter user password" required />
                                     </div>
                                     
                                     <div class="row">

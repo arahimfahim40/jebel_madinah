@@ -14,6 +14,9 @@ use App\Http\Controllers\Admin\HomeController;
 
 Route::middleware('auth:user')->group(function () {
 
+    Route::get('admin/profile', [AuthController::class, 'admin_profile'])->name('users.profile');
+    Route::post('admin/change_password', [AuthController::class, 'change_password'])->name('users.change_password');
+
     Route::get('logout', [AuthController::class, 'logout_user'])->name('users.logout');
     Route::get('admin/dashboard', [HomeController::class, 'index'])->name('user.home.index')->middleware(['can:dashboard-view']);
 
