@@ -7,10 +7,10 @@ use App\Http\Controllers\Admin\VehicleController;
 use App\Http\Controllers\Admin\LocationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\auth\AuthController;
-use App\Http\Controllers\admin\UserController;
-use App\Http\Controllers\admin\PermissionController;
-use App\Http\Controllers\admin\RoleController;
-use App\Http\Controllers\admin\HomeController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\HomeController;
 
 Route::middleware('auth:user')->group(function () {
 
