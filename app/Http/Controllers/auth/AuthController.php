@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -18,6 +19,33 @@ class AuthController extends Controller
         } else{
         return view('auth.login');
         }
+    }
+
+    public function admin_profile(Request $request){
+        $user = Auth::user();
+        return view('auth.admin_profile',compact('user'));
+    }
+
+    public function change_password(Request $request){
+        
+        $this->validate($request, [
+            'email' => 'required|email',
+            'old_password' => 'required',
+            'new_password' => 'required',
+        ]);
+        
+        $user = Auth::user();
+        if(Auth::guard('user')->attempt(['email'=>$user->email, 'password'=>$request->old_password,'status'=>'Active'])) {
+            try{
+                User::where('id',$user->id)->update(["password"=>bcrypt($request['new_password'])]);
+                return redirect()->back()->with('success', 'Password updated successfully!');
+            }
+            catch(Exception $e){
+                return redirect()->back()->with('error', $e->getMessage());
+            }
+        }
+        return redirect()->back()->with("error","Your Old Password is Incorrect."); 
+
     }
     public function login(Request $request)
     {

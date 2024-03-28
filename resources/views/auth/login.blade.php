@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/core.css') }}">
 </head>
 
-<body class="img-cover" style="background-image: url(img/photos-1/back-login.png);">
+<body class="img-cover" style="background-image: url(img/shippment.jpg);">
 
     <div class="container-fluid">
         <div class="sign-form">
