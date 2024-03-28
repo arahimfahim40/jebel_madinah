@@ -49,9 +49,9 @@
                         <th style="background-color: unset;">Mix Shipping Invoice</th>
                     </tr>
                     @php
-                    $names = $invoice->vehicles->flatMap(function ($vehicle) {
+                    <!-- $names = $invoice->vehicles->flatMap(function ($vehicle) {
                         return $vehicle->charges->pluck('name');
-                    })->unique()->toArray();
+                    })->unique()->toArray(); -->
                     $currency = 'AED';
                     @endphp
                     <?php
@@ -110,17 +110,17 @@
                         <th style="text-align: center;" colspan="4">Cargo Information</th>
                     </tr>
                     <tr>
-                        <td colspan="2">Container Number:&nbsp;&nbsp;{{ @$invoice->container->container_number }}
+                        <td colspan="2">Container Number:&nbsp;&nbsp;E ContainerN
                             <br>
-                            Booking Number:&nbsp;&nbsp;{{ @$invoice->container->booking->booking_number }} <br>
-                            Origin:&nbsp;&nbsp;{{ @$invoice->container->booking->vessel->location->name }}
+                            Booking Number:&nbsp;&nbsp;F BNum <br>
+                            Origin:&nbsp;&nbsp; G Org
                             <br>
-                            Destination:&nbsp;&nbsp;{{ @$invoice->container->booking->destination->name }}
+                            Destination:&nbsp;&nbsp;H Dest
                         </td>
-                        <td colspan="2">Consignee:&nbsp;&nbsp;{{ @$invoice->company->name }} <br>
-                            Carrier Name:&nbsp;&nbsp;{{ @$invoice->container->booking->vessel->name }} <br>
-                            ETD:&nbsp;&nbsp;{{ @$invoice->container->booking->vessel->etd }} <br>
-                            ETA:&nbsp;&nbsp;{{ @$invoice->container->booking->eta }}</td>
+                        <td colspan="2">Consignee:&nbsp;&nbsp;I Consignee <br>
+                            Carrier Name:&nbsp;&nbsp;J Carrier <br>
+                            ETD:&nbsp;&nbsp;K ETD <br>
+                            ETA:&nbsp;&nbsp;L ETA </td>
                     </tr>
                 </table>
 
@@ -133,10 +133,10 @@
                                 <th class="td1">Freight</th>
                                 <th class="td1">Towing</th>
                                 <th class="td1">10%Vat & Custom</th>
-                                <th class="td1">Clearance</th>
-                                @foreach (@$names as $name)
+                                <!-- <th class="td1">Clearance</th> -->
+                                <!-- @foreach (@$names as $name)
                                     <th class="td1">{{ @$allCharges[$name] }}</th>
-                                @endforeach
+                                @endforeach -->
                                 <th class="td1">Sub Total</th>
                             </tr>
                             <?php
@@ -160,13 +160,13 @@
                                         <br><b>Auction City:</b>{{ $vehicle->vehicle->auction_city }}
                                         <div style="font-size: 10px;"><b>Description:</b>{!! nl2br($vehicle->description) !!}</div>
                                     </td>
-                                    <td class="td1" style="text-align:right;">${{ $vehicle->freight }}</td>
-                                    <td class="td1" style="text-align:right;">${{ $vehicle->tow_amount }}</td>
+                                    <td class="td1" style="text-align:right;">${{ $vehicle->shiping_charge }}</td>
+                                    <td class="td1" style="text-align:right;">${{ $vehicle->tow_charge }}</td>
                                     <td class="td1" style="text-align:right;">
-                                        ${{ number_format($vehicle->vat_and_custom, 2) }}</td>
-                                    <td class="td1" style="text-align:right;">
-                                        ${{ number_format($vehicle->clearance, 2) }}</td>
-                                    @php 
+                                        ${{ number_format($vehicle->custom_charge, 2) }}</td>
+                                    <!-- <td class="td1" style="text-align:right;">
+                                        ${{ number_format($vehicle->clearance, 2) }}</td> -->
+                                    <!-- @php 
                                     $vehicleNameCharges = @$vehicle->charges->pluck('value', 'name')->toArray();
                                     @endphp
                                     @foreach ($names as $key1 => $name)
@@ -176,18 +176,17 @@
                                         <td class="td1" style="text-align:right;">
                                             ${{ number_format(@$vehicleNameCharges[$name], 2) }}
                                         </td>
-                                    @endforeach
+                                    @endforeach -->
                                     <td class="td1" style="text-align:right;">
-                                        ${{ number_format($vehicle->freight + $vehicle->tow_amount + $vehicle->vat_and_custom + $vehicle->clearance + (float) @$vehicle->charges->sum('value'), 2) }}
+                                        ${{ number_format($vehicle->shiping_charge + $vehicle->tow_charge + $vehicle->custom_charge , 2) }}
                                     </td>
                                 </tr>
                                 <?php
-                                $totalFreight = $totalFreight + $vehicle->freight;
-                                $totalTow_amount = $totalTow_amount + $vehicle->tow_amount;
-                                $totalVatAndCustom = $totalVatAndCustom + $vehicle->vat_and_custom;
-                                $totalClearance = $totalClearance + $vehicle->clearance;
-                                $TotalAmounUSD += $vehicle->freight + $vehicle->tow_amount + $vehicle->vat_and_custom + $vehicle->clearance + array_sum($vehicleNameCharges);
-                                $TotalAmounAED += round(($vehicle->freight + $vehicle->tow_amount + $vehicle->vat_and_custom + $vehicle->clearance + array_sum($vehicleNameCharges)) * $invoice->exchange_rate, 2);
+                                $totalFreight = $totalFreight + $vehicle->shiping_charge;
+                                $totalTow_amount = $totalTow_amount + $vehicle->tow_charge;
+                                $totalVatAndCustom = $totalVatAndCustom + $vehicle->custom_charge;
+                                $TotalAmounUSD += $vehicle->shiping_charge + $vehicle->tow_charge + $vehicle->custom_charge;
+                                $TotalAmounAED += round(($vehicle->shiping_charge + $vehicle->tow_charge + $vehicle->custom_charge) * $invoice->exchange_rate, 2);
                                 ?>
                             @endforeach
                             <tr>
@@ -200,16 +199,14 @@
                                 </th>
                                 <th style=" text-align:right;" class="td1">
                                     ${{ number_format(@$totalVatAndCustom, 2) }}</th>
-                                <th style=" text-align:right;" class="td1">${{ number_format(@$totalClearance, 2) }}
-                                </th>
-                                @foreach ($names as $key1 => $name)
+                                <!-- @foreach ($names as $key1 => $name)
                                     <th style=" text-align:right;" class="td1">
                                         ${{ number_format(@$dynamicCharges[$name], 2) }}
                                     </th>
-                                @endforeach
-                                </th>
+                                @endforeach -->
+                                <!-- </th> -->
                                 <th style=" text-align:right;" class="td1">
-                                    ${{ number_format(@$totalFreight + $totalTow_amount + $totalVatAndCustom + $totalClearance + array_sum(@$dynamicCharges), 2) }}
+                                    ${{ number_format(@$totalFreight + $totalTow_amount + $totalVatAndCustom, 2) }}
                                 </th>
                             </tr>
                         </tbody>
@@ -220,7 +217,7 @@
                                 <th>QTY($)</th>
                                 <th>Rate</th>
                                 <th>Amount</th>
-                                @if (@$invoice->msvehicles->sum('discount') > 0)
+                                @if (@$invoice->discount > 0)
                                     <th>Discount</th>
                                 @endif
                                 <th>Total</th>
@@ -229,10 +226,10 @@
                                 <th>${{ number_format(@$TotalAmounUSD, 2) }}</th>
                                 <th>{{ $invoice->exchange_rate }}</th>
                                 <th>{{ number_format(@$TotalAmounAED, 2) }}  {{ $currency }}</th>
-                                @if (@$invoice->msvehicles->sum('discount') > 0)
-                                    <th>{{ number_format((float) $invoice->msvehicles->sum('discount'), 2) }}  {{ $currency }}</th>
+                                @if (@$invoice->discount > 0)
+                                    <th>{{ number_format((float) $invoice->discount, 2) }}  {{ $currency }}</th>
                                 @endif
-                                <th>{{ number_format($TotalAmounAED - (float) $invoice->msvehicles->sum('discount'), 2) }}  {{ $currency }}
+                                <th>{{ number_format($TotalAmounAED - (float) $invoice->discount, 2) }}  {{ $currency }}
                                 </th>
                             </tr>
                         </tbody>
@@ -253,7 +250,7 @@
                                 <td
                                     style="padding-left:35% !important; width:100% !important; padding-top: 10px !important; padding-bottom: 10px !important;">
                                     <b>Wire Transfer Information:</b><br>
-                                    Account Name: P G L C SHIPPING LLC <br />
+                                    Account Name: A L S C SHIPPING LLC <br />
                                     Account Number: 3708433485501 <br />
                                     Currency: AED <br />
                                     BIC Code: MEBLAEADXXX <br />
@@ -267,15 +264,15 @@
                         <tbody>
                             <tr>
                                 <th style="background-color: #eaf4f4;">Phone: <br>
-                                    {{ $comp_profile->phone }}
+                                    M Phone
                                 </th>
                                 <th style="background-color: #eaf4f4;">Fax:
-                                    <br>{{ $comp_profile->fax }}
+                                    <br>N Fax
                                 </th>
                                 <th style="background-color: #eaf4f4;">
-                                    Website:<br>{{ $comp_profile->website }}</th>
+                                    Website:<br>O Web</th>
                                 <th style="background-color: #eaf4f4;">
-                                    Facebook:<br>{{ $comp_profile->facebook }}</th>
+                                    Facebook:<br>P Fb</th>
                             </tr>
                         </tbody>
                     </table>
