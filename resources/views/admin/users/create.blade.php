@@ -82,8 +82,15 @@
                                         <label for="password">Password <span class="text-danger">*</span></label>
                                         <input type="password" name="password" id="password" class="form-control" value="{{old('password')}}" placeholder="Enter user password" required />
                                     </div>
-
+                                    
                                     <div class="row">
+                                        <div class="form-group col-md-6">
+                                            <label for="status"> Status <span class="text-danger">*</span></label>
+                                            <select name="status" id='status' class="form-control" >
+                                                <option value="Active" selected>Active</option>
+                                                <option value="Inactive">Inactive</option>
+                                            </select>
+                                        </div>
                                         <div class="form-group col-md-6">
                                             <label for="timezone">Choose User Timezone <span class="text-danger">*</span></label>
                                             <select name="time_zone_id" id="timezone" class="form-control s2s_timezone" required>

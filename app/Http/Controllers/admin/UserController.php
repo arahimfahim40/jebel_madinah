@@ -14,10 +14,15 @@ class UserController extends Controller
     public function index(Request $request){
 
         $paginate = $request->paginate ? $request->paginate : 10;
-        $users = User::with(['time_zones','createdBy','updatedBy'])->orderBy('id', 'desc')->paginate($paginate);
-
+        $users = User::when(!empty($request->searchValue), function ($q) use ($request) {
+            $q->where('name', 'LIKE', "%$request->searchValue%");
+            $q->orWhere('username', 'LIKE', "%$request->searchValue%");
+            $q->orWhere('email', 'LIKE', "%$request->searchValue%");
+        })->when(!empty($request->user_status), function ($q) use ($request){
+            $q->where('status',$request->user_status);
+        })->with(['time_zones','createdBy','updatedBy'])->orderBy('id', 'desc')->paginate($paginate);
         if ($request->ajax()) {
-          return view('admin.user.data', compact('users',  'paginate'));
+            return view('admin.users.data', compact('users',  'paginate'));
         }
         return view('admin.users.list', compact('users',  'paginate'));
     }
@@ -43,6 +48,7 @@ class UserController extends Controller
             'username' => 'required|unique:users|unique:customers,email',
             'email' => 'required|unique:users|unique:customers,email',
             'password' => 'required',
+            'status' => 'required|string|in:Active,Inactive',
             'time_zone_id' => 'required|exists:time_zones,id',
             'photo' => 'mimes:jpg,png,jpeg,bmp,gif|max:1024',
             'roles.*' => 'exists:roles,id',
@@ -57,6 +63,7 @@ class UserController extends Controller
                 "email" => $request['email'],
                 "time_zone_id" => $request['time_zone_id'],
                 "password" => bcrypt($request['password']),
+                "status" => $request["status"],
                 "created_by" =>$user->id,
                 "updated_by" =>$user->id,
             ]);
@@ -121,6 +128,7 @@ class UserController extends Controller
             'username' => 'required|unique:customers,email|unique:users,username,'.$id.'',
             'email' => 'required|unique:customers,email|unique:users,email,'.$id,
             'password' => 'nullable',
+            'status' => 'required|string|in:Active,Inactive',
             'time_zone_id' => 'required|exists:time_zones,id',
             'photo' => 'mimes:jpg,png,jpeg,bmp,gif|max:1024',
             'roles.*' => 'exists:roles,id',
@@ -135,6 +143,7 @@ class UserController extends Controller
                 "username" => $request['username'],
                 "email" => $request['email'],
                 "time_zone_id" => $request['time_zone_id'],
+                "status" => $request["status"],
                 "updated_by" =>$user->id,
             ],$password));
 

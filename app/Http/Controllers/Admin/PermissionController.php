@@ -11,7 +11,10 @@ class PermissionController extends Controller
 {
     public function index(Request $request){      
         $paginate = $request->paginate ? $request->paginate : 10;
-        $permissions = Permission::orderBy('group_name', 'desc')->paginate($paginate); 
+        $permissions = Permission::when(!empty($request->searchValue), function ($q) use ($request) {
+          $q->where('name', 'LIKE', "%$request->searchValue%");
+          $q->orWhere('group_name', 'LIKE', "%$request->searchValue%");
+      })->orderBy('group_name', 'desc')->paginate($paginate); 
         if ($request->ajax()) {
           return view('admin.permissions.data', compact('permissions',  'paginate'));
         }

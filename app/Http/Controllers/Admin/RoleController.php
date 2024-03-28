@@ -11,7 +11,9 @@ class RoleController extends Controller
 {
     public function index(Request $request){
         $paginate = $request->paginate ? $request->paginate : 10;
-        $roles = Role::withCount('permissions')->paginate($paginate);
+        $roles = Role::when(!empty($request->searchValue), function ($q) use ($request) {
+            $q->where('name', 'LIKE', "%$request->searchValue%");
+        })->withCount('permissions')->paginate($paginate);
         if ($request->ajax()) {
           return view('admin.roles.data', compact('roles',  'paginate'));
         }

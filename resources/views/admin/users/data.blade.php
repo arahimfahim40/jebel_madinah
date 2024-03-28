@@ -22,10 +22,10 @@
                 <td>{{ $u->email }}</td>
                 <td>{{ @$u->time_zones->name }}</td>
                 <td>
-                    @if($u->active == 1)
-                        <span class="tag tag-success" >Active</span>
+                    @if($u->status == 'Active')
+                        <span class="tag tag-success" >{{$u->status}}</span>
                     @else
-                        <span class="tag tag-warning" >Deactive</span>
+                        <span class="tag tag-warning" >{{$u->status}}</span>
                     @endif
                 </td>
                 <td>{{ @$u->createdBy->name }}</td>
@@ -69,10 +69,8 @@
 @if ($users instanceof \Illuminate\Pagination\LengthAwarePaginator)
     {{ $users->appends(Request::All())->links() }}
 @endif
-
-  <script>
+<script>
     function confirmDelete(slug) {
-        
         if (confirm('Data will be deleted. Continue?')) {
             console.log("Confirmed.",slug);
             document.getElementById('delete_' + slug).submit();

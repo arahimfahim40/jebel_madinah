@@ -74,7 +74,12 @@
                                         <label class="font-weight-bold"> Gender : </label> {{$customer->gender}}
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="font-weight-bold"> Status : </label> {{$customer->status}}
+                                        <label class="font-weight-bold"> Status : </label> 
+                                        @if($customer->status == 'Active')
+                                            <span class="tag tag-success" >{{$customer->status}}</span>
+                                        @else
+                                            <span class="tag tag-warning" >{{$customer->status}}</span>
+                                        @endif  
                                     </div>
                                 </div>
                                 <div class="row my-1">

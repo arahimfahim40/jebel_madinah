@@ -21,7 +21,13 @@
                 <td>{{ $c->name }}</td>
                 <td>{{ $c->email }}</td>
                 <td>{{ $c->phone }}</td>
-                <td>{{ $c->status }}</td>
+                <td>
+                    @if($c->status == 'Active')
+                        <span class="tag tag-success" >{{$c->status}}</span>
+                    @else
+                        <span class="tag tag-warning" >{{$c->status}}</span>
+                    @endif
+                </td>
                 <td>{{ @$c->createdBy->name }}</td>
                 <td>{{ @$c->updatedBy->name }}</td>
                 <td>{{ (new DateTime($c->created_at))->format('Y-m-d H:i')  }} </td>
@@ -63,7 +69,6 @@
 @if ($customers instanceof \Illuminate\Pagination\LengthAwarePaginator)
     {{ $customers->appends(Request::All())->links() }}
 @endif
-
 
 <script>
     function confirmDelete(slug) {

@@ -14,10 +14,14 @@ class CustomerController extends Controller
     public function index(Request $request)
     {
         $paginate = $request->paginate ? $request->paginate : 10;
-        $customers = Customer::with(['createdBy','updatedBy'])->orderBy('id', 'desc')->paginate($paginate);
-
+        $customers = Customer::when(!empty($request->searchValue), function ($q) use ($request) {
+            $q->where('name', 'LIKE', "%$request->searchValue%");
+            $q->orWhere('email', 'LIKE', "%$request->searchValue%");
+        })->when(!empty($request->status), function ($q) use ($request) {
+            $q->where('status', $request->status);
+        })->with(['createdBy','updatedBy'])->orderBy('id', 'desc')->paginate($paginate);
         if ($request->ajax()) {
-          return view('admin.customers.data', compact('customers',  'paginate'));
+            return view('admin.customers.data', compact('customers',  'paginate'));
         }
         return view('admin.customers.list', compact('customers',  'paginate'));
     }
@@ -156,7 +160,6 @@ class CustomerController extends Controller
     public function s2s_customers(Request $request)
     {
         $search = $request->search;
-    
         $response = Customer::where('name', 'like', "%{$search}%")
           ->orderBy('id', 'desc')
           ->select('id', 'name as text')

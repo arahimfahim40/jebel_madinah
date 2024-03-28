@@ -28,12 +28,12 @@ class AuthController extends Controller
             return back()->withErrors($validation);
         } 
         $credentials = $request->only('email','password');
-        if(Auth::guard('user')->attempt($credentials)) 
+        if(Auth::guard('user')->attempt( array_merge($credentials,['status'=>'Active']))) 
         {
             $request->session()->regenerate();
             return redirect()->intended(route('user.home.index'));
         }
-        else if(Auth::guard('customer')->attempt($credentials))
+        else if(Auth::guard('customer')->attempt(array_merge($credentials,['status'=>'Active'])))
         {
             $request->session()->regenerate();
             return redirect()->intended(route('customer.home.index'));
