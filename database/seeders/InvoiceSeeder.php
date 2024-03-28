@@ -19,7 +19,7 @@ class InvoiceSeeder extends Seeder
 
         for ($i = 0; $i < 100; $i++) {
             Invoice::create([
-                'customer_id' => $faker->numberBetween(1, 5),
+                'customer_id' => $faker->numberBetween(1, 3),
                 'exchange_rate' => $faker->randomFloat(4, 0, 100),
                 'invoice_date' => $faker->dateTimeBetween('-1 year', 'now'),
                 'invoice_due_date' => $faker->dateTimeBetween('now', '+1 year'),
