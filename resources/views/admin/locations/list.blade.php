@@ -1,5 +1,5 @@
 @extends('admin.layout.main')
-@section('title', 'Vehicles')
+@section('title', 'Locations')
 @push('css')
     <link href="{{ asset('assets\vazirmatn-v33.003/Vazirmatn-Variable-font-face.css') }}" rel="stylesheet">
     <style>
@@ -12,14 +12,12 @@
         #header-title {
             font-family: 'Times New Roman';
         }
-
         .content-table,
         th,
         td {
             padding: 0px 0px 0px 0px;
             font-size: 12px;
         }
-
         .bordered, .bordered th, .bordered td {
             border: 1px solid #ccc !important;
         }
@@ -55,13 +53,12 @@
                         <button 
                             class="btn btn-success"
                             style="float: left; border-radius: 5px;"
-                            onclick="changeStatus()"
+                            data-toggle="modal" data-target="#createLocation"
                         >
                             <i class="fa fa-plus-circle"></i>&nbsp; Add New
                         </button>
                     </div>
                     @endcan
-                    
                     <div class="form-group col-md-1 col-lg-1 col-sm-2 col-xs-12" style="float:right;">
                         <select class="form-control" id="showEntry">
                             <option value="10">10</option>
@@ -80,6 +77,8 @@
                 <div class="site table-responsive" id="location_data">
                     @include('admin.locations.data')
                 </div>
+                @include('admin.locations.create')
+                @include('admin.locations.edit')
             </div>
         </div>
     </div>
@@ -87,6 +86,19 @@
 @stop
 @push('js')
 <script type="text/javascript">
+    
+    function updateLocation(name,route) {
+        $('#editForm').attr('action', route);
+        $('#editName').val(name);
+        $('#updateLocation').modal('show');
+    }
+
+    function confirmDelete(slug) {
+        if (confirm('Data will be deleted. Continue?')) {
+            console.log("Confirmed.",slug);
+            document.getElementById('delete_' + slug).submit();
+        }
+    }
     // Go to Pagination page
     $(document).on('click', '.pagination a', function(e) {
         e.preventDefault();
@@ -130,6 +142,5 @@
             $('#location_data').append(textStatus);
         });
     }
-
 </script>
 @endpush

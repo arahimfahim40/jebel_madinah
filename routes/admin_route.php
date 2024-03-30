@@ -54,13 +54,13 @@ Route::middleware('auth:user')->group(function () {
     Route::get('/admin_sidebar_sub_count',  [HomeController::class, 'admin_sidebar_sub_count'])->name('admin_sidebar_sub_count');
 
     // Locations Routes
-    Route::get('/admin/locations', [LocationController::class, 'index'])->name('locations.index');
-    Route::get('/admin/locations/create', [LocationController::class, 'create'])->name('locations.create');
-    Route::post('/admin/locations', [LocationController::class, 'store'])->name('locations.store');
-    Route::get('/admin/locations/{location}', [LocationController::class, 'show'])->name('locations.show');
-    Route::get('/admin/locations/{location}/edit', [LocationController::class, 'edit'])->name('locations.edit');
-    Route::put('/admin/locations/{location}', [LocationController::class, 'update'])->name('locations.update');
-    Route::delete('/admin/locations/{location}', [LocationController::class, 'destroy'])->name('locations.destroy');
+    Route::get('/admin/locations', [LocationController::class, 'index'])->name('locations.index')->middleware(['can:location-view']);
+    Route::get('/admin/locations/create', [LocationController::class, 'create'])->name('locations.create')->middleware(['can:location-create']);
+    Route::post('/admin/locations', [LocationController::class, 'store'])->name('locations.store')->middleware(['can:location-create']);
+    Route::get('/admin/locations/{id}', [LocationController::class, 'show'])->name('locations.show')->middleware(['can:location-view']);
+    Route::get('/admin/locations/{id}/edit', [LocationController::class, 'edit'])->name('locations.edit')->middleware(['can:location-edit']);
+    Route::put('/admin/locations/{id}', [LocationController::class, 'update'])->name('locations.update')->middleware(['can:location-edit']);
+    Route::delete('/admin/locations/{id}', [LocationController::class, 'destroy'])->name('locations.destroy')->middleware(['can:location-delete']);
     
     // Vehicles Routes
     Route::get('/admin/vehicles', [VehicleController::class, 'index'])->name('vehicles.index')->middleware(['can:vehicle-view']);

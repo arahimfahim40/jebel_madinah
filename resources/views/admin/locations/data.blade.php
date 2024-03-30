@@ -4,10 +4,10 @@
         <tr>
             <th>#</th>
             <th>Name</th>
-            @can('vehicle-edit')
+            @can('location-edit')
             <th>Edit</th>
             @endcan
-            @can('vehicle-delete')
+            @can('location-delete')
             <th>Delete</th>
             @endcan
         </tr>
@@ -18,14 +18,20 @@
             <tr id="searchBody">
                 <td>{{ $index + 1 }}</td>
                 <td>{{ $item->name }}</td>
-                @can('vehicle-edit')
+                @can('location-edit')
                 <td>
-                    <a href="{{ route('vehicles.edit', $item->id) }}"  class="btn btn-info btn-circle btn-sm column"><span class="fa fa-edit"></span></a>
+                    <button class="btn btn-info btn-circle btn-sm column" id="editbtn" onClick="updateLocation( '{{$item->name}}', '{{ route('locations.update',$item->id)}}' )">
+                        <i class="fa fa-edit"></i>
+                    </button>
                 </td>
                 @endcan
-                @can('vehicle-delete')
+                @can('location-delete')
                 <td>
-                    <a href="{{ route('vehicles.edit', $item->id) }}"  class="btn btn-danger btn-circle btn-sm column"><span class="fa fa-trash"></span></a>
+                    <form method="POST" id="delete_{{ $item->id }}" action="{{ route('locations.destroy',$item->id)}}">
+                        @method('delete')
+                        @csrf
+                        <a onclick="confirmDelete('{{ $item->id }}')" class="btn btn-danger btn-circle btn-sm column text-white" > <span class="fa fa-trash"></span></a>
+                    </form>
                 </td>
                 @endcan
             </tr>
@@ -48,5 +54,3 @@
 @if ($locations instanceof \Illuminate\Pagination\LengthAwarePaginator)
     {{ $locations->appends(Request::All())->links() }}
 @endif
-
-
