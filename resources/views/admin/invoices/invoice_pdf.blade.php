@@ -49,21 +49,24 @@
                         <th style="background-color: unset;">Mix Shipping Invoice</th>
                     </tr>
                     @php
-                    <!-- $names = $invoice->vehicles->flatMap(function ($vehicle) {
-                        return $vehicle->charges->pluck('name');
-                    })->unique()->toArray(); -->
+                    /* $names = $invoice->vehicles->flatMap(function ($vehicle) {
+                            return $vehicle->charges->pluck('name');
+                        })->unique()->toArray(); */
+
                     $currency = 'AED';
                     @endphp
                     <?php
                     $total_amount_aed = 0;
                     $due_balance = 0;
+
                     foreach ($invoice->vehicles as $vehicle) {
-                        $total_amount_aed += round(($vehicle->freight + $vehicle->clearance + $vehicle->tow_amount + $vehicle->vat_and_custom + $vehicle->charges->sum('value')) * $invoice->exchange_rate, 2);
+                        $total_amount_aed += round(($vehicle->freight + $vehicle->clearance + $vehicle->tow_amount + $vehicle->custom_charge) * $invoice->exchange_rate, 2);
                     }
+ 
                     $due_balance = $total_amount_aed; ?>
                     <tr>
-                        <td>{{ A Street }} <br>
-                            {{ B City }}, {{ C State }}, {{ D Zip Code }}
+                        <td>A Street <br>
+                            B City, C State, D Zip Code
                             <br>test@als.com
                         </td>
                         <td>INV#: <b>{{ sprintf("ALSMS%'.04d\n", @$invoice->id) }}</b>
@@ -73,14 +76,14 @@
                             $inv_date_due = Carbon\Carbon::parse(@$invoice->invoice_due_date);
                             ?>
                             <br>Past Due Days:
-                            {{ $today > $invoice_date_due && $due_balance > 0 ? $today->diffInDays($invoice_date_due) : '' }}
+                            {{ $today > $inv_date_due && $due_balance > 0 ? $today->diffInDays($inv_date_due) : '' }}
                         </td>
                     </tr>
                     <tr>
                         <td></td>
                         <td>
                             Payment Date:
-                            {{ join(', ', array_unique($invoice->vehicles->pluck('payment_date')->toArray())) }}
+                            {{-- join(', ', array_unique($invoice->vehicles->pluck('payment_date')->toArray())) --}}
                             <br>
                             Payment Received :
                             <!-- {{ $invoice->vehicles->count() > 0 ? number_format(@$invoice->vehicles->sum('payment_amount'), 2) . ' ' . $currency : '' }} -->
@@ -133,10 +136,6 @@
                                 <th class="td1">Freight</th>
                                 <th class="td1">Towing</th>
                                 <th class="td1">10%Vat & Custom</th>
-                                <!-- <th class="td1">Clearance</th> -->
-                                <!-- @foreach (@$names as $name)
-                                    <th class="td1">{{ @$allCharges[$name] }}</th>
-                                @endforeach -->
                                 <th class="td1">Sub Total</th>
                             </tr>
                             <?php
@@ -148,25 +147,25 @@
                             $dynamicCharges = [];
                             $TotalAmounUSD = 0;
                             $TotalAmounAED = 0;
+                            
                             ?>
-
                             @foreach ($invoice->vehicles as $key => $vehicle)
                                 <tr>
                                     <td class="td1">{{ $key + 1 }}</td>
                                     <td class="td1" style="min-width: 30vw;">
-                                        {{ $vehicle->vehicle->year }}&nbsp;{{ $vehicle->vehicle->make }}&nbsp;{{ $vehicle->vehicle->model }}
-                                        <br><b>VIN:</b>{{ $vehicle->vehicle->vin }}
-                                        <br><b>Lot#:</b>{{ $vehicle->vehicle->lot_number }}
-                                        <br><b>Auction City:</b>{{ $vehicle->vehicle->auction_city }}
+                                        {{ $vehicle->year }}&nbsp;{{ $vehicle->make }}&nbsp;{{ $vehicle->model }}
+                                        <br><b>VIN:</b>{{ $vehicle->vin }}
+                                        <br><b>Lot#:</b>{{ $vehicle->lot_number }}
+                                        <br><b>Auction City:</b>{{ $vehicle->auction_city }}
                                         <div style="font-size: 10px;"><b>Description:</b>{!! nl2br($vehicle->description) !!}</div>
                                     </td>
                                     <td class="td1" style="text-align:right;">${{ $vehicle->shiping_charge }}</td>
                                     <td class="td1" style="text-align:right;">${{ $vehicle->tow_charge }}</td>
                                     <td class="td1" style="text-align:right;">
                                         ${{ number_format($vehicle->custom_charge, 2) }}</td>
-                                    <!-- <td class="td1" style="text-align:right;">
-                                        ${{ number_format($vehicle->clearance, 2) }}</td> -->
-                                    <!-- @php 
+                                    {{-- <td class="td1" style="text-align:right;">
+                                        ${{ number_format($vehicle->clearance, 2) }}</td> 
+                                     @php 
                                     $vehicleNameCharges = @$vehicle->charges->pluck('value', 'name')->toArray();
                                     @endphp
                                     @foreach ($names as $key1 => $name)
@@ -176,7 +175,7 @@
                                         <td class="td1" style="text-align:right;">
                                             ${{ number_format(@$vehicleNameCharges[$name], 2) }}
                                         </td>
-                                    @endforeach -->
+                                    @endforeach --}}
                                     <td class="td1" style="text-align:right;">
                                         ${{ number_format($vehicle->shiping_charge + $vehicle->tow_charge + $vehicle->custom_charge , 2) }}
                                     </td>
@@ -199,12 +198,12 @@
                                 </th>
                                 <th style=" text-align:right;" class="td1">
                                     ${{ number_format(@$totalVatAndCustom, 2) }}</th>
-                                <!-- @foreach ($names as $key1 => $name)
+                                {{--  @foreach ($names as $key1 => $name)
                                     <th style=" text-align:right;" class="td1">
                                         ${{ number_format(@$dynamicCharges[$name], 2) }}
                                     </th>
-                                @endforeach -->
-                                <!-- </th> -->
+                                @endforeach 
+                                 </th> --}}
                                 <th style=" text-align:right;" class="td1">
                                     ${{ number_format(@$totalFreight + $totalTow_amount + $totalVatAndCustom, 2) }}
                                 </th>
