@@ -42,6 +42,21 @@ class Invoice extends Model
         // Chain fluent methods for configuration options
     }
 
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
+    }
+
+    public function deletedBy()
+    {
+        return $this->belongsTo(User::class, 'deleted_by');
+    }
+
     public function vehicles()
     {
         return $this->hasMany(Vehicle::class, 'invoice_id', 'id');

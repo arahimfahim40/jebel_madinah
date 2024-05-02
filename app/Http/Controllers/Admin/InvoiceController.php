@@ -6,6 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Invoice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Customer;
+use Illuminate\Support\Facades\Log;
+use App\Models\Vehicle;
+use PDF;
+use Str;
 
 class InvoiceController extends Controller
 {
@@ -51,11 +56,13 @@ class InvoiceController extends Controller
             'discount' => 'nullable|numeric',
             'invoice_date' => 'required|date',
             'move_to_open_date' => 'required|date',
-            'invoice_due_date' => 'required|date'
+            'invoice_due_date' => 'required|date',
+            'vehicles' => 'required|string',
         ]);
 
         try {
             DB::beginTransaction();
+            $user = Auth::user();
 
             // Retrieve the filtered data from the request
             $filteredData = $request->only([
@@ -69,10 +76,16 @@ class InvoiceController extends Controller
                 'description',
             ]);
 
-            // Create a new invoice store
+            $filteredData['created_by'] = $user->id;
             $invoice = Invoice::create($filteredData);
 
-            // Commit the transaction
+            $vehicles = explode(',', $request->vehicles);
+            foreach ($vehicles as $vehicleId) {
+                $vehicle = Vehicle::findOrFail($vehicleId);
+                $vehicle->invoice()->associate($invoice);
+                $vehicle->save();
+            }
+
             DB::commit();
 
             // Redirect back with success message
@@ -116,5 +129,47 @@ class InvoiceController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function get_vehicles_open_of_customer(Request $request){
+        try {
+            $customer = Customer::findOrFail($request->id);
+            
+            $customerVehicles = $customer->vehicles()->select([
+                'id',
+                'auction_fee_charge',
+                'storage_charge',
+                'towing_charge',
+                'dismantal_charge',
+                'shiping_charge',
+                'custom_charge',
+                'demurage_charge',
+                'other_charge',
+                'lot_number',
+                'vin'
+            ])->get();
+ 
+            return response()->json($customerVehicles);
+        } catch (\Exception $e) {
+            Log::error('Failed to retrieve customer vehicles.', [
+                'error' => $e->getMessage(),
+            ]);
+            return response()->json(['error' => 'Failed to retrieve customer vehicles.'], 500);
+        }
+    }
+
+    public function invoice_pdf(Request $request, $id)
+    {
+        try {
+            
+            $invoice = Invoice::find($id);
+            // dd($invoice);
+            $pdf = PDF::loadView('admin.invoices.invoice_pdf', compact('invoice'), ['format' => ['A4', 190, 236]]); 
+            $file_name = Str::slug($invoice->customer->name  . '_' . sprintf("ALSMS%'.04d\n", @$id));
+            return $pdf->download($file_name . '.pdf');
+        } catch (\Throwable $th) {
+            dd($th->getMessage());
+            return redirect()->back()->with('error', $th->getMessage());
+        }
     }
 }

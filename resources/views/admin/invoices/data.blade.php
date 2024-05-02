@@ -19,17 +19,21 @@
         @foreach ($invoices as $index => $item)
             <tr id="searchBody">
                 <td>{{ $index + 1 }}</td>
-                <td></td>
+                <td><a target="_blank"  class="btn btn-warning btn-circle btn-sm" href="{{route('invoice_pdf',$item->id)}}"><i class="fa fa-file-pdf-o"></i></a></td>
                 <td>{{ $item->customer->name }}</td>
                 <td>{{ $item->exchange_rate }}</td>
                 <td>{{ $item->move_to_open_date }}</td>
                 <td>{{ $item->invoice_date }}</td>
                 <td>{{ $item->invoice_due_date }}</td>
                 <td>
-                    @if($item->status == 'pending')
-                        <span class="tag tag-secondary" >{{ucwords(str_replace('_', ' ', $item->status))}}</span>
-                    @elseif ($item->status == 'shipped')
+                    @if($item->status == 'paid')
                         <span class="tag tag-success" >{{ucwords(str_replace('_', ' ', $item->status))}}</span>
+                    @elseif($item->status == 'past_due')
+                        <span class="tag tag-danger" >{{ucwords(str_replace('_', ' ', $item->status))}}</span>
+                    @elseif($item->status == 'open')
+                        <span class="tag tag-info" >{{ucwords(str_replace('_', ' ', $item->status))}}</span>
+                    @else
+                        <span class="tag tag-secondary" >{{ucwords(str_replace('_', ' ', $item->status))}}</span>
                     @endif
                 </td>
                 <td>{{ $item->discount }}</td>

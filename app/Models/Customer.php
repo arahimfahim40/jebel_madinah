@@ -57,4 +57,9 @@ class Customer extends Authenticatable
     {
         return $this->belongsTo(User::class, 'deleted_by');
     }
+
+    public function vehicles()
+    {
+        return $this->hasMany(Vehicle::class, 'customer_id', 'id');
+    }
 }
