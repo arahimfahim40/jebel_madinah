@@ -110,6 +110,23 @@
     </div>
 </div>
 @stop
+<div class="modal fade small-modal" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="view_invoice_modal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="height: 85vh; border-radius: 10px;">
+            <div class="modal-header" style="padding:20px 15px 10px 25px !important;">
+                <h2 style="float:left;">Invoice View</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="float:right;">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body" id="view_invoice" style="height: 84%; overflow-y: scroll;">
+            </div>
+
+            <div class='modal-footer'>
+            </div>
+        </div>
+    </div>
+</div>
 @push('js')
 <script type="text/javascript">
     function getProperties(id) {
@@ -138,6 +155,43 @@
             }
         });
     }
+    function invoice_view_modal(invoice_id) {
+
+        var request = $.ajax({
+            url: "{{ route('view_single_invoice') }}",
+            method: "GET",
+            data: {
+                invoice_id: invoice_id,
+            },
+        });
+        request.done(function(msg) {
+            $('#view_invoice_modal').modal('show');
+            $('#view_invoice').html(msg);
+            $("#invoice_id").val(invoice_id);
+
+            var ids = JSON.parse($("#ids").val());
+            console.log(invoice_id);
+            let index = ids.findIndex((id, index) => id == invoice_id);
+            if (index == 0) {
+                $('.prev').attr('disabled', 'disabled');
+            } else {
+                $('.prev').attr('disabled', false);
+            }
+            if (ids.length - 1 == index) {
+                $('.next').attr('disabled', 'disabled');
+            } else {
+                $('.next').attr('disabled', false);
+            }
+        });
+        request.fail(function(jqXHR, textStatus) {
+            alert(msg.message);
+        });
+    }
+
+    $('#view_invoice_modal').on('hidden.bs.modal', function() {
+        $('#view_invoice').html('');
+    });
+
     $(document).ready(function() {
         // Go to Pagination page
         $(document).on('click', '.pagination a', function(e) {

@@ -21,8 +21,8 @@
             <tr id="searchBody">
                 <td>{{ $index + 1 }}</td>
                 <td>
-                    <a href="{{ route('invoices.edit', $item->id) }}" class="btn btn-info btn-circle waves-effect waves-light"><span class="fa fa-pencil"></span>
-                    </a>
+                    <!-- <a href="{{ route('invoices.edit', $item->id) }}" class="btn btn-info btn-circle waves-effect waves-light"><span class="fa fa-pencil"></span>
+                    </a> -->
                 </td>
                 <td>{{ $item->customer->name }}</td>
                 <td>{{ $item->exchange_rate }}</td>
@@ -42,7 +42,11 @@
                 </td>
                 <td>{{ $item->discount }}</td>
                 <td>{{ $item->description }}</td>
-                <td><a target="_blank"  class="btn btn-warning btn-circle btn-sm" href="{{route('invoice_pdf',$item->id)}}"><i class="fa fa-file-pdf-o"></i></a></td>
+                <td>
+                    <a target="_blank"  class="btn btn-warning btn-circle btn-sm" href="{{route('invoice_pdf',$item->id)}}" style="align-content: center;"><i class="fa fa-file-pdf-o"></i></a>
+                <button href="#" target="_blank" style="cursor: pointer;" onclick="invoice_view_modal('{{ $item->id }}')" class="btn btn-success btn-circle btn-sm waves-effect waves-light">
+                    <i class="fa fa-eye"></i>
+                </button></td>
             </tr>
         @endforeach
     </tbody>

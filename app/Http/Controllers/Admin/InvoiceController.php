@@ -112,7 +112,9 @@ class InvoiceController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $invoice = Invoice::find($id);
+
+        return view('admin.invoice.edit')->with(['invoice' => $invoice]);
     }
 
     /**
@@ -170,6 +172,20 @@ class InvoiceController extends Controller
         } catch (\Throwable $th) {
             dd($th->getMessage());
             return redirect()->back()->with('error', $th->getMessage());
+        }
+    }
+
+    public function view_single_invoice(Request $request)
+    {
+        try {
+            $invoiceId = $request->invoice_id;
+            $invoice = Invoice::find($invoiceId);
+            return view('admin.invoices.invoice_pdf', ['invoice' => $invoice]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $response['status'] = 'error';
+            $response['message'] = 'Error, Please Try again!' . $e;
+            return response()->json($response);
         }
     }
 }
