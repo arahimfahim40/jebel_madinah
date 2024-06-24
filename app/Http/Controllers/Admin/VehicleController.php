@@ -33,7 +33,7 @@ class VehicleController extends Controller
      */
     public function index(Request $request)
     {
-        $paginate = $request->paginate ? $request->paginate : 10;
+        $paginate = $request->paginate ? $request->paginate : 20;
         $status = in_array($request->status, Vehicle::VEHICLE_STATUS) ? $request->status : '';
         
         $vehicles = Vehicle::with('location:id,name')
@@ -66,7 +66,7 @@ class VehicleController extends Controller
      */
     public function cost_analysis (Request $request)
     {
-        $paginate = $request->paginate ? $request->paginate : 10;
+        $paginate = $request->paginate ? $request->paginate : 20;
         $status = in_array($request->status, Vehicle::VEHICLE_STATUS) ? $request->status : '';
 
         
@@ -85,9 +85,9 @@ class VehicleController extends Controller
         ->paginate($paginate);
         
         if ($request->ajax()) {
-          return view('admin.vehicles.data', compact('vehicles', 'status', 'paginate'));
+          return view('admin.vehicles.cost_analysis_data', compact('vehicles', 'status', 'paginate'));
         }
-        return view('admin.vehicles.list', compact('vehicles', 'status', 'paginate'));
+        return view('admin.vehicles.cost_analysis', compact('vehicles', 'status', 'paginate'));
     }
 
     public function summary (Request $request)

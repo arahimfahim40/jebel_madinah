@@ -34,33 +34,6 @@
                         </a></li>
 
                     <li><a href="{{ route('customer.vehicles.cost_analysis') }}">Cost anlysis</a></li>
-                    <li><a href="{{ route('customer.vehicles.dateline') }}">Datelines</a></li>
-                    
-                    <li class="with-sub">
-                        <a href="#" class="waves-effect waves-light"
-                            onclick="getVehicleSummaryCounts(event);">
-                            <span class="tag tag-warning" style="float:right; border-radius: 3px;"></span>
-                            <span class="s-icon"><i class="fa fa-scribd"></i></span>
-                            <span class="s-text">Summary</span>
-                            <span class="s-caret pull-right"><i class="fa fa-angle-down"></i></span>
-                        </a>
-                        <ul>
-                            <li>
-                                <a href="{{ url('vehicle_summary') }}">All
-                                    <span class="tag tag-info" style="float:right;" id="vl-all">0</span>
-                                </a>
-                            </li>
-                            @foreach (getLocations() as $location)
-                                <li>
-                                    <a
-                                        href="{{ route('vehicles.summary') }}?location_id={{ $location->id }}">{{ $location->name }}
-                                        <span class="tag tag-info" style="float:right;"
-                                            id="vl-{{ $location->id }}">0</span>
-                                    </a>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </li>
                     
                 </ul>
             </li>

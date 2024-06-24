@@ -16,10 +16,10 @@ class VehicleSeeder extends Seeder
     {
         $faker = Factory::create();
 
-        for ($i = 0; $i < 350; $i++) {
+        for ($i = 0; $i < 100; $i++) {
             Vehicle::create([
-                'customer_id' => $faker->numberBetween(1, 5),
-                'invoice_id' => $faker->numberBetween(1, 100),
+                'customer_id' => $faker->numberBetween(1, 3),
+                'invoice_id' => $faker->numberBetween(1, 50),
                 'year' => $faker->year,
                 'container_number' => $faker->lexify('???####'),
                 'title_received_date' => $faker->date(),
@@ -51,24 +51,24 @@ class VehicleSeeder extends Seeder
                 'photos_link' => $faker->url,
                 'auction' => $faker->word,
                 'auction_city' => $faker->city,
+                'invoice_description' => $faker->text,
 
-                'vehicle_price' => $faker->randomFloat(2, 0, 999999.99),
-                'towing_charge' => $faker->randomFloat(2, 0, 999999.99),
-                'auction_fee_charge' => $faker->randomFloat(2, 0, 999999.99),
-                'dismantal_charge' => $faker->randomFloat(2, 0, 999999.99),
-                'shiping_charge' => $faker->randomFloat(2, 0, 999999.99),
-                'storage_charge' => $faker->randomFloat(2, 0, 999999.99),
-                'custom_charge' => $faker->randomFloat(2, 0, 999999.99),
-                'demurage_charge' => $faker->randomFloat(2, 0, 999999.99),
-                'other_charge' => $faker->randomFloat(2, 0, 999999.99),
-                'towing_cost' => $faker->randomFloat(2, 0, 999999.99),
-                'auction_fee_cost' => $faker->randomFloat(2, 0, 999999.99),
-                'dismantal_cost' => $faker->randomFloat(2, 0, 999999.99),
-                'ship_cost' => $faker->randomFloat(2, 0, 999999.99),
-                'storage_cost' => $faker->randomFloat(2, 0, 999999.99),
-                'custom_cost' => $faker->randomFloat(2, 0, 999999.99),
-                'demurage_cost' => $faker->randomFloat(2, 0, 999999.99),
-                'other_cost' => $faker->randomFloat(2, 0, 999999.99),
+                'vehicle_price' => $faker->randomFloat(2, 0, 999999),
+                'towing_charge' => $faker->randomFloat(2, 0, 999999),
+                'clearance_charge' => $faker->randomFloat(2, 0, 999999),
+                'ship_charge' => $faker->randomFloat(2, 0, 999999),
+                'storage_charge' => $faker->randomFloat(2, 0, 999999),
+                'custom_charge' => $faker->randomFloat(2, 0, 999999),
+                'tds_charge' => $faker->randomFloat(2, 0, 999999),
+                'other_charge' => $faker->randomFloat(2, 0, 999999),
+
+                'towing_cost' => $faker->randomFloat(2, 0, 999999),
+                'clearance_cost' => $faker->randomFloat(2, 0, 999999),
+                'ship_cost' => $faker->randomFloat(2, 0, 999999),
+                'storage_cost' => $faker->randomFloat(2, 0, 999999),
+                'custom_cost' => $faker->randomFloat(2, 0, 999999),
+                'tds_cost' => $faker->randomFloat(2, 0, 999999),
+                'other_cost' => $faker->randomFloat(2, 0, 999999),
             ]);
         }
     }

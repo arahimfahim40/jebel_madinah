@@ -23,15 +23,15 @@
     <link rel="stylesheet" href="{{ asset('assets/css/core.css') }}">
 </head>
 
-<body class="img-cover" style="background-image: url(img/photos-1/back-login.png);">
+<body class="img-cover" style="background-image: url(img/shippment.jpg);">
 
-    <div class="container-fluid">
-        <div class="sign-form">
+    <div class="container-fluid" style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+        <div class="sign-form" style="width: 100%;padding-top:0px;">
             <div class="row">
-                <div class="col-md-4 offset-md-4 px-3">
-                    <div class="box b-a-0">
-                        <div class="p-2 text-xs-center">
-                            <h5>Welcome To AL Sadeer</h5>
+                <div style="max-width: 480px; margin: auto;">
+                    <div class="box b-a-0" style="background-color: rgba(255, 255, 255, 0.95); border-radius: 10px;padding-top:20px;">
+                        <div class="p-2 text-xs-center" style="padding-bottom: 0px !important;">
+                            <h3>Welcome To AL SADEER</h3>
                             <p>Please sign in to start your session</p>
                         </div>
                         @if (Session::has('errors'))
@@ -45,7 +45,7 @@
                                 </ul>
                             </div>
                         @endif
-                        <form method="POST" class="form-material mb-1 from-prevent-multiple-submits" action="{{ route('auth.login') }}">
+                        <form method="POST" class="p-2 form-material mb-1 from-prevent-multiple-submits" action="{{ route('auth.login') }}">
                              @csrf
                             <div class="form-group">
                                 <input type="email" class="form-control" id="exampleInputEmail" value="{{old('email')}}"  placeholder="Email" name="email" required />

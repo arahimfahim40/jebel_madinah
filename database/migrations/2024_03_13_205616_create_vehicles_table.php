@@ -51,27 +51,27 @@ return new class extends Migration
             $table->enum('ship_as', ['half-cut', 'complete'])->nullable()->default('complete');
             $table->enum('is_key', ['Yes', 'No'])->nullable()->default('No');
 
+            // Vehicle Charges
             $table->decimal('vehicle_price', 10, 0)->nullable();
             $table->decimal('towing_charge', 10, 0)->nullable();
-            $table->decimal('auction_fee_charge', 10, 0)->nullable();
-            $table->decimal('dismantal_charge', 10, 0)->nullable();
-            $table->decimal('shiping_charge', 10, 0)->nullable();
+            $table->decimal('clearance_charge', 10, 0)->nullable();
+            $table->decimal('ship_charge', 10, 0)->nullable();
             $table->decimal('storage_charge', 10, 0)->nullable();
             $table->decimal('custom_charge', 10, 0)->nullable();
-            $table->decimal('demurage_charge', 10, 0)->nullable();
+            $table->decimal('tds_charge', 10, 0)->nullable();
             $table->decimal('other_charge', 10, 0)->nullable();
+            $table->text('invoice_description')->nullable();
+            // Vehicle Costs
             $table->decimal('towing_cost', 10, 0)->nullable();
-            $table->decimal('auction_fee_cost', 10, 0)->nullable();
-            $table->decimal('dismantal_cost', 10, 0)->nullable();
+            $table->decimal('clearance_cost', 10, 0)->nullable();
             $table->decimal('ship_cost', 10, 0)->nullable();
             $table->decimal('storage_cost', 10, 0)->nullable();
             $table->decimal('custom_cost', 10, 0)->nullable();
-            $table->decimal('demurage_cost', 10, 0)->nullable();
+            $table->decimal('tds_cost', 10, 0)->nullable();
             $table->decimal('other_cost', 10, 0)->nullable();
             
             $table->timestamps();
-            $table->timestamp('deleted_at')->nullable();
-            
+            $table->softDeletes();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();

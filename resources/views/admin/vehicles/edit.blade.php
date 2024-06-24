@@ -421,30 +421,21 @@
                                                 />
                                             </div>
                                             <div class="col-md-12 form-group">
-                                                <label>Auction Fee charge</label>
+                                                <label>Clearance Charge</label>
                                                 <input type="number"
-                                                    name="auction_fee_charge"
-                                                    placeholder="Auction Fee charge"
+                                                    name="clearance_charge"
+                                                    placeholder="Clearance Charge"
                                                     class="form-control"
-                                                    value="{{ old('auction_fee_charge', @$vehicle->auction_fee_charge) }}"
-                                                />
-                                            </div>
-                                            <div class="col-md-12 form-group">
-                                                <label>Dismantal Charge</label>
-                                                <input type="number"
-                                                    name="dismantal_charge"
-                                                    placeholder="Dismantal Charge"
-                                                    class="form-control"
-                                                    value="{{ old('dismantal_charge', @$vehicle->dismantal_charge) }}"
+                                                    value="{{ old('clearance_charge', @$vehicle->clearance_charge) }}"
                                                 />
                                             </div>
                                             <div class="col-md-12 form-group">
                                                 <label>Ship Charge</label>
                                                 <input type="number"
-                                                    name="shiping_charge"
+                                                    name="ship_charge"
                                                     placeholder="Ship Charge"
                                                     class="form-control"
-                                                    value="{{ old('shiping_charge', @$vehicle->shiping_charge) }}"
+                                                    value="{{ old('ship_charge', @$vehicle->ship_charge) }}"
                                                 />
                                             </div>
                                             <div class="col-md-12 form-group">
@@ -466,12 +457,12 @@
                                                 />
                                             </div>
                                             <div class="col-md-12 form-group">
-                                                <label>Demurage Charge</label>
+                                                <label>TDS Charge</label>
                                                 <input type="number"
-                                                    name="demurage_charge"
-                                                    placeholder="Demurage Charge"
+                                                    name="tds_charge"
+                                                    placeholder="TDS Charge"
                                                     class="form-control"
-                                                    value="{{ old('demurage_charge', @$vehicle->demurage_charge) }}"
+                                                    value="{{ old('tds_charge', @$vehicle->tds_charge) }}"
                                                 />
                                             </div>
                                             <div class="col-md-12 form-group">
@@ -497,21 +488,12 @@
                                                 />
                                             </div>
                                             <div class="col-md-12 form-group">
-                                                <label>Auction Fee cost</label>
+                                                <label>Clearance cost</label>
                                                 <input type="number"
-                                                    name="auction_fee_cost"
-                                                    placeholder="Auction Fee Cost"
+                                                    name="clearance_cost"
+                                                    placeholder="Clearance Cost"
                                                     class="form-control"
-                                                    value="{{ old('auction_fee_cost', @$vehicle->auction_fee_cost) }}"
-                                                />
-                                            </div>
-                                            <div class="col-md-12 form-group">
-                                                <label>Dismantal cost</label>
-                                                <input type="number"
-                                                    name="dismantal_cost"
-                                                    placeholder="Dismantal cost"
-                                                    class="form-control"
-                                                    value="{{ old('dismantal_cost', @$vehicle->dismantal_cost) }}"
+                                                    value="{{ old('clearance_cost', @$vehicle->clearance_cost) }}"
                                                 />
                                             </div>
                                             <div class="col-md-12 form-group">
@@ -542,12 +524,12 @@
                                                 />
                                             </div>
                                             <div class="col-md-12 form-group">
-                                                <label>Demurage Cost</label>
+                                                <label>TDS Cost</label>
                                                 <input type="number"
-                                                    name="demurage_cost"
-                                                    placeholder="Demurage Cost"
+                                                    name="tds_cost"
+                                                    placeholder="TDS Cost"
                                                     class="form-control"
-                                                    value="{{ old('demurage_cost', @$vehicle->demurage_cost) }}"
+                                                    value="{{ old('tds_cost', @$vehicle->tds_cost) }}"
                                                 />
                                             </div>
                                             <div class="col-md-12 form-group">
@@ -559,6 +541,10 @@
                                                     value="{{ old('other_cost', @$vehicle->other_cost) }}"
                                                 />
                                             </div>
+                                        </div>
+                                        <div class="col-md-12 form-group">
+                                            <label for="invoice_description">Invoice Description</label>
+                                            <textarea name="invoice_description" placeholder="Invoice Description" rows="6" class="form-control">{{ old('invoice_description', @$vehicle->invoice_description) }}</textarea>
                                         </div>
                                     </div>
                                 </div>

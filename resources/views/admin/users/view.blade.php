@@ -79,9 +79,20 @@
                                     <div class="col-md-6 "> {{$user->email}} </div>
                                 </div>
 
-                                <div class="row">
+                                <div class="row pb-1">
                                     <div class="col-md-3 font-weight-bold">Timezone </div>
                                     <div class="col-md-6 "> {{$user->time_zones->name}} </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-3 font-weight-bold">Status </div>
+                                    <div class="col-md-6">
+                                        @if($user->status == 'Active')
+                                            <span class="tag tag-success" >{{$user->status}}</span>
+                                        @else
+                                            <span class="tag tag-warning" >{{$user->status}}</span>
+                                        @endif    
+                                    </div>
                                 </div>
 
                                 <div class="row pt-3 pb-1">

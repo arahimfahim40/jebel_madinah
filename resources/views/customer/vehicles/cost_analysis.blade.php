@@ -1,4 +1,4 @@
-@extends('admin.layout.main')
+@extends('customer.layout.main')
 @section('title', 'Vehicles')
 @push('css')
     <link href="{{ asset('assets\vazirmatn-v33.003/Vazirmatn-Variable-font-face.css') }}" rel="stylesheet">
@@ -37,18 +37,16 @@
             background: #e9e8e8;
             color: black;
         }
-        .text-center {
-            text-align: center;
+        .bg-color-total{
+            background-color: #ddd;
         }
     </style>
 @endpush
 @section('content')
-
 <div class="site-content">
     <div class="content-area py-1">
         <div class="container-fluid">
             <div class=" bg-white table-responsive">
-                
                 @include('errors')
                 <div style="clear: both;"></div>
                 <div class="pt-1">
@@ -56,22 +54,22 @@
                         <input type="text" name="search" class="form-control b-a" placeholder="Search for ..." id="search">
                     </div>
                     
-                    <div class="form-group col-md-2 col-lg-2 col-sm-3 col-xs-12" style="float:right;">
-                        <select class="form-control" id="vehicleStatus">
-                            <option value="">All</option>
-                            <option value="4categories">4 Category Vehicle</option>
-                            <option value="pending">Pending</option>
-                            <option value="on_the_way">On The Way</option>
-                            <option value="on_hand_no_title">On Hand No Title</option>
-                            <option value="on_hand_with_title">On Hand With Title</option>
+                    <div class="form-group col-md-1 col-lg-1 col-sm-2 col-xs-12" style="float:right;">
+                        <select class="form-control" id="showEntry">
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                            <option value="300">300</option>
+                            <option value="500">500</option>
+                            <option value="500">1000</option>
                         </select>
                     </div>
                     <div style="float: right; padding-top: 8px;">
-                        <div class="text text-warning"><b>Vehicle Summary</b></div>
+                        <div class="text text-warning"><b>Cost Analysis Vehicles</b></div>
                     </div>
                 </div>
-                <div class="site table-responsive" id="vehicle_summary_data">
-                    @include('admin.vehicles.summary_data')
+                <div class="site table-responsive" id="user_data">
+                    @include('customer.vehicles.cost_analysis_data')
                 </div>
             </div>
         </div>
@@ -84,42 +82,46 @@
     $(document).on('click', '.pagination a', function(e) {
         e.preventDefault();
         var page = $(this).attr('href').split('page=')[1];
-        updateVehicleSummary(page);
+        updateVehicleList(page);
     });
     // search section 
     $('#search').on('keyup', function(e) {
         if (e.which == 13) {
-            updateVehicleSummary();
+            updateVehicleList();
         }
     });
     // Change Pagination
-    $('#vehicleStatus').change(function() {
-        updateVehicleSummary();
+    $('#showEntry').change(function() {
+        updateVehicleList();
     });
     // Appliy Filtering
     $('#submit_filter').click(function() {
-        updateVehicleSummary();
+        updateVehicleList();
     });
 
-    function updateVehicleSummary(page=0) {
+    function updateVehicleList(page=0) {
         $('#content_loader').html(
             "<div style='position:fixed; margin-top:15%; margin-left:40%;'><img width='100px' src='/img/loading.gif' alt='Loading ...'> </div> "
         );
         var request = $.ajax({
-            url: "{{ route('vehicles.summary') }}",
+            url: "{{ route('customer.vehicles.cost_analysis') }}",
             method: "GET",
             data: {
+                page: page,
+                status: "{{ request()->status }}",
+                location_id: "{{ request()->location_id }}",
+                customer_id: "{{ request()->customer_id }}",
                 searchValue: $('#search').val(),
-                vehicleStatus: $('#vehicleStatus').val(),
+                paginate: $("#showEntry").val()
             },
         });
         request.done(function(msg) {
             $('#content_loader').html('');
-            $('#vehicle_summary_data').html(msg);
+            $('#user_data').html(msg);
         });
         request.fail(function(jqXHR, textStatus) {
             $('#content_loader').html('');
-            $('#vehicle_summary_data').append(textStatus);
+            $('#user_data').append(textStatus);
         });
     }
 

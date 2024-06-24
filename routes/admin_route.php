@@ -7,12 +7,15 @@ use App\Http\Controllers\Admin\VehicleController;
 use App\Http\Controllers\Admin\LocationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\auth\AuthController;
-use App\Http\Controllers\admin\UserController;
-use App\Http\Controllers\admin\PermissionController;
-use App\Http\Controllers\admin\RoleController;
-use App\Http\Controllers\admin\HomeController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\HomeController;
 
 Route::middleware('auth:user')->group(function () {
+
+    Route::get('admin/profile', [AuthController::class, 'admin_profile'])->name('users.profile');
+    Route::post('admin/change_password', [AuthController::class, 'change_password'])->name('users.change_password');
 
     Route::get('logout', [AuthController::class, 'logout_user'])->name('users.logout');
     Route::get('admin/dashboard', [HomeController::class, 'index'])->name('user.home.index')->middleware(['can:dashboard-view']);
@@ -51,13 +54,13 @@ Route::middleware('auth:user')->group(function () {
     Route::get('/admin_sidebar_sub_count',  [HomeController::class, 'admin_sidebar_sub_count'])->name('admin_sidebar_sub_count');
 
     // Locations Routes
-    Route::get('/admin/locations', [LocationController::class, 'index'])->name('locations.index');
-    Route::get('/admin/locations/create', [LocationController::class, 'create'])->name('locations.create');
-    Route::post('/admin/locations', [LocationController::class, 'store'])->name('locations.store');
-    Route::get('/admin/locations/{location}', [LocationController::class, 'show'])->name('locations.show');
-    Route::get('/admin/locations/{location}/edit', [LocationController::class, 'edit'])->name('locations.edit');
-    Route::put('/admin/locations/{location}', [LocationController::class, 'update'])->name('locations.update');
-    Route::delete('/admin/locations/{location}', [LocationController::class, 'destroy'])->name('locations.destroy');
+    Route::get('/admin/locations', [LocationController::class, 'index'])->name('locations.index')->middleware(['can:location-view']);
+    Route::get('/admin/locations/create', [LocationController::class, 'create'])->name('locations.create')->middleware(['can:location-create']);
+    Route::post('/admin/locations', [LocationController::class, 'store'])->name('locations.store')->middleware(['can:location-create']);
+    Route::get('/admin/locations/{id}', [LocationController::class, 'show'])->name('locations.show')->middleware(['can:location-view']);
+    Route::get('/admin/locations/{id}/edit', [LocationController::class, 'edit'])->name('locations.edit')->middleware(['can:location-edit']);
+    Route::put('/admin/locations/{id}', [LocationController::class, 'update'])->name('locations.update')->middleware(['can:location-edit']);
+    Route::delete('/admin/locations/{id}', [LocationController::class, 'destroy'])->name('locations.destroy')->middleware(['can:location-delete']);
     
     // Vehicles Routes
     Route::get('/admin/vehicles', [VehicleController::class, 'index'])->name('vehicles.index')->middleware(['can:vehicle-view']);
