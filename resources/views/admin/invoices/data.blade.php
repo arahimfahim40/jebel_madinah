@@ -3,7 +3,7 @@
     <thead class="bg-info">
         <tr>
             <th>#</th>
-            <th>Edit</th>
+            <!-- <th>Edit</th> -->
             <th>Customer</th>
             <th>Exchange Rate</th>
             <th>MOVE TO OPEN</th>
@@ -20,10 +20,10 @@
         @foreach ($invoices as $index => $item)
             <tr id="searchBody">
                 <td>{{ $index + 1 }}</td>
-                <td>
-                    <!-- <a href="{{ route('invoices.edit', $item->id) }}" class="btn btn-info btn-circle waves-effect waves-light"><span class="fa fa-pencil"></span>
-                    </a> -->
-                </td>
+                <!-- <td>
+                    <a href="{{ route('invoices.edit', $item->id) }}" class="btn btn-info btn-circle waves-effect waves-light"><span class="fa fa-pencil"></span>
+                    </a>
+                </td> -->
                 <td>{{ $item->customer->name }}</td>
                 <td>{{ $item->exchange_rate }}</td>
                 <td>{{ $item->move_to_open_date }}</td>
@@ -43,17 +43,20 @@
                 <td>{{ $item->discount }}</td>
                 <td>{{ $item->description }}</td>
                 <td>
-                    <a target="_blank"  class="btn btn-warning btn-circle btn-sm" href="{{route('invoice_pdf',$item->id)}}" style="align-content: center;"><i class="fa fa-file-pdf-o"></i></a>
                 <button href="#" target="_blank" style="cursor: pointer;" onclick="invoice_view_modal('{{ $item->id }}')" class="btn btn-success btn-circle btn-sm waves-effect waves-light">
                     <i class="fa fa-eye"></i>
-                </button></td>
+                </button>
+                <a target="_blank"  class="btn btn-warning btn-circle btn-sm waves-effect waves-light" href="{{route('invoice_pdf',$item->id)}}" style="align-content: center;"><i class="fa fa-file-pdf-o"></i></a>
+                <a href="{{ route('invoices.edit', $item->id) }}" class="btn btn-info btn-circle btn-sm" style="align-content: center;"><span class="fa fa-pencil"></span>
+                </a>
+                </td>
             </tr>
         @endforeach
     </tbody>
     <tfoot>
         <tr>
             <th>#</th>
-            <th>Edit</th>
+            <!-- <th>Edit</th> -->
             <th>Customer</th>
             <th>Exchange Rate</th>
             <th>MOVE TO OPEN</th>

@@ -250,6 +250,7 @@
         } else {
             $('.vehicle_list').html('');
         }
+        console.log("vehiclesIds: ", vehiclesIds);
         vehiclesIds.forEach((item, key) => {
             $('.vehicle_list').append(`<li class="list-group-item px-1" >${item}
         <button onClick="removeVehicle(${key})" class="close">
@@ -265,7 +266,6 @@
     }
 
     function onCustomerChange(event) {
-        console.log("event:", event.value)
         if (event.value) {
             $.ajax({
                 url: "{{route('get_vehicles_open_of_customer')}}",
@@ -274,7 +274,6 @@
                     id: event.value
                 },
                 success: function(response) {
-                    console.log("response:", response)
                     renderVehicleOptions(response);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {

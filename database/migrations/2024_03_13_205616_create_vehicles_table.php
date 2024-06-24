@@ -52,6 +52,10 @@ return new class extends Migration
             $table->enum('is_key', ['Yes', 'No'])->nullable()->default('No');
 
             // Vehicle Charges
+            $table->decimal('demurage_charge', 10, 0)->nullable();
+            $table->decimal('shiping_charge', 10, 0)->nullable();
+            $table->decimal('dismantal_charge', 10, 0)->nullable();
+            $table->decimal('auction_fee_charge', 10, 0)->nullable();
             $table->decimal('vehicle_price', 10, 0)->nullable();
             $table->decimal('towing_charge', 10, 0)->nullable();
             $table->decimal('clearance_charge', 10, 0)->nullable();

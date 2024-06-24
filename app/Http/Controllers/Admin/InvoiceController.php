@@ -113,9 +113,18 @@ class InvoiceController extends Controller
     public function edit(string $id)
     {
         $invoice = Invoice::find($id);
+        $customers = Customer::get();
+        $vehicles = [];
+        
+        if ($invoice->vehicles()->exists()) {
+            $vehicles = $invoice->vehicles()
+                ->select(DB::raw('CONCAT(vin, \' | \', lot_number) as text'), 'id')
+                ->pluck('text', 'id')
+                ->toArray();
+        }
 
-        return view('admin.invoice.edit')->with(['invoice' => $invoice]);
-    }
+        return view('admin.invoices.edit', compact('invoice', 'customers', 'vehicles'));
+ }
 
     /**
      * Update the specified resource in storage.
@@ -133,32 +142,45 @@ class InvoiceController extends Controller
         //
     }
 
-    public function get_vehicles_open_of_customer(Request $request){
-        try {
-            $customer = Customer::findOrFail($request->id);
-            
-            $customerVehicles = $customer->vehicles()->select([
-                'id',
-                'auction_fee_charge',
-                'storage_charge',
-                'towing_charge',
-                'dismantal_charge',
-                'shiping_charge',
-                'custom_charge',
-                'demurage_charge',
-                'other_charge',
-                'lot_number',
-                'vin'
-            ])->get();
- 
-            return response()->json($customerVehicles);
-        } catch (\Exception $e) {
-            Log::error('Failed to retrieve customer vehicles.', [
-                'error' => $e->getMessage(),
-            ]);
-            return response()->json(['error' => 'Failed to retrieve customer vehicles.'], 500);
+    public function get_vehicles_open_of_customer(Request $request)
+{
+    try {
+        // Validate request ID
+        if (!$request->has('id')) {
+            return response()->json(['error' => 'Customer ID is required.'], 400);
         }
+
+        // Retrieve the customer by ID
+        $customer = Customer::findOrFail($request->id);
+
+        // Fetch customer vehicles with specified fields
+        $customerVehicles = $customer->vehicles()->select([
+            'id',
+            'auction_fee_charge',
+            'storage_charge',
+            'towing_charge',
+            'dismantal_charge',
+            'shiping_charge',
+            'custom_charge',
+            'demurage_charge',
+            'other_charge',
+            'lot_number',
+            'vin'
+        ])->get();
+
+        // Return the vehicles as JSON
+        return response()->json($customerVehicles);
+    } catch (\Exception $e) {
+        // Log the error message for debugging
+        Log::error('Failed to retrieve customer vehicles.', [
+            'error' => $e->getMessage(),
+            'trace' => $e->getTraceAsString(), // Add stack trace for more detailed debugging
+        ]);
+
+        // Return error response
+        return response()->json(['error' => 'Failed to retrieve customer vehicles.'], 500);
     }
+}
 
     public function invoice_pdf(Request $request, $id)
     {
