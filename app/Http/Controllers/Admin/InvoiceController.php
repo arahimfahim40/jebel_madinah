@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Customer;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Vehicle;
 use PDF;
 use Str;
@@ -124,15 +125,62 @@ class InvoiceController extends Controller
         }
 
         return view('admin.invoices.edit', compact('invoice', 'customers', 'vehicles'));
- }
+    }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'customer_id' => 'required|exists:customers,id',
+            'status' => 'required|in:open,pending,past_due,paid',
+            'exchange_rate' => 'nullable|numeric',
+            'discount' => 'nullable|numeric',
+            'invoice_date' => 'required|date',
+            'move_to_open_date' => 'required|date',
+            'invoice_due_date' => 'required|date',
+            'vehicles' => 'required|string',
+        ]);
+
+        try {
+            DB::beginTransaction();
+            $user = Auth::user();
+
+            $filteredData = $request->only([
+                'customer_id',
+                'exchange_rate',
+                'move_to_open_date',
+                'invoice_date',
+                'invoice_due_date',
+                'status',
+                'discount',
+                'description',
+            ]);
+
+            $filteredData['updated_by'] = $user->id;
+
+            $invoice = Invoice::findOrFail($id);
+            $invoice->update($filteredData);
+
+            Vehicle::where('invoice_id', $invoice->id)->update(['invoice_id' => null]);
+
+            $vehicles = explode(',', $request->vehicles);
+            foreach ($vehicles as $vehicleId) {
+                $vehicle = Vehicle::findOrFail($vehicleId);
+                $vehicle->invoice()->associate($invoice);
+                $vehicle->save();
+            }
+
+            DB::commit();
+
+            return redirect()->route('invoices.index')->with('success', 'Invoice updated successfully');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['message' => 'Failed to update invoice', 'error' => $e->getMessage()], 500);
+        }
     }
+
 
     /**
      * Remove the specified resource from storage.

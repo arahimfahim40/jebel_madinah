@@ -82,7 +82,7 @@ Route::middleware('auth:user')->group(function () {
     Route::post('/admin/invoices', [InvoiceController::class, 'store'])->name('invoices.store');
     Route::get('/admin/invoices/{invoice}', [InvoiceController::class, 'show'])->name('invoices.show');
     Route::get('/admin/invoices/edit/{id}', [InvoiceController::class, 'edit'])->name('invoices.edit');
-    Route::put('/admin/invoices/update', [InvoiceController::class, 'update'])->name('invoices.update');
+    Route::put('/admin/invoices/update/{id}', [InvoiceController::class, 'update'])->name('invoices.update');
     Route::delete('/admin/invoices/{invoice}', [InvoiceController::class, 'destroy'])->name('invoices.destroy');
     Route::get('/get_vehicles_open_of_customer', [InvoiceController::class, 'get_vehicles_open_of_customer'])->name('get_vehicles_open_of_customer');
     Route::get('/invoice_pdf/{id}/pdf', [InvoiceController::class, 'invoice_pdf'])->name('invoice_pdf');

@@ -285,22 +285,33 @@
     }
     
     function renderVehicleOptions(vehicles) {
-        let selectOptions = '<option value="">Select Vehicle</option>';
-        vehicles.forEach(vehicle => {
-            let totalCharges = parseFloat(vehicle.auction_fee_charge) +
-                            parseFloat(vehicle.storage_charge) +
-                            parseFloat(vehicle.towing_charge) +
-                            parseFloat(vehicle.dismantal_charge) +
-                            parseFloat(vehicle.shiping_charge) +
-                            parseFloat(vehicle.custom_charge) +
-                            parseFloat(vehicle.demurage_charge) +
-                            parseFloat(vehicle.other_charge);
-            
-            selectOptions += `<option value="${vehicle.id}" data-total-charges="${totalCharges}">${vehicle.vin} | ${vehicle.lot_number}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$${totalCharges.toFixed(2)}</option>`;
-        });
+    let selectOptions = '<option value="">Select Vehicle</option>';
+    vehicles.forEach(vehicle => {
+        // Check for null values and set to 0 if null
+        let auctionFeeCharge = parseFloat(vehicle.auction_fee_charge) || 0;
+        let storageCharge = parseFloat(vehicle.storage_charge) || 0;
+        let towingCharge = parseFloat(vehicle.towing_charge) || 0;
+        let dismantleCharge = parseFloat(vehicle.dismantal_charge) || 0;
+        let shippingCharge = parseFloat(vehicle.shiping_charge) || 0;
+        let customCharge = parseFloat(vehicle.custom_charge) || 0;
+        let demurrageCharge = parseFloat(vehicle.demurage_charge) || 0;
+        let otherCharge = parseFloat(vehicle.other_charge) || 0;
 
-        $('#VehicleSelect').html(selectOptions);
-    }
+        let totalCharges = auctionFeeCharge +
+                            storageCharge +
+                            towingCharge +
+                            dismantleCharge +
+                            shippingCharge +
+                            customCharge +
+                            demurrageCharge +
+                            otherCharge;
+
+        selectOptions += `<option value="${vehicle.id}" data-total-charges="${totalCharges}">${vehicle.vin} | ${vehicle.lot_number}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$${totalCharges.toFixed(2)}</option>`;
+    });
+
+    $('#VehicleSelect').html(selectOptions);
+}
+
 
     function validateForm() {
         if (vehiclesIds.size === 0) {

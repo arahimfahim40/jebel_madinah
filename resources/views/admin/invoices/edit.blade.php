@@ -54,8 +54,9 @@
             <div class="wizard-v4-content w-100">
                 <div class="wizard-form py-2">
                     <h2 class="mb-1" style="text-align: center;">Edit Invoice</h2>
-                    <form id="edit-invoice-form" class="form-register form-horizontal" method="POST" action="{{ route('invoices.update')}}" onsubmit="return validateForm()">
+                    <form id="edit-invoice-form" class="form-register form-horizontal" method="POST" action="{{ route('invoices.update', $invoice->id)}}" onsubmit="return validateForm()">
                         @csrf
+                        @method('PUT')
                         <div>
                             <h2>
                                 <span class="step-icon"><i class="ti-receipt"></i></span>
@@ -127,6 +128,7 @@
                                                 name="move_to_open_date"   
                                                 placeholder="Move To Open Date"
                                                 class="form-control"
+                                                value="{{ old('move_to_open_date', @$invoice->move_to_open_date) }}"
                                                 required
                                                 />
                                             </div>
@@ -136,6 +138,7 @@
                                                 name="invoice_date"   
                                                 placeholder="Invoice Date"
                                                 class="form-control"
+                                                value="{{ old('invoice_date', @$invoice->invoice_date) }}"
                                                 required
                                                 />
                                             </div>
@@ -145,6 +148,7 @@
                                                 name="invoice_due_date"   
                                                 placeholder="Due Date"
                                                 class="form-control"
+                                                value="{{ old('invoice_due_date', @$invoice->invoice_due_date) }}"
                                                 required
                                                 />
                                             </div>
@@ -158,6 +162,7 @@
                                                     name="exchange_rate"   
                                                     placeholder="Exchange Rate"
                                                     class="form-control"
+                                                    value="{{ old('exchange_rate', @$invoice->exchange_rate) }}"
                                                     required
                                                 />
                                             </div>
@@ -169,6 +174,7 @@
                                                     name="discount" 
                                                     placeholder="Discount" 
                                                     class="form-control"
+                                                    value="{{ old('discount', @$invoice->discount) }}"
                                                     value="0"
                                                 />
                                             </div>
@@ -178,7 +184,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>Description</label>
-                                                <textarea name="description" placeholder="Description" rows="6" class="form-control"></textarea>
+                                                <textarea name="description" placeholder="Description" rows="6" class="form-control" value="{{ old('description', @$invoice->description) }}"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -208,7 +214,7 @@
         <?php endif; ?>
     });
     var form = $("#edit-invoice-form");
-    var vehiclesIds = new Map(Object.entries(<?= json_encode('vehicles' ?? []) ?>));
+    var vehiclesIds = new Map(Object.entries(<?= json_encode($vehicles ?? []) ?>));
     renderVehicleList();
     console.log("vehiclesIds: ", vehiclesIds)
     form.children("div").steps({
@@ -296,22 +302,33 @@
     }
     
     function renderVehicleOptions(vehicles) {
-        let selectOptions = '<option value="">Select Vehicle</option>';
-        vehicles.forEach(vehicle => {
-            let totalCharges = parseFloat(vehicle.auction_fee_charge) +
-                            parseFloat(vehicle.storage_charge) +
-                            parseFloat(vehicle.towing_charge) +
-                            parseFloat(vehicle.dismantal_charge) +
-                            parseFloat(vehicle.shiping_charge) +
-                            parseFloat(vehicle.custom_charge) +
-                            parseFloat(vehicle.demurage_charge) +
-                            parseFloat(vehicle.other_charge);
-            
-            selectOptions += `<option value="${vehicle.id}" data-total-charges="${totalCharges}">${vehicle.vin} | ${vehicle.lot_number}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$${totalCharges.toFixed(2)}</option>`;
-        });
+    let selectOptions = '<option value="">Select Vehicle</option>';
+    vehicles.forEach(vehicle => {
 
-        $('#VehicleSelect').html(selectOptions);
-    }
+        let auctionFeeCharge = parseFloat(vehicle.auction_fee_charge) || 0;
+        let storageCharge = parseFloat(vehicle.storage_charge) || 0;
+        let towingCharge = parseFloat(vehicle.towing_charge) || 0;
+        let dismantleCharge = parseFloat(vehicle.dismantal_charge) || 0;
+        let shippingCharge = parseFloat(vehicle.shiping_charge) || 0;
+        let customCharge = parseFloat(vehicle.custom_charge) || 0;
+        let demurrageCharge = parseFloat(vehicle.demurage_charge) || 0;
+        let otherCharge = parseFloat(vehicle.other_charge) || 0;
+
+        let totalCharges = auctionFeeCharge +
+                            storageCharge +
+                            towingCharge +
+                            dismantleCharge +
+                            shippingCharge +
+                            customCharge +
+                            demurrageCharge +
+                            otherCharge;
+
+        selectOptions += `<option value="${vehicle.id}" data-total-charges="${totalCharges}">${vehicle.vin} | ${vehicle.lot_number}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$${totalCharges.toFixed(2)}</option>`;
+    });
+
+    $('#VehicleSelect').html(selectOptions);
+}
+
 
     function validateForm() {
         if (vehiclesIds.size === 0) {
