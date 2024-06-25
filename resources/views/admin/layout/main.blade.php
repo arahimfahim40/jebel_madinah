@@ -25,7 +25,6 @@
     <link rel="stylesheet" type="text/css" href="{{asset('assets/css/core.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('assets/css/custom-style.css')}}">
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Roboto+Condensed:wght@300;400;700&display=swap">
-
     {{-- <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.0.3/css/buttons.dataTables.min.css"> --}}
     <!-- Neptune CSS -->
 

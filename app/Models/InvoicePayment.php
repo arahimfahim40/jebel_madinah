@@ -5,15 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Activitylog\LogOptions;
-use Spatie\Activitylog\Traits\LogsActivity;
 
 class InvoicePayment extends Model
 {
-    use HasFactory, LogsActivity, SoftDeletes;
+    use HasFactory, SoftDeletes;
     //protected $connection = 'mysql';
-    protected $table = 'vehicles';
-
+    protected $table = 'invoice_payments';
 
     protected $fillable = [
         'invoice_id',
@@ -21,6 +18,7 @@ class InvoicePayment extends Model
         'payment_amount',
         'payment_date',
         'evidence_link',
+        'description',
         'created_by',
         'updated_by',
         'deleted_by',
@@ -30,13 +28,7 @@ class InvoicePayment extends Model
     protected static $logAttributes = ['*'];
     protected static $logAttributesToIgnore = ['created_at', 'updated_at'];
     protected static $logOnlyDirty = true;
-    protected static $logName = 'invoice_payment';
-
-
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults();
-    }
+    protected static $logName = 'invoice_payments';
 
     public function invoice()
     {

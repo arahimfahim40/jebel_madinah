@@ -43,12 +43,16 @@
                 <td>{{ $item->discount }}</td>
                 <td>{{ $item->description }}</td>
                 <td>
-                <button href="#" target="_blank" style="cursor: pointer;" onclick="invoice_view_modal('{{ $item->id }}')" class="btn btn-success btn-circle btn-sm waves-effect waves-light">
-                    <i class="fa fa-eye"></i>
-                </button>
-                <a target="_blank"  class="btn btn-warning btn-circle btn-sm waves-effect waves-light" href="{{route('invoice_pdf',$item->id)}}" style="align-content: center;"><i class="fa fa-file-pdf-o"></i></a>
-                <a href="{{ route('invoices.edit', $item->id) }}" class="btn btn-info btn-circle btn-sm" style="align-content: center;"><span class="fa fa-pencil"></span>
-                </a>
+                    <button href="#" target="_blank" style="cursor: pointer;" onclick="invoice_view_modal('{{ $item->id }}')" class="btn btn-success btn-circle btn-sm waves-effect waves-light">
+                        <i class="fa fa-eye"></i>
+                    </button>
+                    <a target="_blank"  class="btn btn-warning btn-circle btn-sm waves-effect waves-light" href="{{route('invoice_pdf',$item->id)}}" style="align-content: center;"><i class="fa fa-file-pdf-o"></i></a>
+                    <a href="{{ route('invoices.edit', $item->id) }}" class="btn btn-info btn-circle btn-sm" style="align-content: center;"><span class="fa fa-pencil"></span></a>
+                    <button
+                        onclick="updatePayment(`{{ $item->id }}`)"
+                        class="btn btn-info btn-circle btn-sm">
+                        <span class="fa fa-credit-card"></span>
+                    </button>
                 </td>
             </tr>
         @endforeach

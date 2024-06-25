@@ -38,6 +38,7 @@ class InvoicePaymentController extends Controller
             'payment_amount' => 'required|numeric',
             'payment_date' => 'required|date',
             'evidence_link' => 'nullable|string',
+            'description'=> 'nullable|string'
         ]);
 
         try {
@@ -50,12 +51,13 @@ class InvoicePaymentController extends Controller
                 'payment_amount' => $request->payment_amount,
                 'payment_date' => $request->payment_date,
                 'evidence_link' => $request->evidence_link,
+                'description' => $request->description,
                 'created_by' => $user->id,
             ]);
 
             DB::commit();
-
-            return redirect()->route('invoice_payments.index')->with('success', 'Payment created successfully');
+            return response()->json(['message' => 'Payment created successfully', 'status' => 'success'], 200);
+            // return redirect()->route('invoice_payments.index')->with('success', 'Payment created successfully');
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -90,6 +92,7 @@ class InvoicePaymentController extends Controller
             'payment_amount' => 'required|numeric',
             'payment_date' => 'required|date',
             'evidence_link' => 'nullable|string',
+            'description'=> 'nullable|string'
         ]);
 
         try {
@@ -118,7 +121,7 @@ class InvoicePaymentController extends Controller
         try {
             DB::beginTransaction();
             $payment = InvoicePayment::findOrFail($id);
-            
+
             $payment->deleted_by = Auth::id();
             $payment->save();
             $payment->delete();

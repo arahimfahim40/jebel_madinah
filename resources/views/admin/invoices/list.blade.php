@@ -102,6 +102,7 @@
                     style="margin-top:1.5%;float: right;text-align: right;">
                     <div class="text text-warning"><b>{{ ucwords(str_replace('_', ' ', $status ? $status : 'All')) }} Invoices</b></div>
                 </div>
+                @include('admin.invoices.payment_form')
                 <div class="site table-responsive" id="user_data">
                     @include('admin.invoices.data')
                 </div>
@@ -243,5 +244,55 @@
         }
     
     });
+    function updatePayment(id) {
+        console.log(id);
+        $("#payment_form_modal").modal("show");
+        $('#payment_form input[name="invoice_id"]').val(id);
+    }
+    $('#payment_form').on('submit', function(e) {
+    e.preventDefault();
+    $('#edit-page-loading').html("<div class='preloader'></div>");
+    var request = $.ajax({
+        url: "{{ route('invoice_payments.store') }}",
+        method: "POST",
+        data: {
+            _token: $('input[name="_token"]').val(),
+            invoice_id: $('#payment_form input[name="invoice_id"]').val(),
+            payment_amount: $('#payment_form input[name="payment_amount"]').val(),
+            discount: $('#payment_form input[name="discount"]').val(),
+            payment_date: $('#payment_form input[name="payment_date"]').val(),
+            evidence_link: $('#payment_form input[name="evidence_link"]').val(),
+            payment_description: $('#payment_form textarea[name="payment_description"]').val(),
+        },
+        success: function(res) {
+            if (res.status === 'success') {
+                $('#payment_form').trigger("reset");
+                $("#payment_form_modal").modal("hide");
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: res.message,
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+            } else {
+                $('#edit-form-dismissable-alerts #error-message').text(res.message);
+                $('#edit-form-dismissable-alerts').show();
+                setTimeout(function() {
+                    $('#edit-form-dismissable-alerts').hide();
+                }, 4000);
+            }
+            $('#edit-page-loading').html('');
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            $('#edit-form-dismissable-alerts #error-message').text(jqXHR.responseText);
+            $('#edit-form-dismissable-alerts').show();
+            setTimeout(function() {
+                $('#edit-form-dismissable-alerts').hide();
+            }, 4000);
+            $('#edit-page-loading').html('');
+        },
+    });
+});
 </script>
 @endpush
