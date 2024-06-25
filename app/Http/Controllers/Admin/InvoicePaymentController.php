@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\InvoicePayment;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class InvoicePaymentController extends Controller
 {
@@ -12,7 +15,8 @@ class InvoicePaymentController extends Controller
      */
     public function index()
     {
-        //
+        $payments = InvoicePayment::all();
+        return view('invoice_payments.index', compact('payments'));
     }
 
     /**
@@ -20,7 +24,7 @@ class InvoicePaymentController extends Controller
      */
     public function create()
     {
-        //
+        return view('invoice_payments.create');
     }
 
     /**
@@ -28,7 +32,35 @@ class InvoicePaymentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'invoice_id' => 'required|exists:invoices,id',
+            'payment_times' => 'nullable|integer',
+            'payment_amount' => 'required|numeric',
+            'payment_date' => 'required|date',
+            'evidence_link' => 'nullable|string',
+        ]);
+
+        try {
+            DB::beginTransaction();
+            $user = Auth::user();
+
+            $payment = InvoicePayment::create([
+                'invoice_id' => $request->invoice_id,
+                'payment_times' => $request->payment_times,
+                'payment_amount' => $request->payment_amount,
+                'payment_date' => $request->payment_date,
+                'evidence_link' => $request->evidence_link,
+                'created_by' => $user->id,
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('invoice_payments.index')->with('success', 'Payment created successfully');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json(['message' => 'Failed to create payment', 'error' => $e->getMessage()], 500);
+        }
     }
 
     /**
@@ -36,7 +68,7 @@ class InvoicePaymentController extends Controller
      */
     public function show(string $id)
     {
-        //
+        return view('invoice_payments.show', compact('payment'));
     }
 
     /**
@@ -44,7 +76,7 @@ class InvoicePaymentController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return view('invoice_payments.edit', compact('payment'));
     }
 
     /**
@@ -52,7 +84,30 @@ class InvoicePaymentController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'invoice_id' => 'required|exists:invoices,id',
+            'payment_times' => 'nullable|integer',
+            'payment_amount' => 'required|numeric',
+            'payment_date' => 'required|date',
+            'evidence_link' => 'nullable|string',
+        ]);
+
+        try {
+            DB::beginTransaction();
+            $payment = InvoicePayment::findOrFail($id);
+
+            $payment->update($request->all());
+            $payment->updated_by = Auth::id();
+            $payment->save();
+
+            DB::commit();
+
+            return redirect()->route('invoice_payments.index')->with('success', 'Payment updated successfully');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json(['message' => 'Failed to update payment', 'error' => $e->getMessage()], 500);
+        }
     }
 
     /**
@@ -60,6 +115,21 @@ class InvoicePaymentController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            DB::beginTransaction();
+            $payment = InvoicePayment::findOrFail($id);
+            
+            $payment->deleted_by = Auth::id();
+            $payment->save();
+            $payment->delete();
+
+            DB::commit();
+
+            return redirect()->route('invoice_payments.index')->with('success', 'Payment deleted successfully');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json(['message' => 'Failed to delete payment', 'error' => $e->getMessage()], 500);
+        }
     }
 }
