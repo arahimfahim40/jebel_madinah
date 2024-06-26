@@ -19,6 +19,7 @@ return new class extends Migration
             $table->timestamp('payment_date')->nullable()->useCurrent();
             $table->string('evidence_link')->nullable();
             $table->text('description')->nullable();
+            $table->double('discount', 10)->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->unsignedBigInteger('created_by')->nullable();

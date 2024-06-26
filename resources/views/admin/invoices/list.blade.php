@@ -103,6 +103,7 @@
                     <div class="text text-warning"><b>{{ ucwords(str_replace('_', ' ', $status ? $status : 'All')) }} Invoices</b></div>
                 </div>
                 @include('admin.invoices.payment_form')
+                @include('admin.invoices.payment_edit')
                 <div class="site table-responsive" id="user_data">
                     @include('admin.invoices.data')
                 </div>
@@ -169,9 +170,8 @@
             $('#view_invoice_modal').modal('show');
             $('#view_invoice').html(msg);
             $("#invoice_id").val(invoice_id);
-
+            $('#payments-section').show();
             var ids = JSON.parse($("#ids").val());
-            console.log(invoice_id);
             let index = ids.findIndex((id, index) => id == invoice_id);
             if (index == 0) {
                 $('.prev').attr('disabled', 'disabled');
@@ -244,8 +244,7 @@
         }
     
     });
-    function updatePayment(id) {
-        console.log(id);
+    function addPayment(id) {
         $("#payment_form_modal").modal("show");
         $('#payment_form input[name="invoice_id"]').val(id);
     }
@@ -262,12 +261,71 @@
             discount: $('#payment_form input[name="discount"]').val(),
             payment_date: $('#payment_form input[name="payment_date"]').val(),
             evidence_link: $('#payment_form input[name="evidence_link"]').val(),
-            payment_description: $('#payment_form textarea[name="payment_description"]').val(),
+            description: $('#payment_form textarea[name="description"]').val(),
         },
         success: function(res) {
             if (res.status === 'success') {
                 $('#payment_form').trigger("reset");
                 $("#payment_form_modal").modal("hide");
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: res.message,
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+            } else {
+                $('#edit-form-dismissable-alerts #error-message').text(res.message);
+                $('#edit-form-dismissable-alerts').show();
+                setTimeout(function() {
+                    $('#edit-form-dismissable-alerts').hide();
+                }, 4000);
+            }
+            $('#edit-page-loading').html('');
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            $('#edit-form-dismissable-alerts #error-message').text(jqXHR.responseText);
+            $('#edit-form-dismissable-alerts').show();
+            setTimeout(function() {
+                $('#edit-form-dismissable-alerts').hide();
+            }, 4000);
+            $('#edit-page-loading').html('');
+        },
+    });
+})
+    function updatePayment(invoiceId, paymentId, paymentAmount, discount, paymentDate, evidenceLink, description) {
+        console.log(invoiceId, paymentId, paymentAmount, discount, paymentDate, evidenceLink, description)
+        $("#payment_form_update_modal").modal("show");
+        var datePart = paymentDate.split(' ')[0];
+        $('#payment_form_update input[name="invoice_id"]').val(invoiceId);
+        $('#payment_form_update input[name="payment_id"]').val(paymentId);
+        $('#payment_form_update input[name="payment_amount"]').val(paymentAmount);
+        $('#payment_form_update input[name="discount"]').val(discount);
+        $('#payment_form_update input[name="payment_date"]').val(datePart);
+        $('#payment_form_update input[name="evidence_link"]').val(evidenceLink);
+        $('#payment_form_update textarea[name="description"]').val(description);
+    }
+    $('#payment_form_update').on('submit', function(e) {
+    const paymentId = $('#payment_form_update input[name="payment_id"]').val()
+    e.preventDefault();
+    $('#edit-page-loading').html("<div class='preloader'></div>");
+    var request = $.ajax({
+        url: "/admin/invoice_payments/" + paymentId,
+        method: "PUT",
+        data: {
+            _token: $('input[name="_token"]').val(),
+            invoice_id: $('#payment_form_update input[name="invoice_id"]').val(),
+            payment_amount: $('#payment_form_update input[name="payment_amount"]').val(),
+            discount: $('#payment_form_update input[name="discount"]').val(),
+            payment_date: $('#payment_form_update input[name="payment_date"]').val(),
+            evidence_link: $('#payment_form_update input[name="evidence_link"]').val(),
+            description: $('#payment_form_update textarea[name="description"]').val(),
+        },
+        success: function(res) {
+            if (res.status === 'success') {
+                $('#payment_form_update').trigger("reset");
+                $("#payment_form_update_modal").modal("hide");
+                $('#view_invoice_modal').modal('hide');
                 Swal.fire({
                     position: 'center',
                     icon: 'success',

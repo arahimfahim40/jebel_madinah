@@ -35,6 +35,9 @@
         /* background-color: lightblue; */
         color: #222;
     }
+    #payments-section {
+            display: none; /* Hide the payments section by default */
+    }
 </style>
 <div class="container">
     <div class="row">
@@ -233,6 +236,63 @@
                             </tr>
                         </tbody>
                     </table>
+                    <div id="payments-section" style="margin: 10px 0;">
+                        <div style="text-align: left; font-weight: bold; margin: 5px 0;">Payments</div>
+                        <table width="100%" style="border: 1px solid #0a0a0a; background-color: #eaf4f4;">
+                            <tbody>
+                                <tr>
+                                    <th class="td1">#</th>
+                                    <th class="td1">Description</th>
+                                    <th class="td1">Payment Amount</th>
+                                    <th class="td1">Discount</th>
+                                    <th class="td1">Date</th>
+                                    <th class="td1">Link</th>
+                                    <th class="td1">Action</th>
+                                </tr>
+                                <?php
+                                    $totalPayment = 0;
+                                    $totaldiscount = 0;
+                                ?>
+                                @foreach ($payments as $key => $payment)
+                                    <tr>
+                                        <td class="td1">{{ $key + 1 }}</td>
+                                        <td class="td1" style="min-width: 10vw;">
+                                            {{ $payment->description }}
+                                        </td>
+                                        <td class="td1" style="font-size: 10px;">${{ number_format($payment->payment_amount, 2) }}</td>
+                                        <td class="td1" style="font-size: 10px;">${{ number_format($payment->discount, 2) }}</td>
+                                        <td class="td1" style="text-align:right;">{{ $payment->payment_date }}</td>
+                                        <td class="td1" style="text-align:right;">{{ $payment->evidence_link }}</td>
+                                        <td>
+                                            <div style="display: flex; align-items: center; gap: 5px;">
+                                                <button onclick="updatePayment('{{ $invoice->id }}', '{{ $payment->id }}', '{{ $payment->payment_amount }}', '{{ $payment->discount }}', '{{ $payment->payment_date }}', '{{ $payment->evidence_link }}', '{{ $payment->description }}')" class="btn btn-info btn-circle btn-sm">
+                                                    <span class="fa fa-pencil"></span>
+                                                </button>
+                                                <form method="POST" id="payment_delete_{{ $payment->id }}" action="{{ route('invoice_payments.destroy',$payment->id)}}" style="display: inline-block; margin: 0;">
+                                                    @method('delete')
+                                                    @csrf
+                                                    <a onclick="confirmDeletePayment('{{ $payment->id }}')" > <i class="fa fa-trash-o" style="font-size:16px; color:red; cursor:pointer;" ></i></a>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <?php
+                                    $totalPayment = $totalPayment + $payment->payment_amount;
+                                    $totaldiscount = $totaldiscount + $payment->discount;
+                                    ?>
+                                @endforeach
+                                <tr>
+                                    <th class="td1"></th>
+                                    <th class="td1">Sub Total</th>
+                                    <th style="text-align:right;" class="td1">${{ number_format(@$totalPayment, 2) }}</th>
+                                    <th style="text-align:right;" class="td1">${{ number_format(@$totaldiscount, 2) }}</th>
+                                    <th style="text-align:right;" class="td1"></th>
+                                    <th style="text-align:right;" class="td1">
+                                    </th>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                     <table width="100%">
                         <tbody>
                             @if ($invoice->description)

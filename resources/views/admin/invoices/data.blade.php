@@ -43,16 +43,27 @@
                 <td>{{ $item->discount }}</td>
                 <td>{{ $item->description }}</td>
                 <td>
-                    <button href="#" target="_blank" style="cursor: pointer;" onclick="invoice_view_modal('{{ $item->id }}')" class="btn btn-success btn-circle btn-sm waves-effect waves-light">
-                        <i class="fa fa-eye"></i>
-                    </button>
-                    <a target="_blank"  class="btn btn-warning btn-circle btn-sm waves-effect waves-light" href="{{route('invoice_pdf',$item->id)}}" style="align-content: center;"><i class="fa fa-file-pdf-o"></i></a>
-                    <a href="{{ route('invoices.edit', $item->id) }}" class="btn btn-info btn-circle btn-sm" style="align-content: center;"><span class="fa fa-pencil"></span></a>
-                    <button
-                        onclick="updatePayment(`{{ $item->id }}`)"
-                        class="btn btn-info btn-circle btn-sm">
-                        <span class="fa fa-credit-card"></span>
-                    </button>
+                    <div style="display: flex; align-items: center; gap: 5px;">
+                        <button href="#" target="_blank" style="cursor: pointer;" onclick="invoice_view_modal('{{ $item->id }}')" class="btn btn-success btn-circle btn-sm waves-effect waves-light">
+                            <i class="fa fa-eye"></i>
+                        </button>
+                        <a target="_blank" class="btn btn-warning btn-circle btn-sm waves-effect waves-light" href="{{route('invoice_pdf',$item->id)}}" style="align-content: center;">
+                            <i class="fa fa-file-pdf-o"></i>
+                        </a>
+                        <a href="{{ route('invoices.edit', $item->id) }}" class="btn btn-info btn-circle btn-sm" style="align-content: center;">
+                            <span class="fa fa-pencil"></span>
+                        </a>
+                        <button onclick="addPayment(`{{ $item->id }}`)" class="btn btn-info btn-circle btn-sm">
+                            <span class="fa fa-credit-card"></span>
+                        </button>
+                        <form method="POST" id="invoice_delete_{{ $item->id }}" action="{{ route('invoices.destroy',$item->id)}}" style="display: inline-block; margin: 0;">
+                            @method('delete')
+                            @csrf
+                            <a onclick="confirmDeleteInvoice('{{ $item->id }}')" style="cursor:pointer; display: flex; align-items: center;">
+                                <i class="fa fa-trash-o" style="font-size:16px; color:red; margin: 0;"></i>
+                            </a>
+                        </form>
+                    </div>
                 </td>
             </tr>
         @endforeach
@@ -77,5 +88,32 @@
 @if ($invoices instanceof \Illuminate\Pagination\LengthAwarePaginator)
     {{ $invoices->appends(Request::All())->links() }}
 @endif
+
+<script>
+    function confirmDeleteInvoice(slug) {
+        if (confirm('Invoice will be deleted. Continue?')) {
+            document.getElementById('invoice_delete_' + slug).submit();
+        }
+    }
+    function confirmDeletePayment(paymentId) {
+        if (confirm('Payment will be deleted. Continue?')) {
+            var request = $.ajax({
+            url: "/invoice_payments/" + paymentId,
+            method: "DELETE",
+            data: {
+                _token: "{{ csrf_token() }}"
+            },
+        });
+
+        request.done(function(msg) {
+            $('#view_invoice_modal').modal('hide');
+        });
+
+        request.fail(function(jqXHR, textStatus) {
+            alert('Failed to delete payment: ' + jqXHR.responseJSON.message);
+        });
+        }
+    }
+</script>
 
 

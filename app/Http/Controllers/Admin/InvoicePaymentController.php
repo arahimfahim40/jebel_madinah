@@ -38,6 +38,7 @@ class InvoicePaymentController extends Controller
             'payment_amount' => 'required|numeric',
             'payment_date' => 'required|date',
             'evidence_link' => 'nullable|string',
+            'discount' => 'required|numeric',
             'description'=> 'nullable|string'
         ]);
 
@@ -52,6 +53,7 @@ class InvoicePaymentController extends Controller
                 'payment_date' => $request->payment_date,
                 'evidence_link' => $request->evidence_link,
                 'description' => $request->description,
+                'discount' => $request->discount,
                 'created_by' => $user->id,
             ]);
 
@@ -92,7 +94,8 @@ class InvoicePaymentController extends Controller
             'payment_amount' => 'required|numeric',
             'payment_date' => 'required|date',
             'evidence_link' => 'nullable|string',
-            'description'=> 'nullable|string'
+            'description'=> 'nullable|string',
+            'discount' => 'required|numeric'
         ]);
 
         try {
@@ -104,8 +107,8 @@ class InvoicePaymentController extends Controller
             $payment->save();
 
             DB::commit();
-
-            return redirect()->route('invoice_payments.index')->with('success', 'Payment updated successfully');
+            return response()->json(['message' => 'Payment created successfully', 'status' => 'success'], 200);
+            // return redirect()->route('invoice_payments.index')->with('success', 'Payment updated successfully');
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -127,8 +130,8 @@ class InvoicePaymentController extends Controller
             $payment->delete();
 
             DB::commit();
-
-            return redirect()->route('invoice_payments.index')->with('success', 'Payment deleted successfully');
+            return response()->json(['message' => 'Payment deleted successfully', 'status' => 'success'], 200);
+            // return redirect()->route('invoice_payments.index')->with('success', 'Payment deleted successfully');
         } catch (\Exception $e) {
             DB::rollBack();
 

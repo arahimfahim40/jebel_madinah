@@ -94,7 +94,7 @@ Route::middleware('auth:user')->group(function () {
     Route::post('/admin/invoice_payments', [InvoicePaymentController::class, 'store'])->name('invoice_payments.store');
     Route::get('/admin/invoice_payments/{invoice_payment}', [InvoicePaymentController::class, 'show'])->name('invoice_payments.show');
     Route::get('/admin/invoice_payments/{invoice_payment}/edit', [InvoicePaymentController::class, 'edit'])->name('invoice_payments.edit');
-    Route::put('/admin/invoice_payments/{invoice_payment}', [InvoicePaymentController::class, 'update'])->name('invoice_payments.update');
-    Route::delete('/admin/invoice_payments/{invoice_payment}', [InvoicePaymentController::class, 'destroy'])->name('invoices.destroy');
+    Route::put('/admin/invoice_payments/{id}', [InvoicePaymentController::class, 'update'])->name('invoice_payments.update');
+    Route::delete('/invoice_payments/{id}', [InvoicePaymentController::class, 'destroy'])->name('invoice_payments.destroy');
 
 });

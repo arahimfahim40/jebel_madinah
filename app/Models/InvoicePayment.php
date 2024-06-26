@@ -19,6 +19,7 @@ class InvoicePayment extends Model
         'payment_date',
         'evidence_link',
         'description',
+        'discount',
         'created_by',
         'updated_by',
         'deleted_by',

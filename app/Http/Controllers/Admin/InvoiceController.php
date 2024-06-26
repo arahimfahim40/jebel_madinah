@@ -187,7 +187,14 @@ class InvoiceController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = Auth::user();
+        try{
+            Invoice::where('id',$id)->update(['deleted_by' => $user->id]);
+            Invoice::find($id)->delete();
+            return redirect()->route('invoices.index')->with('success', 'Deleted successfully!');
+        } catch(\Exception $ex) {
+            return redirect()->route('invoices.show', ['id' => $id])->with('error', 'Something went wrong, cannot delete the user.');
+        }
     }
 
     public function get_vehicles_open_of_customer(Request $request)
@@ -234,9 +241,10 @@ class InvoiceController extends Controller
     {
         try {
             
-            $invoice = Invoice::find($id);
+            $invoice = Invoice::with('payments')->find($id);
+            $payments =  $invoice->payments;
             // dd($invoice);
-            $pdf = PDF::loadView('admin.invoices.invoice_pdf', compact('invoice'), ['format' => ['A4', 190, 236]]); 
+            $pdf = PDF::loadView('admin.invoices.invoice_pdf', compact('invoice', 'payments'), ['format' => ['A4', 190, 236]]); 
             $file_name = Str::slug($invoice->customer->name  . '_' . sprintf("ALSMS%'.04d\n", @$id));
             return $pdf->download($file_name . '.pdf');
         } catch (\Throwable $th) {
@@ -249,13 +257,19 @@ class InvoiceController extends Controller
     {
         try {
             $invoiceId = $request->invoice_id;
-            $invoice = Invoice::find($invoiceId);
-            return view('admin.invoices.invoice_pdf', ['invoice' => $invoice]);
+            $invoice = Invoice::with('payments')->find($invoiceId);
+
+            if (!$invoice) {
+                return response()->json(['status' => 'error', 'message' => 'Invoice not found'], 404);
+            }
+ 
+            return view('admin.invoices.invoice_pdf', ['invoice' => $invoice, 'payments' => $invoice->payments]);
         } catch (\Exception $e) {
             DB::rollBack();
             $response['status'] = 'error';
-            $response['message'] = 'Error, Please Try again!' . $e;
-            return response()->json($response);
+            $response['message'] = 'Error, Please Try again! ' . $e->getMessage();
+            return response()->json($response, 500);
         }
     }
+
 }

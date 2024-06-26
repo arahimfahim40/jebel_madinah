@@ -1,8 +1,9 @@
 <!-- Edit installment modal -->
-<div class="modal fade large-modal" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="payment_form_modal">
+<div class="modal fade large-modal" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="payment_form_update_modal">
   <div class="modal-dialog">
-    <form class="form" id="payment_form" method="POST">
+    <form class="form" id="payment_form_update" method="POST">
       @csrf
+      @method('PUT')
       <div class="modal-content">
         <div id="edit-page-loading"></div>
         <div class="modal-header">
@@ -63,7 +64,7 @@
         <div class="modal-footer">
           <button type="submit" class="btn btn-info btn-rounded label-left float-xs-left">
             <span class="btn-label"><i class="ti-save"></i></span>
-            Save
+            Update
           </button>
           <button type="button" class="btn btn-danger btn-rounded" data-dismiss="modal">Close</button>
         </div>
