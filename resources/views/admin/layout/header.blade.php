@@ -1,9 +1,11 @@
 <div class="site-header">
   <nav class="navbar navbar-light">
     <div class="navbar-left">
-      <a class="navbar-brand" style="color: #eeecec;padding-top: 16px" href="#">
-        <div class="logo"></div>
-        AL SADEER
+      <a class="navbar-brand" style="color: #eeecec; width: 100%;" href="#">
+        <div style="display: flex; align-items: center; justify-content:center;">
+          <div class="logo" style="height: 50px; width: 50px; border-radius: 50%;"></div>
+          <h5 style="padding-left: 10px; margin:0px;">Jabal AL Madinah</h5>
+        </div>
       </a>
       <div class="toggle-button dark sidebar-toggle-first float-xs-left hidden-md-up">
         <span class="hamburger"></span>
