@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
@@ -19,7 +20,7 @@ class CustomerController extends Controller
             $q->orWhere('email', 'LIKE', "%$request->searchValue%");
         })->when(!empty($request->status), function ($q) use ($request) {
             $q->where('status', $request->status);
-        })->with(['createdBy','updatedBy'])->orderBy('id', 'desc')->paginate($paginate);
+        })->with(['createdBy', 'updatedBy'])->orderBy('id', 'desc')->paginate($paginate);
         if ($request->ajax()) {
             return view('admin.customers.data', compact('customers',  'paginate'));
         }
@@ -45,12 +46,12 @@ class CustomerController extends Controller
             'gender' => 'required|string|in:Male,Female',
             'status' => 'required|string|in:Active,Inactive',
             'email' => 'required|email|unique:customers,email|unique:users,email',
-            'password' => 'required|string',
+            // 'password' => 'required|string',
             'phone' => 'required|string',
             'join_date' => 'nullable|date',
-            'second_email' => 'nullable|email|unique:customers',
-            'second_phone' => 'nullable|string',           
-            'about' => 'nullable|string',            
+            'second_email' => 'nullable|email|unique:customers,second_email',
+            'second_phone' => 'nullable|string',
+            'about' => 'nullable|string',
             //'photo' => 'mimes:jpg,png,jpeg,bmp,gif|max:1024',
         ]);
 
@@ -62,7 +63,7 @@ class CustomerController extends Controller
             $customer->gender = $request->gender;
             $customer->status = $request->status;
             $customer->email = $request->email;
-            $customer->password = bcrypt($request->password);
+            // $customer->password = bcrypt($request->password);
             $customer->phone = $request->phone;
             $customer->join_date = $request->join_date;
             $customer->second_email = $request->second_email;
@@ -71,10 +72,10 @@ class CustomerController extends Controller
             $customer->created_by = $user->id;
             $customer->updated_by = $user->id;
             $customer->save();
-           
+
             return redirect()->route('customers.show', ['id' => $customer->id])->with('success', 'Saved successfully!');
         } catch (\Exception $ex) {
-            return redirect()->route('customers.index')->with('error', 'Something went wrong, cannot save the user.');
+            return redirect()->route('customers.index')->with('error', 'Something went wrong, cannot save the user.' . $ex->getMessage());
         }
     }
 
@@ -83,8 +84,8 @@ class CustomerController extends Controller
      */
     public function show($id)
     {
-        $customer = Customer::with(['createdBy','updatedBy'])->find($id);
-        return view('admin.customers.view',compact('customer'));
+        $customer = Customer::with(['createdBy', 'updatedBy'])->find($id);
+        return view('admin.customers.view', compact('customer'));
     }
 
     /**
@@ -92,8 +93,8 @@ class CustomerController extends Controller
      */
     public function edit(string $id)
     {
-        $customer = Customer::with(['createdBy','updatedBy'])->find($id);
-        return view('admin.customers.update',compact('customer'));
+        $customer = Customer::with(['createdBy', 'updatedBy'])->find($id);
+        return view('admin.customers.update', compact('customer'));
     }
 
     /**
@@ -106,13 +107,13 @@ class CustomerController extends Controller
             'address' => 'required|string',
             'gender' => 'required|string|in:Male,Female',
             'status' => 'required|string|in:Active,Inactive',
-            'email' => 'required|email|unique:users,email|unique:customers,email,'.$id,
+            'email' => 'required|email|unique:users,email|unique:customers,email,' . $id,
             'password' => 'nullable|string',
             'phone' => 'required|string',
             'join_date' => 'nullable|date',
-            'second_email' => 'nullable|email|unique:customers,second_email,'.$id,
-            'second_phone' => 'nullable|string',           
-            'about' => 'nullable|string',            
+            'second_email' => 'nullable|email|unique:customers,second_email,' . $id,
+            'second_phone' => 'nullable|string',
+            'about' => 'nullable|string',
             //'photo' => 'mimes:jpg,png,jpeg,bmp,gif|max:1024',
         ]);
         $user = Auth::user();
@@ -123,8 +124,8 @@ class CustomerController extends Controller
             $customer->gender = $request->gender;
             $customer->status = $request->status;
             $customer->email = $request->email;
-            if($request->password){
-            $customer->password = bcrypt($request->password);
+            if ($request->password) {
+                $customer->password = bcrypt($request->password);
             }
             $customer->phone = $request->phone;
             $customer->join_date = $request->join_date;
@@ -145,11 +146,11 @@ class CustomerController extends Controller
     public function destroy(Request $request, string $id)
     {
         $user = Auth::user();
-        try{
-            Customer::where('id',$id)->update(['deleted_by' => $user->id]);
+        try {
+            Customer::where('id', $id)->update(['deleted_by' => $user->id]);
             Customer::find($id)->delete();
             return redirect()->route('customers.index')->with('success', 'Deleted successfully!');
-        } catch(\Exception $ex) {
+        } catch (\Exception $ex) {
             return redirect()->route('customers.show', ['id' => $id])->with('error', 'Something went wrong, cannot delete the user.');
         }
     }
@@ -161,12 +162,11 @@ class CustomerController extends Controller
     {
         $search = $request->search;
         $response = Customer::where('name', 'like', "%{$search}%")
-          ->orderBy('id', 'desc')
-          ->select('id', 'name as text')
-          ->limit(20)
-          ->get();
-    
-        return response()->json($response);
+            ->orderBy('id', 'desc')
+            ->select('id', 'name as text')
+            ->limit(20)
+            ->get();
 
+        return response()->json($response);
     }
 }

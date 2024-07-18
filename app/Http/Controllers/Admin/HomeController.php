@@ -43,11 +43,9 @@ class HomeController extends Controller
     {
         if ($request->type == 'Vehicle') {
             $result = Vehicle::select(
-                DB::raw("SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) AS t_pending"),
                 DB::raw("SUM(CASE WHEN status = 'on_the_way' THEN 1 ELSE 0 END) AS t_on_the_way"),
-                DB::raw("SUM(CASE WHEN status = 'on_hand_no_title' THEN 1 ELSE 0 END) AS t_on_hand_no_title"),
-                DB::raw("SUM(CASE WHEN status = 'on_hand_with_title' THEN 1 ELSE 0 END) AS t_on_hand_with_title"),
-                DB::raw("SUM(CASE WHEN status = 'shipped' THEN 1 ELSE 0 END) AS t_shipped"),
+                DB::raw("SUM(CASE WHEN status = 'inventory' THEN 1 ELSE 0 END) AS t_inventory"),
+                DB::raw("SUM(CASE WHEN status = 'sold' THEN 1 ELSE 0 END) AS t_sold"),
             )->first()->toArray();
         } else if ($request->type == 'Invoice') {
             $result = Invoice::select(

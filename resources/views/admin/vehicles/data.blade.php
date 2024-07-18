@@ -17,6 +17,7 @@
       <th>Status</th>
       <th>Auction</th>
       <th>Buyer Number</th>
+      <th>Invoice#</th>
       <th>Vehicle Price</th>
     </tr>
   </thead>
@@ -53,6 +54,7 @@
         </td>
         <td>{{ $item->auction_name }}</td>
         <td>{{ $item->buyer_number }}</td>
+        <td>{{ empty($item->invoice_id) ? '' : 'JAM' . str_pad($item->invoice_id, 5, '0', STR_PAD_LEFT) }}</td>
         <td>{{ $item->vehicle_price }}</td>
       </tr>
     @endforeach
@@ -74,6 +76,7 @@
       <th>Status</th>
       <th>Auction</th>
       <th>Buyer Number</th>
+      <th>Invoice#</th>
       <th>Vehicle Price</th>
     </tr>
   </tfoot>

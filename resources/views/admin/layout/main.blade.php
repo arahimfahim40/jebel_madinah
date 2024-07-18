@@ -184,11 +184,9 @@
         vehicle_sub_count.done(function(msg) {
           if (type == 'Vehicle') {
             window.vehicle_section = true;
-            $('.t_pending_vehicle').text(msg.t_pending);
             $('.t_on_the_way_vehicle').text(msg.t_on_the_way);
-            $('.t_on_hand_no_title_vehicle').text(msg.t_on_hand_no_title);
-            $('.t_on_hand_with_title_vehicle').text(msg.t_on_hand_with_title);
-            $('.t_shipped_vehicle').text(msg.t_shipped);
+            $('.t_inventory_vehicle').text(msg.t_inventory);
+            $('.t_sold_vehicle').text(msg.t_sold);
           } else if (type == 'VehicleSummary') {
             window.vehicle_summary_section = true;
             owners.forEach(item => {
