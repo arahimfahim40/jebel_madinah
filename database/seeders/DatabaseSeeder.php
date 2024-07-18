@@ -48,10 +48,10 @@ class DatabaseSeeder extends Seeder
         ["name" => "invoice-edit", "group_name" => "invoice"],
         ["name" => "invoice-delete", "group_name" => "invoice"],
 
-        ["name" => "location-view", "group_name" => "location"],
-        ["name" => "location-create", "group_name" => "location"],
-        ["name" => "location-edit", "group_name" => "location"],
-        ["name" => "location-delete", "group_name" => "location"],
+        ["name" => "owner-view", "group_name" => "owner"],
+        ["name" => "owner-create", "group_name" => "owner"],
+        ["name" => "owner-edit", "group_name" => "owner"],
+        ["name" => "owner-delete", "group_name" => "owner"],
     ];
 
 
@@ -89,13 +89,9 @@ class DatabaseSeeder extends Seeder
 
         $user->assignRole([$role->id]);
 
-        \App\Models\Location::insert([
-            ['name' => 'Savannah, GA'],
-            ['name' => 'Houston, TX'],
-            ['name' => 'Baltimore, MD'],
-            ['name' => 'New Jersey, NJ'],
-            ['name' => 'Los Angeles, CA'],
-            ['name' => 'Canada'],
+        \App\Models\Owner::insert([
+            ['name' => 'Haji Masood'],
+            ['name' => 'Ahmad'],
         ]);
         // \App\Models\Customer::insert([
         //     ['name' => $faker->name, 'email' => $faker->email, 'password' => bcrypt($faker->password) ],

@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 //use Spatie\Activitylog\Traits\LogsActivity;
 
-class Location extends Model
+class Owner extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $table = 'locations';
+    protected $table = 'owners';
 
     protected $fillable = [
         "name",
@@ -24,9 +24,9 @@ class Location extends Model
     protected static $logAttributes = ['*'];
     protected static $logAttributesToIgnore = ['created_at', 'updated_at'];
     protected static $logOnlyDirty = true;
-    protected static $logName = 'Location';
+    protected static $logName = 'Owner';
 
-    
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults();
@@ -34,6 +34,6 @@ class Location extends Model
 
     public function vehicles()
     {
-        return $this->hasMany(Vehicle::class, 'point_of_loading_id', 'id');
+        return $this->hasMany(Vehicle::class, 'owner_id', 'id');
     }
 }

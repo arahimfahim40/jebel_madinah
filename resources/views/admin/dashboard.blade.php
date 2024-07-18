@@ -74,12 +74,10 @@
                   <thead>
                     <tr>
                       <th>#</th>
-                      <th>Location Name</th>
-                      <th>Pending</th>
+                      <th>Owner Name</th>
                       <th>On The Way</th>
-                      <th>On Hand No Title</th>
-                      <th>On Hand With Title</th>
-                      <th>Shipped</th>
+                      <th>Inventory</th>
+                      <th>Sold</th>
                       <th>Total</th>
                     </tr>
                   </thead>
@@ -87,40 +85,25 @@
                     @foreach ($vehicleSummary as $index => $vehicle)
                       <tr>
                         <td>{{ $index + 1 }}</td>
-                        <td>{{ $vehicle->location_name ? $vehicle->location_name : 'Unknown' }}</td>
+                        <td>{{ $vehicle->owner_name ? $vehicle->owner_name : 'Unknown' }}</td>
                         <td>
-                          <a
-                            href="{{ route('vehicles.index') }}?status=pending&location_id={{ $vehicle->point_of_loading_id }}">
-                            {{ $vehicle->pending }}
-                          </a>
-                        </td>
-                        <td>
-                          <a
-                            href="{{ route('vehicles.index') }}?status=on_the_way&location_id={{ $vehicle->point_of_loading_id }}">
+                          <a href="{{ route('vehicles.index') }}?status=on_the_way&owner_id={{ $vehicle->owner_id }}">
                             {{ $vehicle->on_the_way }}
                           </a>
                         </td>
                         <td>
-                          <a
-                            href="{{ route('vehicles.index') }}?status=on_hand_no_title&location_id={{ $vehicle->point_of_loading_id }}">
-                            {{ $vehicle->on_hand_no_title }}
+                          <a href="{{ route('vehicles.index') }}?status=inventory&owner_id={{ $vehicle->owner_id }}">
+                            {{ $vehicle->inventory }}
                           </a>
                         </td>
                         <td>
-                          <a
-                            href="{{ route('vehicles.index') }}?status=on_hand_with_title&location_id={{ $vehicle->point_of_loading_id }}">
-                            {{ $vehicle->on_hand_with_title }}
-                          </a>
-                        </td>
-                        <td>
-                          <a
-                            href="{{ route('vehicles.index') }}?status=shipped&location_id={{ $vehicle->point_of_loading_id }}">
-                            {{ $vehicle->shipped }}
+                          <a href="{{ route('vehicles.index') }}?status=sold&owner_id={{ $vehicle->owner_id }}">
+                            {{ $vehicle->sold }}
                           </a>
                         </td>
                         <th>
-                          <a href="{{ route('vehicles.index') }}?location_id={{ $vehicle->point_of_loading_id }}">
-                            {{ $vehicle->pending + $vehicle->on_the_way + $vehicle->on_hand_no_title + $vehicle->on_hand_with_title + $vehicle->shipped }}
+                          <a href="{{ route('vehicles.index') }}?owner_id={{ $vehicle->owner_id }}">
+                            {{ $vehicle->on_the_way + $vehicle->inventory + $vehicle->sold }}
                           </a>
                         </th>
                       </tr>
@@ -130,33 +113,23 @@
                     <tr>
                       <th colspan="2">Total</th>
                       <th>
-                        <a href="{{ route('vehicles.index') }}?status=pending">
-                          {{ $vehicleSummary->sum('pending') }}
-                        </a>
-                      </th>
-                      <th>
                         <a href="{{ route('vehicles.index') }}?status=on_the_way">
                           {{ $vehicleSummary->sum('on_the_way') }}
                         </a>
                       </th>
                       <th>
-                        <a href="{{ route('vehicles.index') }}?status=on_hand_no_title">
-                          {{ $vehicleSummary->sum('on_hand_no_title') }}
+                        <a href="{{ route('vehicles.index') }}?status=inventory">
+                          {{ $vehicleSummary->sum('inventory') }}
                         </a>
                       </th>
                       <th>
-                        <a href="{{ route('vehicles.index') }}?status=on_hand_with_title">
-                          {{ $vehicleSummary->sum('on_hand_with_title') }}
-                        </a>
-                      </th>
-                      <th>
-                        <a href="{{ route('vehicles.index') }}?status=shipped">
-                          {{ $vehicleSummary->sum('shipped') }}
+                        <a href="{{ route('vehicles.index') }}?status=sold">
+                          {{ $vehicleSummary->sum('sold') }}
                         </a>
                       </th>
                       <th>
                         <a href="{{ route('vehicles.index') }}">
-                          {{ $vehicleSummary->sum('pending') + $vehicleSummary->sum('on_the_way') + $vehicleSummary->sum('on_hand_no_title') + $vehicleSummary->sum('on_hand_with_title') + $vehicleSummary->sum('shipped') }}
+                          {{ $vehicleSummary->sum('on_the_way') + $vehicleSummary->sum('inventory') + $vehicleSummary->sum('sold') }}
                         </a>
                       </th>
                     </tr>

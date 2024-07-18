@@ -4,13 +4,13 @@ use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\InvoiceController;
 use App\Http\Controllers\Admin\InvoicePaymentController;
 use App\Http\Controllers\Admin\VehicleController;
-use App\Http\Controllers\Admin\LocationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\auth\AuthController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\HomeController;
+use App\Http\Controllers\Admin\OwnerController;
 
 Route::middleware('auth:user')->group(function () {
 
@@ -21,9 +21,9 @@ Route::middleware('auth:user')->group(function () {
     Route::get('admin/dashboard', [HomeController::class, 'index'])->name('user.home.index')->middleware(['can:dashboard-view']);
 
     // user section 
-    Route::get('admin/users', [UserController::class,'index'])->name('users.index')->middleware(['can:user-view']);
-    Route::get('admin/users/create', [UserController::class,'create'])->name('users.create')->middleware(['can:user-create']);
-    Route::post('admin/users/store', [UserController::class,'store'])->name('users.store')->middleware(['can:user-create']);
+    Route::get('admin/users', [UserController::class, 'index'])->name('users.index')->middleware(['can:user-view']);
+    Route::get('admin/users/create', [UserController::class, 'create'])->name('users.create')->middleware(['can:user-create']);
+    Route::post('admin/users/store', [UserController::class, 'store'])->name('users.store')->middleware(['can:user-create']);
     Route::get('admin/users/edit/{id}', [UserController::class, 'edit'])->name('users.edit')->middleware(['can:user-edit']);
     Route::put('admin/users/update/{id}', [UserController::class, 'update'])->name('users.update')->middleware(['can:user-edit']);
     Route::get('admin/users/{id}', [UserController::class, 'show'])->name('users.show')->middleware(['can:user-view']);
@@ -40,28 +40,28 @@ Route::middleware('auth:user')->group(function () {
     Route::get('/admin/s2s_customers', [CustomerController::class, 's2s_customers'])->name('s2s_customers');
 
     // User Permissions
-    Route::get('admin/permissions', [PermissionController::class,'index'])->name('permissions.index')->middleware(['can:permission-view']);
+    Route::get('admin/permissions', [PermissionController::class, 'index'])->name('permissions.index')->middleware(['can:permission-view']);
 
     // User Roles
-    Route::get('admin/roles', [RoleController::class,'index'])->name('roles.index')->middleware(['can:role-view']);
-    Route::get('admin/roles/create', [RoleController::class,'create'])->name('roles.create')->middleware(['can:role-create']);
-    Route::post('admin/roles/store', [RoleController::class,'store'])->name('roles.store')->middleware(['can:role-create']);
+    Route::get('admin/roles', [RoleController::class, 'index'])->name('roles.index')->middleware(['can:role-view']);
+    Route::get('admin/roles/create', [RoleController::class, 'create'])->name('roles.create')->middleware(['can:role-create']);
+    Route::post('admin/roles/store', [RoleController::class, 'store'])->name('roles.store')->middleware(['can:role-create']);
     Route::get('/admin/roles/edit/{id}', [RoleController::class, 'edit'])->name('roles.edit')->middleware(['can:role-edit']);
     Route::put('/admin/roles/update/{id}', [RoleController::class, 'update'])->name('roles.update')->middleware(['can:role-edit']);
     Route::get('/admin/roles/{id}', [RoleController::class, 'show'])->name('roles.show')->middleware(['can:role-view']);
-    
+
     Route::get('/admin_sidebar_count', [HomeController::class, 'admin_sidebar_count'])->name('admin_sidebar_count');
     Route::get('/admin_sidebar_sub_count',  [HomeController::class, 'admin_sidebar_sub_count'])->name('admin_sidebar_sub_count');
 
-    // Locations Routes
-    Route::get('/admin/locations', [LocationController::class, 'index'])->name('locations.index')->middleware(['can:location-view']);
-    Route::get('/admin/locations/create', [LocationController::class, 'create'])->name('locations.create')->middleware(['can:location-create']);
-    Route::post('/admin/locations', [LocationController::class, 'store'])->name('locations.store')->middleware(['can:location-create']);
-    Route::get('/admin/locations/{id}', [LocationController::class, 'show'])->name('locations.show')->middleware(['can:location-view']);
-    Route::get('/admin/locations/{id}/edit', [LocationController::class, 'edit'])->name('locations.edit')->middleware(['can:location-edit']);
-    Route::put('/admin/locations/{id}', [LocationController::class, 'update'])->name('locations.update')->middleware(['can:location-edit']);
-    Route::delete('/admin/locations/{id}', [LocationController::class, 'destroy'])->name('locations.destroy')->middleware(['can:location-delete']);
-    
+    // Owners Routes
+    Route::get('/admin/owners', [OwnerController::class, 'index'])->name('owners.index')->middleware(['can:owner-view']);
+    Route::get('/admin/owners/create', [OwnerController::class, 'create'])->name('owners.create')->middleware(['can:owner-create']);
+    Route::post('/admin/owners', [OwnerController::class, 'store'])->name('owners.store')->middleware(['can:owner-create']);
+    Route::get('/admin/owners/{id}', [OwnerController::class, 'show'])->name('owners.show')->middleware(['can:owner-view']);
+    Route::get('/admin/owners/{id}/edit', [OwnerController::class, 'edit'])->name('owners.edit')->middleware(['can:owner-edit']);
+    Route::put('/admin/owners/{id}', [OwnerController::class, 'update'])->name('owners.update')->middleware(['can:owner-edit']);
+    Route::delete('/admin/owners/{id}', [OwnerController::class, 'destroy'])->name('owners.destroy')->middleware(['can:owner-delete']);
+
     // Vehicles Routes
     Route::get('/admin/vehicles', [VehicleController::class, 'index'])->name('vehicles.index')->middleware(['can:vehicle-view']);
     Route::get('/admin/vehicles/create', [VehicleController::class, 'create'])->name('vehicles.create')->middleware(['can:vehicle-create']);
@@ -71,7 +71,7 @@ Route::middleware('auth:user')->group(function () {
     Route::put('/admin/vehicles/{vehicle}', [VehicleController::class, 'update'])->name('vehicles.update')->middleware(['can:vehicle-edit']);
     Route::delete('/admin/vehicles/{vehicle}', [VehicleController::class, 'destroy'])->name('vehicles.destroy')->middleware(['can:vehicle-delete']);
 
-    
+
     Route::post('/admin/vehicles_change_status', [VehicleController::class, 'change_status'])->name('vehicles.change_status')->middleware(['can:vehicle-change-status']);
     Route::get('/admin/vehicles_cost_analysis', [VehicleController::class, 'cost_analysis'])->name('vehicles.cost_analysis')->middleware(['can:vehicle-view']);
     Route::get('/admin/vehicles_summary', [VehicleController::class, 'summary'])->name('vehicles.summary')->middleware(['can:vehicle-view']);
@@ -96,5 +96,4 @@ Route::middleware('auth:user')->group(function () {
     Route::get('/admin/invoice_payments/{invoice_payment}/edit', [InvoicePaymentController::class, 'edit'])->name('invoice_payments.edit');
     Route::put('/admin/invoice_payments/{id}', [InvoicePaymentController::class, 'update'])->name('invoice_payments.update');
     Route::delete('/invoice_payments/{id}', [InvoicePaymentController::class, 'destroy'])->name('invoice_payments.destroy');
-
 });

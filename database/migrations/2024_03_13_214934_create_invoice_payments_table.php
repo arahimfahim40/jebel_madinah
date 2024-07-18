@@ -14,12 +14,10 @@ return new class extends Migration
         Schema::create('invoice_payments', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('invoice_id')->nullable()->comment('reference to invoices');
-            $table->tinyInteger('payment_times')->nullable()->comment('this is for tracking how many times customer paid');
             $table->double('payment_amount', 40)->nullable();
             $table->timestamp('payment_date')->nullable()->useCurrent();
             $table->string('evidence_link')->nullable();
             $table->text('description')->nullable();
-            $table->double('discount', 10)->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->unsignedBigInteger('created_by')->nullable();
