@@ -80,6 +80,7 @@
       </div>
     </div>
   </div>
+
   <div class="site-content">
     <div class="content-area py-1">
       <div class="container-fluid">
@@ -90,13 +91,19 @@
             <div class="form-group col-md-3 col-lg-3 col-sm-6 col-xs-12">
               <input type="text" name="search" class="form-control b-a" placeholder="Search for ..." id="search">
             </div>
-            @can('vehicle-change-status')
-              <div class="form-group col-md-2">
-                <button class="btn btn-info" style="float: left; border-radius: 5px;" onclick="changeStatus()">
+            <div class="form-group col-md-4">
+              @can('vehicle-change-status')
+                <button class="btn btn-info" style="float: left; border-radius: 5px; margin-right: 10px;"
+                  onclick="changeStatus()">
                   <i class="fa fa-info-circle"></i> Change Status
                 </button>
-              </div>
-            @endcan
+              @endcan
+              @can('vehicle-change-status')
+                <button class="btn btn-success" style="float: left; border-radius: 5px;" onclick="vehicleSell()">
+                  <i class="fa fa-dollar"></i> Sell
+                </button>
+              @endcan
+            </div>
 
             <div class="form-group col-md-1 col-lg-1 col-sm-2 col-xs-12" style="float:right;">
               <select class="form-control" id="showEntry">
