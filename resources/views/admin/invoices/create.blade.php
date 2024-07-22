@@ -62,61 +62,14 @@
               action="{{ route('invoices.store') }}" onsubmit="return validateForm()">
               @csrf
               <div>
-                {{-- <h2>
-                                <span class="step-icon"><i class="ti-receipt"></i></span>
-                                <span class="step-text">Invoice Details</span>
-                            </h2> --}}
                 <section style="padding: 10px;">
                   <div class="inner">
                     <div class="row">
                       <div class="col-md-12 px-0">
-                        <div class="col-md-6 form-group">
+                        <div class="col-md-4 form-group">
                           <label class="required">Select Customer</label>
                           <select onchange="onCustomerChange(this)" name="customer_id" class="form-control s2s_customers"
                             required></select>
-                        </div>
-                        <div class="col-md-6 form-group">
-                          <label class="required">Status</label>
-                          <select name="status" class="form-control">
-                            <option value="">-- Select Status --</option>
-                            <option value="open">Open</option>
-                            <option value="pending">Pending</option>
-                            <option value="past_due">Past Due</option>
-                            <option value="paid">paid</option>
-                          </select>
-                        </div>
-                      </div>
-                      <div class="col-md-12 px-0">
-                        <div class="col-md-12 form-group">
-                          <input type="hidden" name="vehicles" value="" />
-                          <label for="VehicleSelect">Vehicle</label>
-                          <div class="input-group">
-                            <select id='VehicleSelect' class="form-control" aria-describedby="basic-addon2">
-                            </select>
-                            <span class="input-group-btn">
-                              <button id="basic-addon2" onclick="addVehicleToList()"
-                                class="btn btn-success bootstrap-touchspin-up" type="button">
-                                Add <i class="fa fa-plus"></i>
-                              </button>
-                            </span>
-                          </div>
-                          <div class="card mt-1">
-                            <h5 class="card-header">List Of Vehicles<label class="required"></label></h5>
-
-                            <div class="card-body">
-                              <ul class="vehicle_list list-group m-1"> No item in list</ul>
-                            </div>
-                          </div>
-                          @error('vehicles')
-                            <span class="text-danger">{{ $message }}</span>
-                          @enderror
-                        </div>
-                      </div>
-                      <div class="col-md-12 px-0">
-                        <div class="col-md-4 form-group">
-                          <label class="required">Move To Open Date</label>
-                          <input type="date" name="move_to_open_date" placeholder="Move To Open Date"
-                            class="form-control" required />
                         </div>
                         <div class="col-md-4 form-group">
                           <label class="required">Invoice Date</label>
@@ -128,7 +81,6 @@
                           <input type="date" name="invoice_due_date" placeholder="Due Date" class="form-control"
                             required />
                         </div>
-
                       </div>
                       <div class="col-md-12 px-0">
                         <div class="col-md-4 form-group">
@@ -142,6 +94,49 @@
                           <input type="number" name="discount" placeholder="Discount" class="form-control"
                             value="0" />
                         </div>
+                      </div>
+
+
+                      <div class="col-md-6 form-group">
+                        <label>Add Vehicles</label>
+                        <div class="input-group">
+                          <select id="vehicles-select" class="form-control select2">
+                            <option value="">--- Select Vehicle ---</option>
+                            @foreach (array_diff(array_keys($allCharges), $vehicle->charges->pluck('name')->toArray()) as $charge)
+                              <option value="{{ $charge }}">{{ $allCharges[$charge] }} </option>
+                            @endforeach
+                          </select>
+                          <span class="input-group-btn">
+                            <button onclick="addNewChargeField(event, {{ $vehicle->id }}, {{ $index }})"
+                              class="btn btn-success bootstrap-touchspin-up" type="button">
+                              Add <i class="fa fa-plus"></i>
+                            </button>
+                          </span>
+                        </div>
+                      </div>
+                      <span id="vehicle-{{ $vehicle->id }}-charges">
+                        @foreach ($vehicle->charges as $charge)
+                          <div class="form-group col-md-12">
+                            <label for="{{ $charge->name }}">{{ $allCharges[$charge->name] }}</label>
+                            <div class="input-group">
+                              <div class="input-group-addon">Charge($)</div>
+                              <input type="number" step="any" oninput="changeChargeInput(this)"
+                                name="vehicles[{{ $index }}][{{ $charge->name }}]"
+                                id="{{ $charge->name }}" value="{{ @$charge->value }}"
+                                class="vehicle_charges form-control"
+                                placeholder="{{ $allCharges[$charge->name] }}" />
+                              <div class="input-group-addon">Cost($)</div>
+                              <input type="number" step="any"
+                                name="vehicles[{{ $index }}][{{ $charge->name . '_cost' }}]"
+                                id="{{ $charge->name . '_cost' }}" value="{{ @$charge->cost_value }}"
+                                class="form-control" placeholder="{{ $allCharges[$charge->name] }} Cost" />
+                            </div>
+                          </div>
+                        @endforeach
+                      </span>
+
+                      <div class="col-md-12 px-0">
+                        
                       </div>
                     </div>
                     <div class="row">
@@ -201,6 +196,52 @@
         form.submit();
       }
     });
+
+    function addNewChargeField(event, id, index) {
+      let select = $(`#vehicles-${id}-charge-select`);
+      if (select.val() != '') {
+        var fieldTitle = $(`#vehicles-${id}-charge-select option:selected`).html();
+        var newField = $('<div>', {
+          class: 'form-group col-md-12'
+        }).append(
+          $('<label>', {
+            for: select.val(),
+            text: fieldTitle
+          }),
+          $('<div>', {
+            class: 'input-group'
+          }).append(
+            $('<div>', {
+              class: 'input-group-addon',
+              text: 'Charge($)'
+            }),
+            $('<input>', {
+              type: 'number',
+              step: 'any',
+              name: `vehicles[${index}][${select.val()}]`,
+              class: 'vehicle_charges form-control',
+              oninput: 'changeChargeInput(this)',
+              placeholder: fieldTitle
+            }),
+            $('<div>', {
+              class: 'input-group-addon',
+              text: 'Cost($)'
+            }),
+            $('<input>', {
+              type: 'number',
+              step: 'any',
+              name: `vehicles[${index}][${select.val()}_cost]`,
+              class: 'form-control',
+              placeholder: fieldTitle + ' Cost'
+            })
+          )
+        );
+
+        $(`#vehicle-${id}-charges`).append(newField);
+        $(`#vehicles-${id}-charge-select option[value="${select.val()}"]`).remove();
+      }
+
+    }
 
     // Add vehicle to the list
     function addVehicleToList() {
