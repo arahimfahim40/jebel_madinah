@@ -81,6 +81,64 @@
     </div>
   </div>
 
+  <!-- Change Status modal -->
+  <div class="modal fade modal" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true"
+    id="vehicle_sell_modal">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+          <h4 class="modal-title">Sell Vehicles</h4>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="col-md-12 form-group">
+                <label class="required">Select Customer</label>
+                <select onchange="onCustomerChange(this)" name="customer_id" class="form-control s2s_customers"
+                  required></select>
+              </div>
+              <div class="col-md-12 form-group">
+                <label class="required">Invoice Date</label>
+                <input type="date" name="invoice_date" placeholder="Invoice Date" class="form-control"
+                  required />
+              </div>
+              <div class="col-md-12 form-group">
+                <label class="required">Due Date</label>
+                <input type="date" name="invoice_due_date" placeholder="Due Date" class="form-control"
+                  required />
+              </div>
+  
+              <div class="col-md-12 form-group">
+                <label>Discount</label>
+                <input type="number" name="discount" placeholder="Discount" class="form-control"
+                  value="0" />
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              
+            </div>
+
+            <div class="col-md-12">
+              <div class="col-md-12 form-group">
+                <label>Description</label>
+                <textarea name="description" placeholder="Description" rows="6" class="form-control"></textarea>
+              </div>
+            </div>
+
+          </div>
+          <div class="modal-footer" style="text-align:center !important;">
+            <button type="button" class="btn btn-primary btn-rounded" onclick="submitForm()">Change</button>
+            <button type="button" class="btn btn-danger btn-rounded" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="site-content">
     <div class="content-area py-1">
       <div class="container-fluid">
@@ -207,6 +265,25 @@
         });
       } else {
         $('#vehicle_change_status_modal').modal('show');
+      }
+    }
+
+    function vehicleSell() {
+      var selectedVehicleIds = [];
+      $(".checkbox:checked").each(function() {
+        selectedVehicleIds.push($(this).attr('data-id'));
+      });
+
+      if (selectedVehicleIds.length <= 0) {
+        Swal.fire({
+          position: 'center',
+          icon: 'info',
+          title: "Please select atleast one record to change the status.",
+          showConfirmButton: false,
+          timer: 4000
+        });
+      } else {
+        $('#vehicle_sell_modal').modal('show');
       }
     }
 
