@@ -14,12 +14,10 @@ class InvoicePayment extends Model
 
     protected $fillable = [
         'invoice_id',
-        'payment_times',
         'payment_amount',
         'payment_date',
         'evidence_link',
         'description',
-        'discount',
         'created_by',
         'updated_by',
         'deleted_by',

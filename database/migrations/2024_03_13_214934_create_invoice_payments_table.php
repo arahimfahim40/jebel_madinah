@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('invoice_id')->nullable()->comment('reference to invoices');
             $table->double('payment_amount', 40)->nullable();
-            $table->timestamp('payment_date')->nullable()->useCurrent();
+            $table->date('payment_date')->nullable();
             $table->string('evidence_link')->nullable();
             $table->text('description')->nullable();
             $table->timestamps();

@@ -99,6 +99,14 @@
           </ul>
         </li>
       @endcan
+      @can('customer-report-view')
+        <li>
+          <a href="{{ route('customers.reports.list') }}" class="waves-effect  waves-light">
+            <span class="s-icon"><i class="ti-file"></i></span>
+            <span class="s-text">Customer Report</span>
+          </a>
+        </li>
+      @endcan
       @can('user-view')
         <li>
           <a href="{{ route('users.index') }}" class="waves-effect  waves-light">

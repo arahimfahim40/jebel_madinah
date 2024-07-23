@@ -34,12 +34,10 @@ class InvoicePaymentController extends Controller
     {
         $request->validate([
             'invoice_id' => 'required|exists:invoices,id',
-            'payment_times' => 'nullable|integer',
             'payment_amount' => 'required|numeric',
             'payment_date' => 'required|date',
             'evidence_link' => 'nullable|string',
-            'discount' => 'required|numeric',
-            'description'=> 'nullable|string'
+            'description' => 'nullable|string'
         ]);
 
         try {
@@ -48,12 +46,10 @@ class InvoicePaymentController extends Controller
 
             $payment = InvoicePayment::create([
                 'invoice_id' => $request->invoice_id,
-                'payment_times' => $request->payment_times,
                 'payment_amount' => $request->payment_amount,
                 'payment_date' => $request->payment_date,
                 'evidence_link' => $request->evidence_link,
                 'description' => $request->description,
-                'discount' => $request->discount,
                 'created_by' => $user->id,
             ]);
 
@@ -94,7 +90,7 @@ class InvoicePaymentController extends Controller
             'payment_amount' => 'required|numeric',
             'payment_date' => 'required|date',
             'evidence_link' => 'nullable|string',
-            'description'=> 'nullable|string',
+            'description' => 'nullable|string',
             'discount' => 'required|numeric'
         ]);
 

@@ -15,26 +15,53 @@ use Str;
 
 class InvoiceController extends Controller
 {
+
+    private static $searchColumns = [
+        'id',
+        'description',
+        'vehicles.vin',
+        'vehicles.lot_number',
+        'customer.name'
+    ];
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $paginate = $request->paginate ? $request->paginate : 10;
+        $paginate = $request->paginate ? $request->paginate : 20;
         $status = in_array($request->status, Invoice::INVOICE_STATUS) ? $request->status : '';
 
-        $invoices = Invoice::with('customer:id,name')
-        ->when(!empty($status), function ($q) use ($status) {
-            $q->where('status', $status);
-        })
-        ->orderBy('created_at', 'desc')
-        ->paginate($paginate);
+        $invoices = Invoice::with('customer:id,name', 'vehicles', 'payments')
+            ->when(!empty($status), function ($q) use ($status) {
+                $q->where('status', $status);
+            })
+            ->when(!empty($request->searchValue), function ($q) use ($request) {
+                $q->where(function ($query) use ($request) {
+                    foreach (self::$searchColumns as $value) {
+                        $fields = explode('.', $value);
+                        $searchQuery = $request->searchValue;
+                        if (count($fields) == 1) {
+                            if ($value == 'id') {
+                                $search = preg_replace('/[^0-9.]+/', '', $searchQuery);
+                                $query->where($value, '=', $search);
+                            } else {
+                                $query->orWhere($value, 'LIKE', "%$searchQuery%");
+                            }
+                        } elseif (count($fields) == 2) {
+                            $query->orWhereHas($fields[0], function ($q2) use ($fields, $searchQuery) {
+                                $q2->where($fields[1], 'LIKE', "%$searchQuery%");
+                            });
+                        }
+                    }
+                });
+            })
+            ->orderBy('id', 'desc')
+            ->paginate($paginate);
         if ($request->ajax()) {
-          return view('admin.invoices.data', compact('invoices', 'status', 'paginate'));
+            return view('admin.invoices.data', compact('invoices', 'status', 'paginate'));
         }
-        
-        return view('admin.invoices.list', compact('invoices', 'status', 'paginate'));
 
+        return view('admin.invoices.list', compact('invoices', 'status', 'paginate'));
     }
 
     /**
@@ -42,7 +69,12 @@ class InvoiceController extends Controller
      */
     public function create()
     {
-        return view('admin.invoices.create');
+        $vehicles = Vehicle::whereIn('status', ['on_the_way', 'inventory'])
+            ->whereNull('invoice_id')
+            ->select('id', 'vin', 'lot_number', 'sold_price', 'year', 'make', 'model', 'color')
+            ->get();
+
+        return view('admin.invoices.create', compact('vehicles'));
     }
 
     /**
@@ -52,39 +84,32 @@ class InvoiceController extends Controller
     {
         $request->validate([
             'customer_id' => 'required|exists:customers,id',
-            'status' => 'required|in:open,pending,past_due,paid',
-            'exchange_rate' => 'nullable|numeric',
             'discount' => 'nullable|numeric',
-            'invoice_date' => 'required|date',
-            'move_to_open_date' => 'required|date',
-            'invoice_due_date' => 'required|date',
-            'vehicles' => 'required|string',
+            'vehicles' => 'required|array',
         ]);
 
         try {
             DB::beginTransaction();
             $user = Auth::user();
-
             // Retrieve the filtered data from the request
             $filteredData = $request->only([
                 'customer_id',
-                'exchange_rate',
-                'move_to_open_date',
                 'invoice_date',
                 'invoice_due_date',
-                'status',
                 'discount',
                 'description',
             ]);
+            $filteredData['status'] = 'pending';
 
             $filteredData['created_by'] = $user->id;
             $invoice = Invoice::create($filteredData);
 
-            $vehicles = explode(',', $request->vehicles);
-            foreach ($vehicles as $vehicleId) {
-                $vehicle = Vehicle::findOrFail($vehicleId);
-                $vehicle->invoice()->associate($invoice);
-                $vehicle->save();
+            foreach ($request->vehicles as $id => $soldPrice) {
+                Vehicle::where('id', $id)->update([
+                    'sold_price' => $soldPrice,
+                    'invoice_id' => $invoice->id,
+                    'status' => 'sold'
+                ]);
             }
 
             DB::commit();
@@ -113,16 +138,12 @@ class InvoiceController extends Controller
      */
     public function edit(string $id)
     {
-        $invoice = Invoice::find($id);
+        $invoice = Invoice::with('vehicles')->find($id);
         $customers = Customer::get();
-        $vehicles = [];
-        
-        if ($invoice->vehicles()->exists()) {
-            $vehicles = $invoice->vehicles()
-                ->select(DB::raw('CONCAT(vin, \' | \', lot_number) as text'), 'id')
-                ->pluck('text', 'id')
-                ->toArray();
-        }
+        $vehicles = Vehicle::whereIn('status', ['on_the_way', 'inventory'])
+            ->whereNull('invoice_id')
+            ->select('id', 'vin', 'lot_number', 'sold_price', 'year', 'make', 'model', 'color')
+            ->get();
 
         return view('admin.invoices.edit', compact('invoice', 'customers', 'vehicles'));
     }
@@ -134,13 +155,9 @@ class InvoiceController extends Controller
     {
         $request->validate([
             'customer_id' => 'required|exists:customers,id',
-            'status' => 'required|in:open,pending,past_due,paid',
-            'exchange_rate' => 'nullable|numeric',
             'discount' => 'nullable|numeric',
             'invoice_date' => 'required|date',
-            'move_to_open_date' => 'required|date',
-            'invoice_due_date' => 'required|date',
-            'vehicles' => 'required|string',
+            'vehicles' => 'required|array',
         ]);
 
         try {
@@ -149,11 +166,8 @@ class InvoiceController extends Controller
 
             $filteredData = $request->only([
                 'customer_id',
-                'exchange_rate',
-                'move_to_open_date',
                 'invoice_date',
                 'invoice_due_date',
-                'status',
                 'discount',
                 'description',
             ]);
@@ -163,14 +177,19 @@ class InvoiceController extends Controller
             $invoice = Invoice::findOrFail($id);
             $invoice->update($filteredData);
 
-            Vehicle::where('invoice_id', $invoice->id)->update(['invoice_id' => null]);
-
-            $vehicles = explode(',', $request->vehicles);
-            foreach ($vehicles as $vehicleId) {
-                $vehicle = Vehicle::findOrFail($vehicleId);
-                $vehicle->invoice()->associate($invoice);
-                $vehicle->save();
+            foreach ($request->vehicles as $vehicleId => $soldPrice) {
+                Vehicle::where('id', $vehicleId)
+                    ->update(['sold_price' => $soldPrice, 'invoice_id' => $invoice->id, 'status' => 'sold']);
             }
+
+            // Unlink vehicles not included in the request
+            $invoice->vehicles()
+                ->whereNotIn('id', array_keys($request->vehicles))
+                ->update([
+                    'invoice_id' => null,
+                    'sold_price' => null,
+                    'status' => 'inventory'
+                ]);
 
             DB::commit();
 
@@ -187,64 +206,35 @@ class InvoiceController extends Controller
      */
     public function destroy(string $id)
     {
-        $user = Auth::user();
-        try{
-            Invoice::where('id',$id)->update(['deleted_by' => $user->id]);
-            Invoice::find($id)->delete();
-            return redirect()->route('invoices.index')->with('success', 'Deleted successfully!');
-        } catch(\Exception $ex) {
+        try {
+            // Find the invoice
+            $invoice = Invoice::findOrFail($id);
+
+            // Unlink the vehicles
+            $invoice->vehicles()->update([
+                'invoice_id' => null,
+                'sold_price' => null,
+                'status' => 'inventory'
+            ]);
+
+            $invoice->update(['deleted_by' => auth()->id()]);
+            // Delete the invoice
+            $invoice->delete();
+            return redirect()->route('invoices.index')->with('success', 'Invoice deleted successfully!');
+        } catch (\Exception $ex) {
             return redirect()->route('invoices.show', ['id' => $id])->with('error', 'Something went wrong, cannot delete the user.');
         }
     }
 
-    public function get_vehicles_open_of_customer(Request $request)
-{
-    try {
-        // Validate request ID
-        if (!$request->has('id')) {
-            return response()->json(['error' => 'Customer ID is required.'], 400);
-        }
-
-        // Retrieve the customer by ID
-        $customer = Customer::findOrFail($request->id);
-
-        // Fetch customer vehicles with specified fields
-        $customerVehicles = $customer->vehicles()->select([
-            'id',
-            'auction_fee_charge',
-            'storage_charge',
-            'towing_charge',
-            'dismantal_charge',
-            'shiping_charge',
-            'custom_charge',
-            'demurage_charge',
-            'other_charge',
-            'lot_number',
-            'vin'
-        ])->get();
-
-        // Return the vehicles as JSON
-        return response()->json($customerVehicles);
-    } catch (\Exception $e) {
-        // Log the error message for debugging
-        Log::error('Failed to retrieve customer vehicles.', [
-            'error' => $e->getMessage(),
-            'trace' => $e->getTraceAsString(), // Add stack trace for more detailed debugging
-        ]);
-
-        // Return error response
-        return response()->json(['error' => 'Failed to retrieve customer vehicles.'], 500);
-    }
-}
 
     public function invoice_pdf(Request $request, $id)
     {
         try {
-            
+
             $invoice = Invoice::with('payments')->find($id);
             $payments =  $invoice->payments;
             // dd($invoice);
-            $pdf = PDF::loadView('admin.invoices.invoice_pdf', compact('invoice', 'payments'), ['format' => ['A4', 190, 236]]); 
+            $pdf = PDF::loadView('admin.invoices.invoice_pdf', compact('invoice', 'payments'), ['format' => ['A4', 190, 236]]);
             $file_name = Str::slug($invoice->customer->name  . '_' . sprintf("ALSMS%'.04d\n", @$id));
             return $pdf->download($file_name . '.pdf');
         } catch (\Throwable $th) {
@@ -262,7 +252,7 @@ class InvoiceController extends Controller
             if (!$invoice) {
                 return response()->json(['status' => 'error', 'message' => 'Invoice not found'], 404);
             }
- 
+
             return view('admin.invoices.invoice_pdf', ['invoice' => $invoice, 'payments' => $invoice->payments]);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -271,5 +261,4 @@ class InvoiceController extends Controller
             return response()->json($response, 500);
         }
     }
-
 }

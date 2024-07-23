@@ -50,6 +50,7 @@
     <div class="content-area py-1">
       <div class="container-fluid">
         <div class=" bg-white table-responsive">
+          @include('errors')
 
           {{-- <div class="site pt-2">
                     <div id="filter_form">
@@ -94,7 +95,6 @@
           </div>
           <div class="form-group col-md-1 col-lg-1 col-sm-2 col-xs-12" style="margin:1%;float: right;">
             <select class="form-control" id="showEntry">
-              <option value="10">10</option>
               <option value="20">20</option>
               <option value="50">50</option>
               <option value="100">100</option>
@@ -109,7 +109,7 @@
             </div>
           </div>
           @include('admin.invoices.payment_form')
-          @include('admin.invoices.payment_edit')
+          {{-- @include('admin.invoices.payment_edit') --}}
           <div class="site table-responsive" id="user_data">
             @include('admin.invoices.data')
           </div>

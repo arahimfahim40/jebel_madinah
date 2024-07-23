@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\CustomerReportController;
 use App\Http\Controllers\Admin\InvoiceController;
 use App\Http\Controllers\Admin\InvoicePaymentController;
 use App\Http\Controllers\Admin\VehicleController;
@@ -96,4 +97,9 @@ Route::middleware('auth:user')->group(function () {
     Route::get('/admin/invoice_payments/{invoice_payment}/edit', [InvoicePaymentController::class, 'edit'])->name('invoice_payments.edit');
     Route::put('/admin/invoice_payments/{id}', [InvoicePaymentController::class, 'update'])->name('invoice_payments.update');
     Route::delete('/invoice_payments/{id}', [InvoicePaymentController::class, 'destroy'])->name('invoice_payments.destroy');
+
+    // invoice customer reporting
+    Route::get('/admin/reports/customer_list', [CustomerReportController::class, 'list'])->name('customers.reports.list');
+    Route::get('/admin/reports/customer_view/{customer_id}', [CustomerReportController::class, 'view'])->name('customers.reports.view');
+    Route::get('/admin/reports/customer_pdf/{customer_id}', [CustomerReportController::class, 'pdf'])->name('customers.reports.pdf');
 });

@@ -14,11 +14,10 @@ class Invoice extends Model
     //protected $connection = 'mysql';
     protected $table = 'invoices';
 
-    const INVOICE_STATUS = ['pending','open','past_due','paid'];
+    const INVOICE_STATUS = ['pending', 'open', 'past_due', 'paid'];
 
     protected $fillable = [
         "customer_id",
-        "exchange_rate",
         "invoice_date",
         "invoice_due_date",
         "status",
@@ -35,7 +34,7 @@ class Invoice extends Model
     protected static $logOnlyDirty = true;
     protected static $logName = 'pgl';
 
-    
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults();

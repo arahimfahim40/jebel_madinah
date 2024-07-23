@@ -31,8 +31,8 @@
     }
 
     /* .actions {
-                      display: none;
-                  } */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    display: none;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                } */
     #create-invoice-form ul {
       margin-bottom: 0px;
     }
@@ -62,33 +62,26 @@
               action="{{ route('invoices.store') }}" onsubmit="return validateForm()">
               @csrf
               <div>
+                <h2 style="display: none;"></h2>
                 <section style="padding: 10px;">
                   <div class="inner">
                     <div class="row">
                       <div class="col-md-12 px-0">
                         <div class="col-md-4 form-group">
                           <label class="required">Select Customer</label>
-                          <select onchange="onCustomerChange(this)" name="customer_id" class="form-control s2s_customers"
-                            required></select>
+                          <select name="customer_id" class="form-control s2s_customers" required></select>
                         </div>
                         <div class="col-md-4 form-group">
                           <label class="required">Invoice Date</label>
                           <input type="date" name="invoice_date" placeholder="Invoice Date" class="form-control"
-                            required />
+                            value="{{ old('invoice_date', now()->format('Y-m-d')) }}" required />
                         </div>
                         <div class="col-md-4 form-group">
-                          <label class="required">Due Date</label>
-                          <input type="date" name="invoice_due_date" placeholder="Due Date" class="form-control"
-                            required />
+                          <label>Due Date</label>
+                          <input type="date" name="invoice_due_date" placeholder="Due Date" class="form-control" />
                         </div>
                       </div>
                       <div class="col-md-12 px-0">
-                        <div class="col-md-4 form-group">
-                          <label class="required">Exchange Rate</label>
-                          <input type="number" name="exchange_rate" placeholder="Exchange Rate" class="form-control"
-                            required />
-                        </div>
-
                         <div class="col-md-4 form-group">
                           <label>Discount</label>
                           <input type="number" name="discount" placeholder="Discount" class="form-control"
@@ -96,47 +89,48 @@
                         </div>
                       </div>
 
+                      <div class="col-md-6 px-0">
 
-                      <div class="col-md-6 form-group">
-                        <label>Add Vehicles</label>
-                        <div class="input-group">
-                          <select id="vehicles-select" class="form-control select2">
-                            <option value="">--- Select Vehicle ---</option>
-                            @foreach (array_diff(array_keys($allCharges), $vehicle->charges->pluck('name')->toArray()) as $charge)
-                              <option value="{{ $charge }}">{{ $allCharges[$charge] }} </option>
-                            @endforeach
-                          </select>
-                          <span class="input-group-btn">
-                            <button onclick="addNewChargeField(event, {{ $vehicle->id }}, {{ $index }})"
-                              class="btn btn-success bootstrap-touchspin-up" type="button">
-                              Add <i class="fa fa-plus"></i>
-                            </button>
-                          </span>
-                        </div>
-                      </div>
-                      <span id="vehicle-{{ $vehicle->id }}-charges">
-                        @foreach ($vehicle->charges as $charge)
-                          <div class="form-group col-md-12">
-                            <label for="{{ $charge->name }}">{{ $allCharges[$charge->name] }}</label>
-                            <div class="input-group">
-                              <div class="input-group-addon">Charge($)</div>
-                              <input type="number" step="any" oninput="changeChargeInput(this)"
-                                name="vehicles[{{ $index }}][{{ $charge->name }}]"
-                                id="{{ $charge->name }}" value="{{ @$charge->value }}"
-                                class="vehicle_charges form-control"
-                                placeholder="{{ $allCharges[$charge->name] }}" />
-                              <div class="input-group-addon">Cost($)</div>
-                              <input type="number" step="any"
-                                name="vehicles[{{ $index }}][{{ $charge->name . '_cost' }}]"
-                                id="{{ $charge->name . '_cost' }}" value="{{ @$charge->cost_value }}"
-                                class="form-control" placeholder="{{ $allCharges[$charge->name] }} Cost" />
-                            </div>
+                        <div class="col-md-12 form-group">
+                          <label>Add Vehicles</label>
+                          <div class="input-group">
+                            <select id="vehicle-sold-price-select" class="form-control select2">
+                              <option value="">--- Select Vehicle ---</option>
+                              @foreach (@$vehicles as $item)
+                                <option value="{{ $item->id }}" data-sold_price="{{ $item->sold_price }}"
+                                  data-vin="{{ $item->vin }}"
+                                  data-description="{{ $item->year }} {{ $item->make }} {{ $item->model }} {{ $item->color }}">
+                                  {{ $item->year }} {{ $item->make }} {{ $item->model }} {{ $item->color }} |
+                                  {{ $item->vin }} | {{ $item->lot_number }}</option>
+                              @endforeach
+                            </select>
+                            <span class="input-group-btn">
+                              <button onclick="addNewVehicleSoldField(this)"
+                                class="btn btn-success bootstrap-touchspin-up" type="button">
+                                Add <i class="fa fa-plus"></i>
+                              </button>
+                            </span>
                           </div>
-                        @endforeach
-                      </span>
-
-                      <div class="col-md-12 px-0">
-                        
+                        </div>
+                        <span id="vehicle-sold-price-list">
+                          {{-- @foreach ([] as $charge)
+                            <div class="form-group col-md-12">
+                              <label for="{{ $charge->name }}">{{ $allCharges[$charge->name] }}</label>
+                              <div class="input-group">
+                                <div class="input-group-addon">Charge($)</div>
+                                <input type="number" step="any" oninput="changeChargeInput(this)"
+                                  name="vehicles[{{ $index }}][{{ $charge->name }}]" id="{{ $charge->name }}"
+                                  value="{{ @$charge->value }}" class="vehicle_charges form-control"
+                                  placeholder="{{ $allCharges[$charge->name] }}" />
+                                <div class="input-group-addon">Cost($)</div>
+                                <input type="number" step="any"
+                                  name="vehicles[{{ $index }}][{{ $charge->name . '_cost' }}]"
+                                  id="{{ $charge->name . '_cost' }}" value="{{ @$charge->cost_value }}"
+                                  class="form-control" placeholder="{{ $allCharges[$charge->name] }} Cost" />
+                              </div>
+                            </div>
+                          @endforeach --}}
+                        </span>
                       </div>
                     </div>
                     <div class="row">
@@ -168,12 +162,19 @@
 
   <script>
     var form = $("#create-invoice-form");
-    var vehiclesIds = new Map(Object.entries(<?= json_encode(old('vehicle_list') ?? []) ?>));
+    // Convert the keys to integers
+    var vehicles = new Map(
+      [...new Map(Object.entries(<?= json_encode($vehicles->toArray()) ?>)).entries()]
+      .map(([key, value]) => [parseInt(key), value])
+    );
+    var selectedVehicleIds = [];
+
     form.children("div").steps({
+      title: 'Add New Invoice',
       headerTag: "h2",
       bodyTag: "section",
       transitionEffect: "fade",
-      enableAllSteps: true,
+      enableAllSteps: false,
       autoFocus: true,
       transitionEffectSpeed: 500,
       titleTemplate: '<div class="title">#title#</div>',
@@ -197,138 +198,8 @@
       }
     });
 
-    function addNewChargeField(event, id, index) {
-      let select = $(`#vehicles-${id}-charge-select`);
-      if (select.val() != '') {
-        var fieldTitle = $(`#vehicles-${id}-charge-select option:selected`).html();
-        var newField = $('<div>', {
-          class: 'form-group col-md-12'
-        }).append(
-          $('<label>', {
-            for: select.val(),
-            text: fieldTitle
-          }),
-          $('<div>', {
-            class: 'input-group'
-          }).append(
-            $('<div>', {
-              class: 'input-group-addon',
-              text: 'Charge($)'
-            }),
-            $('<input>', {
-              type: 'number',
-              step: 'any',
-              name: `vehicles[${index}][${select.val()}]`,
-              class: 'vehicle_charges form-control',
-              oninput: 'changeChargeInput(this)',
-              placeholder: fieldTitle
-            }),
-            $('<div>', {
-              class: 'input-group-addon',
-              text: 'Cost($)'
-            }),
-            $('<input>', {
-              type: 'number',
-              step: 'any',
-              name: `vehicles[${index}][${select.val()}_cost]`,
-              class: 'form-control',
-              placeholder: fieldTitle + ' Cost'
-            })
-          )
-        );
-
-        $(`#vehicle-${id}-charges`).append(newField);
-        $(`#vehicles-${id}-charge-select option[value="${select.val()}"]`).remove();
-      }
-
-    }
-
-    // Add vehicle to the list
-    function addVehicleToList() {
-      const vehicleSelect = document.getElementById("VehicleSelect");
-      const selectedOption = vehicleSelect.options[vehicleSelect.selectedIndex];
-      const vehicleId = selectedOption.value;
-      const vehicleDetails = selectedOption.text;
-
-      if (vehicleId && !vehiclesIds.has(vehicleId)) {
-        vehiclesIds.set(vehicleId, vehicleDetails);
-        renderVehicleList();
-      }
-    }
-
-    function renderVehicleList() {
-      $("input[name=vehicles]").val(Array.from(vehiclesIds.keys()));
-      if (vehiclesIds.size == 0) {
-        $('.vehicle_list').html('No item in list');
-      } else {
-        $('.vehicle_list').html('');
-      }
-      console.log("vehiclesIds: ", vehiclesIds);
-      vehiclesIds.forEach((item, key) => {
-        $('.vehicle_list').append(`<li class="list-group-item px-1" >${item}
-        <button onClick="removeVehicle(${key})" class="close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-        </li>`);
-      });
-    }
-
-    function removeVehicle(id) {
-      vehiclesIds.delete(id.toString());
-      renderVehicleList();
-    }
-
-    function onCustomerChange(event) {
-      if (event.value) {
-        $.ajax({
-          url: "{{ route('get_vehicles_open_of_customer') }}",
-          method: 'GET',
-          data: {
-            id: event.value
-          },
-          success: function(response) {
-            renderVehicleOptions(response);
-          },
-          error: function(jqXHR, textStatus, errorThrown) {
-            Swal.fire("Error!", jqXHR.statusText, "error");
-            console.log("Error : " + jqXHR.responseText + " Status: " + textStatus + " Http error:" + errorThrown);
-          }
-        });
-      }
-    }
-
-    function renderVehicleOptions(vehicles) {
-      let selectOptions = '<option value="">Select Vehicle</option>';
-      vehicles.forEach(vehicle => {
-        // Check for null values and set to 0 if null
-        let auctionFeeCharge = parseFloat(vehicle.auction_fee_charge) || 0;
-        let storageCharge = parseFloat(vehicle.storage_charge) || 0;
-        let towingCharge = parseFloat(vehicle.towing_charge) || 0;
-        let dismantleCharge = parseFloat(vehicle.dismantal_charge) || 0;
-        let shippingCharge = parseFloat(vehicle.shiping_charge) || 0;
-        let customCharge = parseFloat(vehicle.custom_charge) || 0;
-        let demurrageCharge = parseFloat(vehicle.demurage_charge) || 0;
-        let otherCharge = parseFloat(vehicle.other_charge) || 0;
-
-        let totalCharges = auctionFeeCharge +
-          storageCharge +
-          towingCharge +
-          dismantleCharge +
-          shippingCharge +
-          customCharge +
-          demurrageCharge +
-          otherCharge;
-
-        selectOptions +=
-          `<option value="${vehicle.id}" data-total-charges="${totalCharges}">${vehicle.vin} | ${vehicle.lot_number}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$${totalCharges.toFixed(2)}</option>`;
-      });
-
-      $('#VehicleSelect').html(selectOptions);
-    }
-
-
     function validateForm() {
-      if (vehiclesIds.size === 0) {
+      if (selectedVehicleIds.size === 0) {
         alert('Please select at least one vehicle.');
         return false;
       }
@@ -340,6 +211,79 @@
       if (form.valid()) {
         form.submit();
       }
+    }
+
+    function addNewVehicleSoldField() {
+      let select = $(`#vehicle-sold-price-select`);
+      if (select.val() != '') {
+        var fieldTitle = $(`#vehicle-sold-price-select option:selected`).data('description');
+        var newField = $('<div>', {
+          class: `form-group col-md-12 vehicle-field-${select.val()}`
+        }).append(
+          $('<label>', {
+            for: select.val(),
+            text: fieldTitle
+          }),
+          $('<div>', {
+            class: 'input-group'
+          }).append(
+            $('<div>', {
+              class: 'input-group-addon',
+              text: 'Sold Price'
+            }),
+            $('<input>', {
+              type: 'number',
+              step: 'any',
+              name: `vehicles[${select.val()}]`,
+              class: 'vehicle_charges form-control',
+              placeholder: 'Enter Vehicle Sold Price',
+              value: select.data('sold_price')
+            }),
+            $('<span>', {
+              class: 'input-group-btn',
+              text: 'Cost($)'
+            }).append(
+              $('<button>', {
+                onclick: `removeVehicleSoldField(${select.val()})`,
+                type: "button",
+                class: "btn btn-danger bootstrap-touchspin-up",
+              })
+              .append(
+                $('<i>', {
+                  class: 'fa fa-trash' // Replace with the appropriate icon class
+                })
+              )
+            )
+            // $('<input>', {
+            //   type: 'number',
+            //   step: 'any',
+            //   name: `vehicles[${select.val()}_cost]`,
+            //   class: 'form-control',
+            //   placeholder: fieldTitle + ' Cost'
+            // })
+          )
+        );
+        selectedVehicleIds.push(select.val());
+
+        $(`#vehicle-sold-price-list`).append(newField);
+        $(`#vehicle-sold-price-select option[value="${select.val()}"]`).remove();
+      }
+    }
+
+    function removeVehicleSoldField(id) {
+      let select = $(`#vehicle-sold-price-select`);
+      $(`.vehicle-field-${id}`).remove();
+      selectedVehicleIds.pop(id);
+
+      // Find the object by id and set a new field
+      var vehicle = [...vehicles.values()].find(v => v.id == id);
+      select.append(
+        `<option data-sold_price="${vehicle.sold_price}"
+          data-vin="${vehicle.vin}"
+          data-description="${vehicle.year} ${vehicle.make} ${vehicle.model} ${vehicle.color}"
+          value="${vehicle.id}">${vehicle.year} ${vehicle.make} ${vehicle.model} ${vehicle.color} | ${vehicle.vin} | ${vehicle.lot_number}
+        </option>`
+      );
     }
   </script>
 @endpush

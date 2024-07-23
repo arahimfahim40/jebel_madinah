@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('customer_id');
+            $table->unsignedBigInteger('customer_id')->nullable();
             $table->date('invoice_date')->nullable();
             $table->date('invoice_due_date')->nullable();
             $table->enum('status', ['pending', 'open', 'past_due', 'paid'])->nullable();

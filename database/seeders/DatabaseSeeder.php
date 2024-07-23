@@ -48,10 +48,16 @@ class DatabaseSeeder extends Seeder
         ["name" => "invoice-edit", "group_name" => "invoice"],
         ["name" => "invoice-delete", "group_name" => "invoice"],
 
+        ["name" => "payment-add", "group_name" => "payment"],
+        ["name" => "payment-edit", "group_name" => "payment"],
+        ["name" => "payment-delete", "group_name" => "payment"],
+
         ["name" => "owner-view", "group_name" => "owner"],
         ["name" => "owner-create", "group_name" => "owner"],
         ["name" => "owner-edit", "group_name" => "owner"],
         ["name" => "owner-delete", "group_name" => "owner"],
+
+        ["name" => "customer-report-view", "group_name" => "reports"],
     ];
 
 
@@ -91,16 +97,16 @@ class DatabaseSeeder extends Seeder
 
         \App\Models\Owner::insert([
             ['name' => 'Haji Masood'],
-            ['name' => 'Ahmad'],
+            ['name' => 'Janh Deo'],
+            ['name' => 'Kamal Ahmad'],
         ]);
-        // \App\Models\Customer::insert([
-        //     ['name' => $faker->name, 'email' => $faker->email, 'password' => bcrypt($faker->password) ],
-        //     ['name' => $faker->name, 'email' => $faker->email, 'password' => bcrypt($faker->password) ],
-        //     ['name' => 'customer', 'email' => 'customer@gmail.com', 'password' => bcrypt('password') ],
-        // ]);
+        \App\Models\Customer::insert([
+            ['name' => $faker->name, 'email' => $faker->email],
+            ['name' => $faker->name, 'email' => $faker->email],
+            ['name' => 'customer', 'email' => 'customer@gmail.com'],
+        ]);
 
-        // $this->call(InvoiceSeeder::class);
-        // $this->call(VehicleSeeder::class);
-
+        $this->call(InvoiceSeeder::class);
+        $this->call(VehicleSeeder::class);
     }
 }
