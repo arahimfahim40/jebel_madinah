@@ -58,25 +58,6 @@ class CustomerReportController extends Controller
     public function view(Request $request, $customer_id)
     {
         $invoices = Invoice::with('customer', 'vehicles', 'payments')
-
-            // leftJoin('invoice_payments as ip', function ($query) {
-            //     $query->on('ip.invoice_id', '=', 'invoices.id')
-            //         ->whereNull('ip.deleted_at');
-            // })
-            // ->leftJoin('customers as cus', function ($q) {
-            //     $q->on('invoices.customer_id', '=', 'cus.id')
-            //         ->whereNull('cus.deleted_at');
-            // })
-            // ->leftJoin('vehicles as v', function ($q) {
-            //     $q->on('invoices.id', '=', 'v.invoice_id')
-            //         ->whereNull('v.deleted_at');
-            // })
-            // ->when(!empty($request->from_date), function ($q) use ($request) {
-            //     $q->whereDate('invoices.invoice_date', '>=', $request->from_date);
-            // })
-            // ->when(!empty($request->to_date), function ($q) use ($request) {
-            //     $q->whereDate('invoices.invoice_date', '<=', $request->to_date);
-            // })
             ->whereIn('invoices.status', ['open', 'past_due'])
             ->where('invoices.customer_id', $customer_id)
             ->get();
@@ -87,38 +68,20 @@ class CustomerReportController extends Controller
 
 
 
-    public function pdf(Request $request)
+    public function pdf(Request $request, $customer_id)
     {
-        $paginate = $request->paginate ? $request->paginate : 20;
-        $pglcCustomers = Invoice::leftJoin('invoice_payments as ip', function ($query) {
-            $query->on('ip.invoice_id', '=', 'invoices.id')
-                ->whereNull('ip.deleted_at');
-        })
-            ->leftJoin('customers as cus', function ($q) {
-                $q->on('invoices.customer_id', '=', 'cus.id')
-                    ->whereNull('cus.deleted_at');
-            })
-            ->leftJoin('vehicles as v', function ($q) {
-                $q->on('invoices.id', '=', 'v.invoice_id')
-                    ->whereNull('v.deleted_at');
-            })
-            ->when(!empty($request->from_date), function ($q) use ($request) {
-                $q->whereDate('invoices.invoice_date', '>=', $request->from_date);
-            })
-            ->when(!empty($request->to_date), function ($q) use ($request) {
-                $q->whereDate('invoices.invoice_date', '<=', $request->to_date);
-            })
-            ->when(!empty($request->status), function ($q) use ($request) {
-                $q->where('invoices.status', $request->status);
-            })
-            ->select(
-                'cus.id',
-                DB::raw("SUM(v.sold_price) AS total_invoices"),
-            )
-            ->groupBy('cus.id')
-            ->paginate($paginate);
-        return view('admin.operation.reporting.customers.view', [
-            'pglcCustomers' => $pglcCustomers
+        $invoices = Invoice::with('customer', 'vehicles', 'payments')
+            ->whereIn('invoices.status', ['open', 'past_due'])
+            ->where('invoices.customer_id', $customer_id)
+            ->get();
+
+        $pdf = PDF::loadView('admin.reports.customer.pdf', [
+            'invoices' => $invoices
+        ], [
+            'format' => ['A4', 190, 236]
         ]);
+        $pdf->setOptions(['isPhpEnabled' => true]);
+        $pdf->setPaper("A4", "landscape");
+        return $pdf->download(str_replace(' ', '_', @$invoices[0]->customer->name) . '.pdf');
     }
 }
