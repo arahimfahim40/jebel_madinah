@@ -99,7 +99,13 @@ Route::middleware('auth:user')->group(function () {
     Route::delete('/invoice_payments/{id}', [InvoicePaymentController::class, 'destroy'])->name('invoice_payments.destroy');
 
     // invoice customer reporting
-    Route::get('/admin/reports/customer_list', [CustomerReportController::class, 'list'])->name('customers.reports.list');
-    Route::get('/admin/reports/customer_view/{customer_id}', [CustomerReportController::class, 'view'])->name('customers.reports.view');
-    Route::get('/admin/reports/customer_pdf/{customer_id}', [CustomerReportController::class, 'pdf'])->name('customers.reports.pdf');
+    Route::get('/admin/reports/customer_list', [CustomerReportController::class, 'list'])
+        ->name('customers.reports.list')
+        ->middleware(['can:customer-report-view']);
+    Route::get('/admin/reports/customer_view/{customer_id}', [CustomerReportController::class, 'view'])
+        ->name('customers.reports.view')
+        ->middleware(['can:customer-report-view']);
+    Route::get('/admin/reports/customer_pdf/{customer_id}', [CustomerReportController::class, 'pdf'])
+        ->name('customers.reports.pdf')
+        ->middleware(['can:customer-report-view']);
 });
