@@ -74,7 +74,7 @@
                       style="float: left; border-radius: 5px;">
                       <i class="fa fa-file-pdf-o"></i> PDF
                     </a>
-                    <mark style="padding: 0 5px;">{{ @$invoices[0]->customer->name }}</mark>
+                    <span style="padding: 0 5px;">{{ @$invoices[0]->customer->name }}</span>
                     <div style="width: 80px;"></div>
                   </div>
                 </th>
