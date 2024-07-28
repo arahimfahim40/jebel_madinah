@@ -128,9 +128,18 @@ class InvoiceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request, string $id)
     {
-        //
+        try {
+            $invoice = Invoice::with('payments', 'vehicles', 'customer')->find($id);
+
+            return view('admin.invoices.view', compact('invoice'));
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $response['status'] = 'error';
+            $response['message'] = 'Error, Please Try again! ' . $e->getMessage();
+            return response()->json($response, 500);
+        }
     }
 
     /**
@@ -231,14 +240,11 @@ class InvoiceController extends Controller
     {
         try {
 
-            $invoice = Invoice::with('payments')->find($id);
-            $payments =  $invoice->payments;
-            // dd($invoice);
-            $pdf = PDF::loadView('admin.invoices.invoice_pdf', compact('invoice', 'payments'), ['format' => ['A4', 190, 236]]);
-            $file_name = Str::slug($invoice->customer->name  . '_' . sprintf("ALSMS%'.04d\n", @$id));
+            $invoice = Invoice::with('payments', 'vehicles', 'customer')->find($id);
+            $pdf = PDF::loadView('admin.invoices.pdf', compact('invoice'), ['format' => ['A4', 190, 236]]);
+            $file_name = Str::slug($invoice->customer->name  . '_' . sprintf("JAM%'.06d\n", @$id));
             return $pdf->download($file_name . '.pdf');
         } catch (\Throwable $th) {
-            dd($th->getMessage());
             return redirect()->back()->with('error', $th->getMessage());
         }
     }

@@ -72,11 +72,10 @@
         <td style="max-width: 160px;">{{ $item->description }}</td>
         <td>
           <div style="display: flex; align-items: center; gap: 5px;">
-            <button href="#" target="_blank" style="cursor: pointer;"
-              onclick="invoice_view_modal('{{ $item->id }}')"
+            <a href="{{ route('invoices.show', $item->id) }}" target="_blank" style="cursor: pointer;"
               class="btn btn-success btn-circle btn-sm waves-effect waves-light">
               <i class="fa fa-eye"></i>
-            </button>
+            </a>
             <a target="_blank" class="btn btn-warning btn-circle btn-sm waves-effect waves-light"
               href="{{ route('invoice_pdf', $item->id) }}" style="align-content: center;">
               <i class="fa fa-file-pdf-o"></i>

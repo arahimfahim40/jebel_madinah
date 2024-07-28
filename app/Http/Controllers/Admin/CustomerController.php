@@ -104,18 +104,18 @@ class CustomerController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|string',
-            'address' => 'required|string',
+            'address' => 'nullable|string',
             'gender' => 'required|string|in:Male,Female',
             'status' => 'required|string|in:Active,Inactive',
             'email' => 'required|email|unique:users,email|unique:customers,email,' . $id,
-            'password' => 'nullable|string',
             'phone' => 'required|string',
             'join_date' => 'nullable|date',
             'second_email' => 'nullable|email|unique:customers,second_email,' . $id,
             'second_phone' => 'nullable|string',
-            'about' => 'nullable|string',
-            //'photo' => 'mimes:jpg,png,jpeg,bmp,gif|max:1024',
+            'about' => 'nullable|string'
         ]);
+
+
         $user = Auth::user();
         try {
             $customer = Customer::find($id);
@@ -124,9 +124,9 @@ class CustomerController extends Controller
             $customer->gender = $request->gender;
             $customer->status = $request->status;
             $customer->email = $request->email;
-            if ($request->password) {
-                $customer->password = bcrypt($request->password);
-            }
+            // if ($request->password) {
+            //     $customer->password = bcrypt($request->password);
+            // }
             $customer->phone = $request->phone;
             $customer->join_date = $request->join_date;
             $customer->second_email = $request->second_email;
@@ -136,7 +136,7 @@ class CustomerController extends Controller
             $customer->save();
             return redirect()->route('customers.show', ['id' => $id])->with('success', 'Saved successfully!');
         } catch (\Exception $ex) {
-            return redirect()->route('customers.show', ['id' => $id])->with('error', 'Something went wrong, cannot save the user.');
+            return redirect()->route('customers.show', ['id' => $id])->with('error', 'Something went wrong, cannot save the user.' . $ex->getMessage());
         }
     }
 
