@@ -17,7 +17,7 @@ class AppServiceProvider extends ServiceProvider
         //
     }
 
-/**
+    /**
      * Bootstrap any application services.
      *
      * @return void
@@ -34,10 +34,15 @@ class AppServiceProvider extends ServiceProvider
         ]);
         Blade::directive(
             'money',
-            function ($amount) {
-                return "<?php echo number_format($amount ?? 0, 2); ?>";
-            }
-        );
-        Paginator::defaultView('vendor.pagination.bootstrap-4');
-    }
+            function ($expression) {
+                $arguments = explode(',', $expression);
+                $amount = trim($arguments[0]);
+                $currency = isset($arguments[1]) ? trim($arguments[1]) : '$';
+
+                $formattedAmount = "<?php echo '{$currency}' . number_format({$amount} ?? 0, 2); ?>";
+return $formattedAmount;
+}
+);
+Paginator::defaultView('vendor.pagination.bootstrap-4');
+}
 }

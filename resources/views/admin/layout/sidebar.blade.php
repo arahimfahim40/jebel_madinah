@@ -84,16 +84,16 @@
             <li><a href="{{ route('invoices.index') }}">All
                 <span class="tag tag-success t_all_invoice" style="float:right;">0</span>
               </a></li>
-            <li><a href="{{ route('invoices.index') }}">Pending
+            <li><a href="{{ route('invoices.index') }}?status=pending">Pending
                 <span class="tag tag-warning t_pending_invoice" style="float:right;">0</span></a>
             </li>
-            <li><a href="{{ route('invoices.index') }}">Open
+            <li><a href="{{ route('invoices.index') }}?status=open">Open
                 <span class="tag tag-warning t_open_invoice" style="float:right;">0</span>
               </a></li>
-            <li><a href="{{ route('invoices.index') }}">Past Due
+            <li><a href="{{ route('invoices.index') }}?status=past_due">Past Due
                 <span class="tag tag-info t_past_due_invoice" style="float:right;">0</span>
               </a></li>
-            <li><a href="{{ route('invoices.index') }}">Paid
+            <li><a href="{{ route('invoices.index') }}?status=paid">Paid
                 <span class="tag tag-success t_paid_invoice" style="float:right;">0</span>
               </a></li>
           </ul>
