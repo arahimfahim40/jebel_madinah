@@ -102,24 +102,21 @@
               </div>
               <div class="col-md-12 form-group">
                 <label class="required">Invoice Date</label>
-                <input type="date" name="invoice_date" placeholder="Invoice Date" class="form-control"
-                  required />
+                <input type="date" name="invoice_date" placeholder="Invoice Date" class="form-control" required />
               </div>
               <div class="col-md-12 form-group">
                 <label class="required">Due Date</label>
-                <input type="date" name="invoice_due_date" placeholder="Due Date" class="form-control"
-                  required />
+                <input type="date" name="invoice_due_date" placeholder="Due Date" class="form-control" required />
               </div>
-  
+
               <div class="col-md-12 form-group">
                 <label>Discount</label>
-                <input type="number" name="discount" placeholder="Discount" class="form-control"
-                  value="0" />
+                <input type="number" name="discount" placeholder="Discount" class="form-control" value="0" />
               </div>
             </div>
 
             <div class="col-md-6">
-              
+
             </div>
 
             <div class="col-md-12">
@@ -147,7 +144,8 @@
           <div style="clear: both;"></div>
           <div class="pt-1">
             <div class="form-group col-md-3 col-lg-3 col-sm-6 col-xs-12">
-              <input type="text" name="search" class="form-control b-a" placeholder="Search for ..." id="search">
+              <input type="text" name="search" class="form-control b-a" placeholder="Search for ..."
+                id="search">
             </div>
             <div class="form-group col-md-4">
               @can('vehicle-change-status')
@@ -156,11 +154,11 @@
                   <i class="fa fa-info-circle"></i> Change Status
                 </button>
               @endcan
-              @can('vehicle-change-status')
+              {{-- @can('vehicle-change-status')
                 <button class="btn btn-success" style="float: left; border-radius: 5px;" onclick="vehicleSell()">
                   <i class="fa fa-dollar"></i> Sell
                 </button>
-              @endcan
+              @endcan --}}
             </div>
 
             <div class="form-group col-md-1 col-lg-1 col-sm-2 col-xs-12" style="float:right;">
