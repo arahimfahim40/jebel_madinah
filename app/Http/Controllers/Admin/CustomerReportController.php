@@ -61,9 +61,10 @@ class CustomerReportController extends Controller
             ->whereIn('invoices.status', ['open', 'past_due'])
             ->where('invoices.customer_id', $customer_id)
             ->get();
+        $customer = Customer::find($customer_id);
         return view('admin.reports.customer.view', [
             'invoices' => $invoices,
-            'customer_id' => $customer_id
+            'customer' => $customer
         ]);
     }
 
