@@ -7,7 +7,6 @@ use App\Models\Invoice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Customer;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Vehicle;
 use PDF;
@@ -243,6 +242,7 @@ class InvoiceController extends Controller
             $invoice = Invoice::with('payments', 'vehicles', 'customer')->find($id);
             $pdf = PDF::loadView('admin.invoices.invoice_pdf', compact('invoice'), ['format' => ['A4', 190, 236]]);
             $file_name = Str::slug($invoice->customer->name  . '_' . sprintf("JAM%'.06d\n", @$id));
+            // $pdf->setOptions(['isPhpEnabled' => true]);
             return $pdf->download($file_name . '.pdf');
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());

@@ -7,11 +7,7 @@ use App\Models\Invoice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Customer;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Vehicle;
 use PDF;
-use Str;
 
 class CustomerReportController extends Controller
 {

@@ -50,7 +50,7 @@
       <div id="header-title"
         style="display: flex; flex-direction: column; justify-content: space-between; align-items:center; padding: 10px;">
         <div style="text-align: center;">
-          <img src="{{ asset('/img/logo.png') }}" width="150px">
+          <img src="{{ asset('/img/logo.webp') }}" height="140px">
         </div>
         <div style="display: inline; text-align:center; margin-top: -10px;">
           <div style="font-size: 24px; font-weight: bold;">JABAL AL MADINAH</div>
