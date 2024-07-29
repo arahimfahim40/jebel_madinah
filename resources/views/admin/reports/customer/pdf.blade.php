@@ -64,7 +64,7 @@
             <tr class="table-header-footer bordered">
               <th colspan="12" style="text-align: center; font-family: Vazirmatn; font-size: 20px;">
                 <div style="display: flex; flex-direction: row; justify-content: space-between; align-items:center;">
-                  <span style="padding: 0 5px;">{{ @$invoices[0]->customer->name }}</span>
+                  <span style="padding: 0 5px;">{{ @$customer->name }}</span>
                   <div style="width: 80px;"></div>
                 </div>
               </th>

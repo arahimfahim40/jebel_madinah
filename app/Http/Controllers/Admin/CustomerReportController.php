@@ -76,9 +76,12 @@ class CustomerReportController extends Controller
             ->whereIn('invoices.status', ['open', 'past_due'])
             ->where('invoices.customer_id', $customer_id)
             ->get();
+        $customer = Customer::find($customer_id);
+
 
         $pdf = PDF::loadView('admin.reports.customer.pdf', [
-            'invoices' => $invoices
+            'invoices' => $invoices,
+            'customer' => $customer
         ], [
             'format' => ['A4', 190, 236]
         ]);
