@@ -81,6 +81,14 @@ class DatabaseSeeder extends Seeder
         }
 
         // Create admin User and assign the role to him.
+        User::create([
+            'name' => 'Jabal AL Madinah',
+            'username' => 'jabalalmadinah@gmail.com',
+            'email' => 'jabalalmadinah@gmail.com',
+            'time_zone_id' => '1',
+            'password' => Hash::make('jabalalmadinah@9090')
+        ]);
+
         $user = User::create([
             'name' => 'admin',
             'username' => 'admin@gmail.com',
