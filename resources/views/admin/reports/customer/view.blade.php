@@ -69,8 +69,7 @@
               <tr class="table-header-footer bordered">
                 <th colspan="13" style="text-align: center; font-family: Vazirmatn; font-size: 20px;">
                   <div style="display: flex; flex-direction: row; justify-content: space-between; align-items:center;">
-                    <a class="btn btn-warning mx-1 text-white"
-                      href="{{ route('customers.reports.pdf', @$invoices[0]->customer->id) }}"
+                    <a class="btn btn-warning mx-1 text-white" href="{{ route('customers.reports.pdf', @$customer_id) }}"
                       style="float: left; border-radius: 5px;">
                       <i class="fa fa-file-pdf-o"></i> PDF
                     </a>

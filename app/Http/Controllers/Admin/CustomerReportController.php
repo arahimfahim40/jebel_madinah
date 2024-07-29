@@ -62,7 +62,8 @@ class CustomerReportController extends Controller
             ->where('invoices.customer_id', $customer_id)
             ->get();
         return view('admin.reports.customer.view', [
-            'invoices' => $invoices
+            'invoices' => $invoices,
+            'customer_id' => $customer_id
         ]);
     }
 
