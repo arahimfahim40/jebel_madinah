@@ -8,7 +8,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="shortcut icon" href="{{ asset('img/logo-25.png') }}" />
+    <link rel="shortcut icon" href="{{ asset('img/logo-small.png') }}" />
     <title>@yield('title')</title>
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/bootstrap4/css/bootstrap.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/themify-icons/themify-icons.css') }}">
