@@ -51,7 +51,8 @@
     <div class="col-md-12">
       <div class="col-md-12 col-md-offset-1 ">
         <div style="width: 100%; text-align: center;">
-          <img src="{{ asset('/img/logo.webp') }}" height="140px">
+          <img src="{{ asset('/img/logo.png') }}" height="140px">
+          <img src="data:image/png;base64,{!! base64_encode(file_get_contents(public_path('img/logo.png'))) !!}" height="140px">
           <div style=" font-size:20px;font-weight:bold; text-align:center">
             Tax Invoice
           </div>
