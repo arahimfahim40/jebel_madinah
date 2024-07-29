@@ -220,7 +220,7 @@
             </div>
           @endif
 
-          <table width="100%">
+          <table width="100%" style="margin-top: 15px;">
             <tbody>
               @if ($invoice->description)
                 <tr style="background-color: #f5f8f8; color: black;">
