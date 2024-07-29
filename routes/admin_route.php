@@ -85,6 +85,8 @@ Route::middleware('auth:user')->group(function () {
     Route::get('/admin/invoices/edit/{id}', [InvoiceController::class, 'edit'])->name('invoices.edit');
     Route::put('/admin/invoices/update/{id}', [InvoiceController::class, 'update'])->name('invoices.update');
     Route::delete('/admin/invoices/{invoice}', [InvoiceController::class, 'destroy'])->name('invoices.destroy');
+    Route::post('/admin/invoices_change_status', [InvoiceController::class, 'change_status'])->name('invoices.change_status')->middleware(['can:invoice-change-status']);
+
     Route::get('/get_vehicles_open_of_customer', [InvoiceController::class, 'get_vehicles_open_of_customer'])->name('get_vehicles_open_of_customer');
     Route::get('/invoice_pdf/{id}/pdf', [InvoiceController::class, 'invoice_pdf'])->name('invoice_pdf');
     Route::get('/view_single_invoce', [InvoiceController::class, 'view_single_invoice'])->name('view_single_invoice');

@@ -267,4 +267,21 @@ class InvoiceController extends Controller
             return response()->json($response, 500);
         }
     }
+
+    public function change_status(Request  $request)
+    {
+        try {
+            DB::beginTransaction();
+            if (empty($request->selectedInvoiceIds)) {
+                throw new \InvalidArgumentException('No Invoice IDs were specified to change the status.');
+            }
+            Invoice::whereIn('id', $request->selectedInvoiceIds)
+                ->update(['status' => $request->status]);
+            DB::commit();
+            return response()->json(['result' => true, 'message' => 'Invoices status changed successfully!']);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(['result' => false, 'message' => 'Something went wrong, ' . $th->getMessage()], 400);
+        }
+    }
 }

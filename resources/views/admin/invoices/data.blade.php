@@ -31,7 +31,12 @@
       @endphp
       <tr id="searchBody">
         <td>{{ $index + 1 }}</td>
-        <td>{{ $index + 1 }}</td>
+        @can('vehicle-change-status')
+          <td>
+            <input name="status[{{ $item->id }}]" type="checkbox" style="width:25px; height:20px;" class="checkbox"
+              data-id="{{ $item->id }}" data-status="{{ $item->status }}" />
+          </td>
+        @endcan
         <td>{{ 'JAM' . str_pad($item->id, 6, '0', STR_PAD_LEFT) }}</td>
         <td>{{ $item->customer->name }}</td>
         <td style="max-width: 150px;">{{ $item->vehicles->pluck('vin')->join(' | ') }}</td>

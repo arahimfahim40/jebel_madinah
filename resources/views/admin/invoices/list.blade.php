@@ -46,6 +46,46 @@
   </style>
 @endpush
 @section('content')
+
+  <!-- Change Status modal -->
+  <div class="modal fade small-modal" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true"
+    id="invoice_change_status_modal">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+          <h4 class="modal-title">Change Invoice Status</h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <span class="pl-1">
+              <input type="radio" name="invoice_status" value="pending" id="pending" class="invoice_status">
+              <label for="pending">Pending</label>
+            </span>
+            <span class="pl-1">
+              <input type="radio" name="invoice_status" value="open" id="open" class="invoice_status">
+              <label for="open">Open</label>
+            </span>
+            <span class="pl-1">
+              <input type="radio" name="invoice_status" value="past_due" id="past_due" class="invoice_status">
+              <label for="past_due">Past Due</label>
+            </span>
+            <span class="pl-1">
+              <input type="radio" name="invoice_status" value="paid" id="paid" class="invoice_status">
+              <label for="paid">Paid</label>
+            </span>
+          </div>
+          <div class="modal-footer" style="text-align:center !important;">
+            <button type="button" class="btn btn-primary btn-rounded" onclick="submitForm()">Change</button>
+            <button type="button" class="btn btn-danger btn-rounded" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="site-content">
     <div class="content-area py-1">
       <div class="container-fluid">
@@ -93,6 +133,14 @@
           <div class="form-group col-md-3 col-lg-3 col-sm-6 col-xs-12" style="margin:1%;margin-left:0px;">
             <input type="text" name="search" class="form-control b-a" placeholder="Search for ..." id="search">
           </div>
+          <div class="form-group col-md-4" style="margin:1%;margin-left:0px;">
+            @can('invoice-change-status')
+              <button class="btn btn-info" style="float: left; border-radius: 5px; margin-right: 10px;"
+                onclick="changeStatus()">
+                <i class="fa fa-info-circle"></i> Change Status
+              </button>
+            @endcan
+          </div>
           <div class="form-group col-md-1 col-lg-1 col-sm-2 col-xs-12" style="margin:1%;float: right;">
             <select class="form-control" id="showEntry">
               <option value="20">20</option>
@@ -138,57 +186,54 @@
 @stop
 @push('js')
   <script type="text/javascript">
-    $(document).ready(function() {
-      // Go to Pagination page
-      $(document).on('click', '.pagination a', function(e) {
-        e.preventDefault();
-        var page = $(this).attr('href').split('page=')[1];
-        searchLogs(page);
-      });
-      // search section 
-      $('#search').on('keyup', function(e) {
-        if (e.which == 13) {
-          searchLogs();
-        }
-      });
-      // Change Pagination
-      $('#showEntry').change(function() {
-        searchLogs();
-      });
-      // Appliy Filtering
-      $('#submit_filter').click(function() {
-        searchLogs();
-      });
-
-      function searchLogs(page = 0) {
-        $('#searchBody').html(
-          "<div style='position:fixed; margin-top:7%; margin-left:40%;'><img width='70px' src='img/loading.gif' alt='Loading ...'> </div> "
-        );
-        var request = $.ajax({
-          url: "{{ route('invoices.index') }}",
-          method: "GET",
-          data: {
-            page: page,
-            // status: $('#status option:selected').val(),
-            status: "{{ $status }}",
-            causer_id: $('#causer_id').val(),
-            from_date: $('#from_date').val(),
-            to_date: $('#to_date').val(),
-            searchValue: $('#search').val(),
-            paginate: $("#showEntry").val()
-          },
-        });
-        request.done(function(msg) {
-          $('#searchBody').html('');
-          $('#user_data').html(msg);
-        });
-        request.fail(function(jqXHR, textStatus) {
-          $('#searchBody').html('');
-          $('#user_data').append(textStatus);
-        });
-      }
-
+    // Go to Pagination page
+    $(document).on('click', '.pagination a', function(e) {
+      e.preventDefault();
+      var page = $(this).attr('href').split('page=')[1];
+      updateInvoiceList(page);
     });
+    // search section 
+    $('#search').on('keyup', function(e) {
+      if (e.which == 13) {
+        updateInvoiceList();
+      }
+    });
+    // Change Pagination
+    $('#showEntry').change(function() {
+      updateInvoiceList();
+    });
+    // Appliy Filtering
+    $('#submit_filter').click(function() {
+      updateInvoiceList();
+    });
+
+    function updateInvoiceList(page = 0) {
+      $('#content_loader').html(
+        "<div style='position:fixed; margin-top:15%; margin-left:40%;'><img width='100px' src='/img/loading.gif' alt='Loading ...'> </div> "
+      );
+      var request = $.ajax({
+        url: "{{ route('invoices.index') }}",
+        method: "GET",
+        data: {
+          page: page,
+          status: "{{ request()->status }}",
+          // location_id: "{{ request()->location_id }}",
+          // customer_id: "{{ request()->customer_id }}",
+          // from_date: $('#from_date').val(),
+          // to_date: $('#to_date').val(),
+          searchValue: $('#search').val(),
+          paginate: $("#showEntry").val()
+        },
+      });
+      request.done(function(msg) {
+        $('#content_loader').html('');
+        $('#user_data').html(msg);
+      });
+      request.fail(function(jqXHR, textStatus) {
+        $('#content_loader').html('');
+        $('#user_data').append(textStatus);
+      });
+    }
 
     function addPayment(id) {
       $("#payment_form_modal").modal("show");
@@ -241,7 +286,6 @@
     })
 
     function updatePayment(invoiceId, paymentId, paymentAmount, discount, paymentDate, evidenceLink, description) {
-      console.log(invoiceId, paymentId, paymentAmount, discount, paymentDate, evidenceLink, description)
       $("#payment_form_update_modal").modal("show");
       var datePart = paymentDate.split(' ')[0];
       $('#payment_form_update input[name="invoice_id"]').val(invoiceId);
@@ -299,5 +343,84 @@
         },
       });
     });
+
+    function checkAll(checkbox) {
+      if (checkbox.checked == true) {
+        $(".checkbox").prop('checked', true);
+        $(".checkbox_all").prop('checked', true);
+      } else {
+        $(".checkbox").prop('checked', false);
+        $(".checkbox_all").prop('checked', false);
+      }
+    }
+
+    function changeStatus() {
+      var selectedInvoiceIds = [];
+      $(".checkbox:checked").each(function() {
+        selectedInvoiceIds.push($(this).attr('data-id'));
+      });
+
+      if (selectedInvoiceIds.length <= 0) {
+        Swal.fire({
+          position: 'center',
+          icon: 'info',
+          title: "Please select atleast one record to change the status.",
+          showConfirmButton: false,
+          timer: 4000
+        });
+      } else {
+        $('#invoice_change_status_modal').modal('show');
+      }
+    }
+
+    function submitForm() {
+      var status = $(".invoice_status:checked").val();
+      if (status == null) {
+        Swal.fire({
+          position: 'center',
+          icon: 'info',
+          title: "Please select at least one status",
+          showConfirmButton: false,
+          timer: 4000
+        });
+        return;
+      } else {
+        var selectedInvoiceIds = [];
+        $(".checkbox:checked").each(function() {
+          selectedInvoiceIds.push($(this).attr('data-id'));
+        });
+
+        var request = $.ajax({
+          url: "{{ route('invoices.change_status') }}",
+          method: "POST",
+          data: {
+            selectedInvoiceIds: selectedInvoiceIds,
+            status: status,
+            _token: '{{ csrf_token() }}',
+          },
+        });
+        request.done(function(msg) {
+          $('#invoice_change_status_modal').modal('hide');
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: msg.message,
+            showConfirmButton: false,
+            timer: 4000
+          });
+          updateInvoiceList();
+        });
+        request.fail(function(jqXHR, textStatus) {
+          $('#invoice_change_status_modal').modal('hide');
+          Swal.fire({
+            position: 'center',
+            icon: 'error',
+            title: jqXHR.responseJSON.message,
+            showConfirmButton: false,
+            timer: 4000
+          });
+        });
+      }
+    }
   </script>
 @endpush
