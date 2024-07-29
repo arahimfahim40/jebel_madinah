@@ -104,17 +104,15 @@ class DatabaseSeeder extends Seeder
         $user->assignRole([$role->id]);
 
         \App\Models\Owner::insert([
-            ['name' => 'Haji Masood'],
-            ['name' => 'Janh Deo'],
-            ['name' => 'Kamal Ahmad'],
+            ['name' => 'Haji Masood']
         ]);
-        \App\Models\Customer::insert([
-            ['name' => $faker->name, 'email' => $faker->email],
-            ['name' => $faker->name, 'email' => $faker->email],
-            ['name' => 'customer', 'email' => 'customer@gmail.com'],
-        ]);
+        // \App\Models\Customer::insert([
+        //     ['name' => $faker->name, 'email' => $faker->email],
+        //     ['name' => $faker->name, 'email' => $faker->email],
+        //     ['name' => 'customer', 'email' => 'customer@gmail.com'],
+        // ]);
 
-        $this->call(InvoiceSeeder::class);
-        $this->call(VehicleSeeder::class);
+        // $this->call(InvoiceSeeder::class);
+        // $this->call(VehicleSeeder::class);
     }
 }
