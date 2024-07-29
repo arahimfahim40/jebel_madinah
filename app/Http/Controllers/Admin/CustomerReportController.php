@@ -85,7 +85,7 @@ class CustomerReportController extends Controller
         ], [
             'format' => ['A4', 190, 236]
         ]);
-        // $pdf->setOptions(['isPhpEnabled' => true]);
+        $pdf->setOptions(['isPhpEnabled' => true]);
         $pdf->setPaper("A4", "landscape");
         return $pdf->download(str_replace(' ', '_', @$customer->name) . '.pdf');
     }
