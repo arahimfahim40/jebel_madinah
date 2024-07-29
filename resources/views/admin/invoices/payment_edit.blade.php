@@ -1,5 +1,6 @@
 <!-- Edit installment modal -->
-<div class="modal fade large-modal" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="payment_form_update_modal">
+<div class="modal fade large-modal" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true"
+  id="payment_form_update_modal">
   <div class="modal-dialog">
     <form class="form" id="payment_form_update" method="POST">
       @csrf
@@ -10,7 +11,7 @@
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">×</span>
           </button>
-          <h4 class="modal-title">Payment Form</h4>
+          <h4 class="modal-title">Payment Edit</h4>
         </div>
         <div class="row">
           <div class="col-md-12 pt-1">
@@ -23,35 +24,25 @@
           <div class="col-md-12">
             <div class="col-md-6">
               <div class="form-group">
-                <span class="main"><label for="payment_amount">Payment Amount(DH)</label>&nbsp;<span class="text-danger">*</span></span>
-                <input type="number" step=".01" name="payment_amount" id="payment_amount" class="form-control" required />
+                <span class="main"><label for="payment_amount">Payment Amount(DH)</label>&nbsp;<span
+                    class="text-danger">*</span></span>
+                <input type="number" step=".01" name="payment_amount" id="payment_amount" class="form-control"
+                  required />
                 <span id="payment_amount" style="color: red;font-weight: bold;"></span>
               </div>
             </div>
-            <div class="form-group col-md-6">
-              <label for="discount">Discount</label>
-              <div class="input-group">
-                <div class="input-group-addon currency-type">AED</div>
-                <input type="number"
-                  step="any"
-                  name="discount"
-                  id="discount" 
-                  value="0"
-                  class="form-control"
-                  placeholder="Discount"
-                />
-              </div>
-          </div>
             <div class="col-md-6">
               <div class="form-group">
-                <span class="main"><label for="payment_date">Payment Date</label>&nbsp;<span class="text-danger">*</span></span>
-                <input type="date" value="{{now()->format('Y-m-d')}}" name="payment_date" id="payment_date" class="form-control" required />
+                <span class="main"><label for="payment_date">Payment Date</label>&nbsp;<span
+                    class="text-danger">*</span></span>
+                <input type="date" value="{{ now()->format('Y-m-d') }}" name="payment_date" id="payment_date"
+                  class="form-control" required />
                 <span id="payment_date" style="color: red;font-weight: bold;"></span>
               </div>
             </div>
-            <div class="col-md-6 form-group">
-                <label for="">Evidence Link</label>
-                <input type="text" class="form-control" name="evidence_link" id="evidence_link">
+            <div class="col-md-12 form-group">
+              <label for="">Evidence Link</label>
+              <input type="text" class="form-control" name="evidence_link" id="evidence_link">
             </div>
             <div class="col-md-12">
               <div class="form-group">

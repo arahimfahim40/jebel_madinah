@@ -109,7 +109,7 @@
             </div>
           </div>
           @include('admin.invoices.payment_form')
-          {{-- @include('admin.invoices.payment_edit') --}}
+          @include('admin.invoices.payment_edit')
           <div class="site table-responsive" id="user_data">
             @include('admin.invoices.data')
           </div>
@@ -138,69 +138,6 @@
 @stop
 @push('js')
   <script type="text/javascript">
-    function getProperties(id) {
-      $('#logProperties').modal('toggle');
-      $('#properties_loading').show();
-      $("#log_data").html('');
-
-      $.ajax("{{ route('invoices.index') }}", {
-        data: {
-          id: id
-        },
-        success: function(data, status, xhr) {
-          $('#properties_loading').hide();
-
-          $("#log_data").html(data);
-        },
-        error: function(jqXhr, textStauts, errorMessage) {
-          $('#properties_loading').hide();
-
-          $.notify("Server error", {
-            className: "error",
-            clickToHide: true,
-            autoHide: true,
-            globalPosition: 'top right'
-          });
-        }
-      });
-    }
-
-    function invoice_view_modal(invoice_id) {
-
-      var request = $.ajax({
-        url: "{{ route('view_single_invoice') }}",
-        method: "GET",
-        data: {
-          invoice_id: invoice_id,
-        },
-      });
-      request.done(function(msg) {
-        $('#view_invoice_modal').modal('show');
-        $('#view_invoice').html(msg);
-        $("#invoice_id").val(invoice_id);
-        $('#payments-section').show();
-        var ids = JSON.parse($("#ids").val());
-        let index = ids.findIndex((id, index) => id == invoice_id);
-        if (index == 0) {
-          $('.prev').attr('disabled', 'disabled');
-        } else {
-          $('.prev').attr('disabled', false);
-        }
-        if (ids.length - 1 == index) {
-          $('.next').attr('disabled', 'disabled');
-        } else {
-          $('.next').attr('disabled', false);
-        }
-      });
-      request.fail(function(jqXHR, textStatus) {
-        alert(msg.message);
-      });
-    }
-
-    $('#view_invoice_modal').on('hidden.bs.modal', function() {
-      $('#view_invoice').html('');
-    });
-
     $(document).ready(function() {
       // Go to Pagination page
       $(document).on('click', '.pagination a', function(e) {

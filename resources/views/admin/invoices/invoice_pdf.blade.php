@@ -1,4 +1,11 @@
+<link rel="stylesheet" href="{{ asset('assets/bootstrap4/css/bootstrap.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/font-awesome/css/font-awesome.min.css') }}">
+
 <style>
+  * {
+    box-sizing: border-box;
+  }
+
   table,
   tr {
     font-family: arial, sans-serif;
@@ -10,7 +17,7 @@
   .td1 {
     border: 1px solid #0a0a0a;
     text-align: left;
-    padding: 3px;
+    padding: 5px;
     border-collapse: collapse !important;
   }
 
@@ -26,284 +33,197 @@
 
   td,
   th {
-    font-size: 11px;
-    padding: 3px !important;
+    font-size: 14px;
+    padding: 5px !important;
   }
 
-  th {
-    background-color: #d9edf7;
-    /* background-color: lightblue; */
-    color: #222;
+  .no-border {
+    border: none !important;
   }
 
   #payments-section {
-    display: none;
+    /* display: none; */
     /* Hide the payments section by default */
   }
 </style>
-<div class="container">
+<div class="container" style="width: 190mm; margin: auto;">
   <div class="row">
     <div class="col-md-12">
       <div class="col-md-12 col-md-offset-1 ">
-        <table id="customers">
-          <tr>
-            <td rowspan="5">
-              <img src="{{ asset('img/logo.webp') }}" height="100px">
-            </td>
-            <th style="background-color: unset;">Jabal AL Madinah</th>
-            <th style="background-color: unset;">Mix Shipping Invoice</th>
-          </tr>
-          @php
-            /* $names = $invoice->vehicles->flatMap(function ($vehicle) {
-                            return $vehicle->charges->pluck('name');
-                        })->unique()->toArray(); */
+        <div style="width: 100%; text-align: center;">
+          <img src="{{ asset('img/logo.webp') }}" alt="logo" style="width: 140px;">
+          <div style=" font-size:20px;font-weight:bold; text-align:center">
+            Tax Invoice
+          </div>
+          <div style="margin-top: 4px; text-align:center">
+            <span style="font-size: 12px; font-weight: bold;">
+              TRN: <span>******************</span>
+            </span>
+          </div>
 
-            $currency = 'AED';
-          @endphp
-          <?php
-          $total_amount_aed = 0;
-          $due_balance = 0;
-          
-          foreach ($invoice->vehicles as $vehicle) {
-              $total_amount_aed += round(($vehicle->freight + $vehicle->clearance + $vehicle->tow_amount + $vehicle->custom_charge) * $invoice->exchange_rate, 2);
-          }
-          
-          $due_balance = $total_amount_aed; ?>
-          <tr>
-            <td>A Street <br>
-              B City, C State, D Zip Code
-              <br>test@als.com
-            </td>
-            <td>INV#: <b>{{ sprintf("ALSMS%'.04d\n", @$invoice->id) }}</b>
-              <br>Issue Date: {{ @$invoice->invoice_date }}
-              <br>Due Date: {{ @$invoice->invoice_due_date }}
-              <?php $today = Carbon\Carbon::parse(Carbon\Carbon::today());
-              $inv_date_due = Carbon\Carbon::parse(@$invoice->invoice_due_date);
-              ?>
-              <br>Past Due Days:
-              {{ $today > $inv_date_due && $due_balance > 0 ? $today->diffInDays($inv_date_due) : '' }}
-            </td>
-          </tr>
-          <tr>
-            <td></td>
-            <td>
-              Payment Date:
-              {{-- join(', ', array_unique($invoice->vehicles->pluck('payment_date')->toArray())) --}}
-              <br>
-              Payment Received :
-              <!-- {{ $invoice->vehicles->count() > 0 ? number_format(@$invoice->vehicles->sum('payment_amount'), 2) . ' ' . $currency : '' }} -->
-              <br>
-            </td>
-          </tr>
-          <tr>
-            <th style=" text-align: left;">Bill TO: </th>
-            <th style=" text-align: left;">Balance Due: {{ number_format($due_balance, 2) }} {{ $currency }}
-            </th>
-          </tr>
-          <tr>
-            <td colspan="2">{{ @$invoice->customer->name }}
-              <!-- <br>
-                            {{ @$invoice->company->customer_address }}, {{ @$invoice->company->comp_city }},
-                            {{ @$invoice->company->zip_code }}
-                            <br>
-                            {{ @$invoice->company->country }} &nbsp;Phone: {{ @$invoice->company->customer_phone }} -->
-            </td>
+        </div>
 
-          </tr>
-          <tr>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <th style="text-align: center;" colspan="4">Cargo Information</th>
-          </tr>
-          <tr>
-            <td colspan="2">Container Number:&nbsp;&nbsp;E ContainerN
-              <br>
-              Booking Number:&nbsp;&nbsp;F BNum <br>
-              Origin:&nbsp;&nbsp; G Org
-              <br>
-              Destination:&nbsp;&nbsp;H Dest
-            </td>
-            <td colspan="2">Consignee:&nbsp;&nbsp;I Consignee <br>
-              Carrier Name:&nbsp;&nbsp;J Carrier <br>
-              ETD:&nbsp;&nbsp;K ETD <br>
-              ETA:&nbsp;&nbsp;L ETA </td>
-          </tr>
-        </table>
-
-        <div id="yoba">
-          <table width="100%">
-            <tbody>
-              <tr>
-                <th class="td1">#</th>
-                <th class="td1">Description</th>
-                <th class="td1">Freight</th>
-                <th class="td1">Towing</th>
-                <th class="td1">10%Vat & Custom</th>
-                <th class="td1">Sub Total</th>
-              </tr>
-              <?php
-              
-              $totalFreight = 0;
-              $totalTow_amount = 0;
-              $totalVatAndCustom = 0;
-              $totalClearance = 0;
-              $dynamicCharges = [];
-              $TotalAmounUSD = 0;
-              $TotalAmounAED = 0;
-              
-              ?>
-              @foreach ($invoice->vehicles as $key => $vehicle)
-                <tr>
-                  <td class="td1">{{ $key + 1 }}</td>
-                  <td class="td1" style="min-width: 25vw;">
-                    {{ $vehicle->year }}&nbsp;{{ $vehicle->make }}&nbsp;{{ $vehicle->model }}
-                    <br><b>VIN:</b>{{ $vehicle->vin }}
-                    <br><b>Lot#:</b>{{ $vehicle->lot_number }}
-                    <br><b>Auction City:</b>{{ $vehicle->auction_city }}
-                    <div style="font-size: 10px;"><b>Description:</b>{!! nl2br($vehicle->description) !!}</div>
-                  </td>
-                  <td class="td1" style="text-align:right;">${{ $vehicle->shiping_charge }}</td>
-                  <td class="td1" style="text-align:right;">${{ $vehicle->tow_charge }}</td>
-                  <td class="td1" style="text-align:right;">
-                    ${{ number_format($vehicle->custom_charge, 2) }}</td>
-                  {{-- <td class="td1" style="text-align:right;">
-                                        ${{ number_format($vehicle->clearance, 2) }}</td> 
-                                     @php 
-                                    $vehicleNameCharges = @$vehicle->charges->pluck('value', 'name')->toArray();
-                                    @endphp
-                                    @foreach ($names as $key1 => $name)
-                                        @php
-                                            $dynamicCharges[$name] = @$dynamicCharges[$name] + @$vehicleNameCharges[$name];
-                                        @endphp
-                                        <td class="td1" style="text-align:right;">
-                                            ${{ number_format(@$vehicleNameCharges[$name], 2) }}
-                                        </td>
-                                    @endforeach --}}
-                  <td class="td1" style="text-align:right;">
-                    ${{ number_format($vehicle->shiping_charge + $vehicle->tow_charge + $vehicle->custom_charge, 2) }}
-                  </td>
-                </tr>
-                <?php
-                $totalFreight = $totalFreight + $vehicle->shiping_charge;
-                $totalTow_amount = $totalTow_amount + $vehicle->tow_charge;
-                $totalVatAndCustom = $totalVatAndCustom + $vehicle->custom_charge;
-                $TotalAmounUSD += $vehicle->shiping_charge + $vehicle->tow_charge + $vehicle->custom_charge;
-                $TotalAmounAED += round(($vehicle->shiping_charge + $vehicle->tow_charge + $vehicle->custom_charge) * $invoice->exchange_rate, 2);
-                ?>
-              @endforeach
-              <tr>
-                <th class="td1"></th>
-                <th class="td1">Sub Total</th>
-                <th style=" text-align:right;" class="td1">${{ number_format(@$totalFreight, 2) }}
-                </th>
-                <th style=" text-align:right;" class="td1">
-                  ${{ number_format(@$totalTow_amount, 2) }}
-                </th>
-                <th style=" text-align:right;" class="td1">
-                  ${{ number_format(@$totalVatAndCustom, 2) }}</th>
-                {{--  @foreach ($names as $key1 => $name)
-                                    <th style=" text-align:right;" class="td1">
-                                        ${{ number_format(@$dynamicCharges[$name], 2) }}
-                                    </th>
-                                @endforeach 
-                                 </th> --}}
-                <th style=" text-align:right;" class="td1">
-                  ${{ number_format(@$totalFreight + $totalTow_amount + $totalVatAndCustom, 2) }}
-                </th>
-              </tr>
-            </tbody>
-          </table>
-          <table width="100%" style="border: 1px solid #0a0a0a;">
-            <tbody>
-              <tr>
-                <th>QTY($)</th>
-                <th>Rate</th>
-                <th>Amount</th>
-                @if (@$invoice->discount > 0)
-                  <th>Discount</th>
-                @endif
-                <th>Total</th>
-              </tr>
-              <tr>
-                <th>${{ number_format(@$TotalAmounUSD, 2) }}</th>
-                <th>{{ $invoice->exchange_rate }}</th>
-                <th>{{ number_format(@$TotalAmounAED, 2) }} {{ $currency }}</th>
-                @if (@$invoice->discount > 0)
-                  <th>{{ number_format((float) $invoice->discount, 2) }} {{ $currency }}</th>
-                @endif
-                <th>{{ number_format($TotalAmounAED - (float) $invoice->discount, 2) }} {{ $currency }}
-                </th>
-              </tr>
-            </tbody>
-          </table>
-          <div id="payments-section" style="margin: 10px 0;">
-            <div style="text-align: left; font-weight: bold; margin: 5px 0;">Payments</div>
-            <table width="100%" style="border: 1px solid #0a0a0a; background-color: #eaf4f4;">
-              <tbody>
-                <tr>
-                  <th class="td1">#</th>
-                  <th class="td1">Description</th>
-                  <th class="td1">Payment Amount</th>
-                  <th class="td1">Discount</th>
-                  <th class="td1">Date</th>
-                  <th class="td1">Link</th>
-                  <th class="td1">Action</th>
-                </tr>
-                <?php
-                $totalPayment = 0;
-                $totaldiscount = 0;
-                ?>
-                @foreach ($payments as $key => $payment)
+        <table
+          style="background-color: #f5f8f8; color: black; width: 100%; margin-top: 6px; margin-bottom: 8px; border-radius: 4px;"
+          id="print_content">
+          <tbody>
+            <tr>
+              <td colspan="3">
+                <table>
                   <tr>
-                    <td class="td1">{{ $key + 1 }}</td>
-                    <td class="td1" style="min-width: 10vw;">
-                      {{ $payment->description }}
-                    </td>
-                    <td class="td1" style="font-size: 10px;">${{ number_format($payment->payment_amount, 2) }}</td>
-                    <td class="td1" style="font-size: 10px;">${{ number_format($payment->discount, 2) }}</td>
-                    <td class="td1" style="text-align:right;">{{ $payment->payment_date }}</td>
-                    <td class="td1" style="text-align:right;">{{ $payment->evidence_link }}</td>
-                    <td>
-                      <div style="display: flex; align-items: center; gap: 5px;">
-                        <button
-                          onclick="updatePayment('{{ $invoice->id }}', '{{ $payment->id }}', '{{ $payment->payment_amount }}', '{{ $payment->discount }}', '{{ $payment->payment_date }}', '{{ $payment->evidence_link }}', '{{ $payment->description }}')"
-                          class="btn btn-info btn-circle btn-sm">
-                          <span class="fa fa-pencil"></span>
-                        </button>
-                        <form method="POST" id="payment_delete_{{ $payment->id }}"
-                          action="{{ route('invoice_payments.destroy', $payment->id) }}"
-                          style="display: inline-block; margin: 0;">
-                          @method('delete')
-                          @csrf
-                          <a onclick="confirmDeletePayment('{{ $payment->id }}')"> <i class="fa fa-trash-o"
-                              style="font-size:16px; color:red; cursor:pointer;"></i></a>
-                        </form>
-                      </div>
+                    <td>Customer</td>
+                    <td>: <strong>{{ @$invoice->customer->name }}</strong></td>
+                  </tr>
+                  <tr>
+                    <td>Phone</td>
+                    <td>: <strong>{{ @$invoice->customer->phone }}</strong></td>
+                  </tr>
+                  <tr>
+                    <td>Address</td>
+                    <td>: <strong>Dubai U.A.E</strong></td>
+                  </tr>
+                </table>
+              </td>
+              <td colspan="2">
+                <table style="text-align:left; width: 100%;">
+                  <tr>
+                    <td>Invoice No</td>
+                    <td>: <strong style="color: red;">{{ 'JAM' . str_pad($invoice->id, 6, '0', STR_PAD_LEFT) }}</strong>
                     </td>
                   </tr>
-                  <?php
-                  $totalPayment = $totalPayment + $payment->payment_amount;
-                  $totaldiscount = $totaldiscount + $payment->discount;
-                  ?>
-                @endforeach
-                <tr>
-                  <th class="td1"></th>
-                  <th class="td1">Sub Total</th>
-                  <th style="text-align:right;" class="td1">${{ number_format(@$totalPayment, 2) }}</th>
-                  <th style="text-align:right;" class="td1">${{ number_format(@$totaldiscount, 2) }}</th>
-                  <th style="text-align:right;" class="td1"></th>
-                  <th style="text-align:right;" class="td1">
-                  </th>
+                  <tr>
+                    <td>Invoice Date</td>
+                    <td>: <strong>{{ date('Y-m-d', strtotime(@$invoice->invoice_date)) }}</strong>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Due Balance</td>
+                    <td>: <strong>@money($invoice->vehicles->sum('sold_price') - $invoice->discount - $invoice->payments->sum('payment_amount'))</th< /strong>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+              {{-- <td colspan="2">
+                <table dir="rtl" style="text-align:right; width: 100%;">
+                  <tr>
+                    <td>مشتری</td>
+                    <td>: <strong>{{ @$invoice->customer->name }}</strong></td>
+                  </tr>
+                  <tr>
+                    <td>المتحرک</td>
+                    <td>: <strong>{{ @$invoice->customer->phone }}</strong></td>
+                  </tr>
+                  <tr>
+                    <td>العنوان</td>
+                    <td>: <strong>Dubai U.A.E</strong></td>
+                  </tr>
+                </table>
+              </td> --}}
+            </tr>
+          </tbody>
+        </table>
+        <div id="yoba">
+          <table class="table" style="width: 100%;">
+            <thead>
+              <tr>
+                <th class="th1">#</th>
+                <th class="th1">Vehicle Description</th>
+                <th class="th1">Amount</th>
+                <th class="th1">Sub Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach ($invoice->vehicles as $key => $vehicle)
+                <tr style="width: 70mm;">
+                  <td class="td1">{{ $key + 1 }}</td>
+                  <td class="td1">
+                    <strong>{{ @$vehicle->year . ' ' . @$vehicle->make . ' ' . @$vehicle->model . ' ' . @$vehicle->color }}</strong>
+                    <br>
+                    VIN: <strong>{{ @$vehicle->vin }}</strong>
+                    <br>
+                    Lot#: <strong>{{ @$vehicle->lot_number }}</strong>
+                  </td>
+                  <td class="td1">@money($vehicle->sold_price)</td>
+                  <td class="td1">@money($vehicle->sold_price)</td>
                 </tr>
-              </tbody>
-            </table>
-          </div>
+              @endforeach
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="2" class="no-border" style="border: none !important;"></td>
+                <td class="td1" colspan="2">
+                  <div style="clear: both;">
+                    <span style="float: left;"> Sub Total</span>
+                    <span style="font-weight: bold; float: right;">
+                      @money(@$invoice->vehicles->sum('sold_price'))
+                    </span>
+                  </div>
+                  @if ($invoice->discount > 0)
+                    <div style="clear: both;">
+                      <span style="float: left;">Discount</span>
+                      <span style="font-weight: bold; float: right;">
+                        -@money(@$invoice->discount)
+                      </span>
+                    </div>
+                  @endif
+                  <div style="clear: both;">
+                    <span style="float: left;">Total</span>
+                    <span style="font-weight: bold; float: right;">
+                      @money(@$invoice->vehicles->sum('sold_price') - @$invoice->discount)
+                    </span>
+                  </div>
+                  <div style="clear: both;"></div>
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+
+          @if (count($invoice->payments) > 0)
+            <div id="payments-section" style="margin: 10px 0;">
+              <div style="text-align: left; font-weight: bold; margin: 5px 0;">Payments</div>
+              <table class="table table-bordered" width="100%">
+                <tbody>
+                  <tr>
+                    <th class="td1">#</th>
+                    <th class="td1">Payment Amount</th>
+                    <th class="td1">Date</th>
+                    <th class="td1">Description</th>
+                    <th class="td1">Link</th>
+                  </tr>
+                  @foreach ($invoice->payments as $key => $payment)
+                    <tr>
+                      <td class="td1">{{ $key + 1 }}</td>
+
+                      <td class="td1">@money(@$payment->payment_amount)
+                      </td>
+                      <td class="td1" style="text-align:right;">{{ $payment->payment_date }}</td>
+
+                      <td class="td1" style="max-width: 150px;">
+                        {{ $payment->description }}
+                      </td>
+                      <td class="td1" style="text-align:right;">
+                        <a href="{{ $payment->evidence_link }}" target="_blank" style="cursor: pointer;"
+                          class="btn btn-info btn-circle btn-sm waves-effect waves-light">
+                          view evidence
+                        </a>
+                      </td>
+                    </tr>
+                  @endforeach
+                  <tr>
+                    <th class="td1" colspan="2">Total Paid</th>
+                    <th style="text-align:right;" class="td1">@money($invoice->payments->sum('payment_amount'))</th>
+                    <th class="td1">Due Balance</th>
+                    <th style="text-align:right;" class="td1">@money($invoice->vehicles->sum('sold_price') - $invoice->discount - $invoice->payments->sum('payment_amount'))</th>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          @endif
+
           <table width="100%">
             <tbody>
               @if ($invoice->description)
-                <tr style="background-color: #eaf4f4; color: black;">
+                <tr style="background-color: #f5f8f8; color: black;">
                   <th
                     style="padding-left:10px; padding-right:10px; width:100%; padding-top: 10px; padding-bottom: 5px;">
                     <span style="text-align:left;">Additional Note
@@ -312,7 +232,7 @@
                   </th>
                 </tr>
               @endif
-              <tr style="background-color: #eaf4f4; color: black;">
+              <tr style="background-color: #f5f8f8; color: black;">
                 <td
                   style="padding-left:35% !important; width:100% !important; padding-top: 10px !important; padding-bottom: 10px !important;">
                   <b>Wire Transfer Information:</b><br>
@@ -329,15 +249,15 @@
           {{-- <table width="100%">
             <tbody>
               <tr>
-                <th style="background-color: #eaf4f4;">Phone: <br>
+                <th style="background-color: #f5f8f8;">Phone: <br>
                   M Phone
                 </th>
-                <th style="background-color: #eaf4f4;">Fax:
+                <th style="background-color: #f5f8f8;">Fax:
                   <br>N Fax
                 </th>
-                <th style="background-color: #eaf4f4;">
+                <th style="background-color: #f5f8f8;">
                   Website:<br>O Web</th>
-                <th style="background-color: #eaf4f4;">
+                <th style="background-color: #f5f8f8;">
                   Facebook:<br>P Fb</th>
               </tr>
             </tbody>

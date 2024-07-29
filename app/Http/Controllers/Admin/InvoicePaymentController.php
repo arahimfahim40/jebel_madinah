@@ -86,12 +86,10 @@ class InvoicePaymentController extends Controller
     {
         $request->validate([
             'invoice_id' => 'required|exists:invoices,id',
-            'payment_times' => 'nullable|integer',
             'payment_amount' => 'required|numeric',
             'payment_date' => 'required|date',
             'evidence_link' => 'nullable|string',
-            'description' => 'nullable|string',
-            'discount' => 'required|numeric'
+            'description' => 'nullable|string'
         ]);
 
         try {

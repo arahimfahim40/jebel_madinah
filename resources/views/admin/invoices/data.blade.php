@@ -76,29 +76,35 @@
               class="btn btn-success btn-circle btn-sm waves-effect waves-light">
               <i class="fa fa-eye"></i>
             </a>
-            <a target="_blank" class="btn btn-warning btn-circle btn-sm waves-effect waves-light"
-              href="{{ route('invoice_pdf', $item->id) }}" style="align-content: center;">
-              <i class="fa fa-file-pdf-o"></i>
-            </a>
-            <a href="{{ route('invoices.edit', $item->id) }}" class="btn btn-info btn-circle btn-sm"
-              style="align-content: center;">
-              <span class="fa fa-pencil"></span>
-            </a>
+            @can('invoice-view')
+              <a target="_blank" class="btn btn-warning btn-circle btn-sm waves-effect waves-light"
+                href="{{ route('invoice_pdf', $item->id) }}" style="align-content: center;">
+                <i class="fa fa-file-pdf-o"></i>
+              </a>
+            @endcan
+            @can('invoice-edit')
+              <a href="{{ route('invoices.edit', $item->id) }}" class="btn btn-info btn-circle btn-sm"
+                style="align-content: center;">
+                <span class="fa fa-pencil"></span>
+              </a>
+            @endcan
 
-            @can('vehicle-edit')
+            @can('payment-add')
               <button onclick="addPayment(`{{ $item->id }}`)" class="btn btn-info btn-circle btn-sm">
                 <span class="fa fa-credit-card"></span>
               </button>
             @endcan
-            <form method="POST" id="invoice_delete_{{ $item->id }}"
-              action="{{ route('invoices.destroy', $item->id) }}" style="display: inline-block; margin: 0;">
-              @method('delete')
-              @csrf
-              <a onclick="confirmDeleteInvoice('{{ $item->id }}')"
-                style="cursor:pointer; display: flex; align-items: center;">
-                <i class="fa fa-trash-o" style="font-size:16px; color:red; margin: 0;"></i>
-              </a>
-            </form>
+            @can('invoice-delete')
+              <form method="POST" id="invoice_delete_{{ $item->id }}"
+                action="{{ route('invoices.destroy', $item->id) }}" style="display: inline-block; margin: 0;">
+                @method('delete')
+                @csrf
+                <a onclick="confirmDeleteInvoice('{{ $item->id }}')"
+                  style="cursor:pointer; display: flex; align-items: center;">
+                  <i class="fa fa-trash-o" style="font-size:16px; color:red; margin: 0;"></i>
+                </a>
+              </form>
+            @endcan
           </div>
         </td>
       </tr>

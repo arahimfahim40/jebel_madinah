@@ -241,7 +241,7 @@ class InvoiceController extends Controller
         try {
 
             $invoice = Invoice::with('payments', 'vehicles', 'customer')->find($id);
-            $pdf = PDF::loadView('admin.invoices.pdf', compact('invoice'), ['format' => ['A4', 190, 236]]);
+            $pdf = PDF::loadView('admin.invoices.invoice_pdf', compact('invoice'), ['format' => ['A4', 190, 236]]);
             $file_name = Str::slug($invoice->customer->name  . '_' . sprintf("JAM%'.06d\n", @$id));
             return $pdf->download($file_name . '.pdf');
         } catch (\Throwable $th) {
