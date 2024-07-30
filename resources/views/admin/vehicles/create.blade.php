@@ -31,8 +31,8 @@
     }
 
     /* .actions {
-                                                                                                                                                  display: none;
-                                                                                                                                              } */
+                                                                                                                                                                                                                                                                                                                                                                                                    display: none;
+                                                                                                                                                                                                                                                                                                                                                                                                } */
     #create-vehicle-form ul {
       margin-bottom: 0px;
     }
@@ -185,46 +185,74 @@
                         <div class="col-md-6 px-0">
 
                           <div class="col-md-12 form-group">
-                            <label>Vehicle Price</label>
-                            <input type="number" name="vehicle_price" placeholder="Vehicle Price"
-                              class="form-control" value="{{ old('vehicle_price', '') }}" />
+                            <label for="vehicle_price">Vehicle Price</label>
+                            <div class="input-group">
+                              <div class="input-group-addon">$</div>
+                              <input type="number" id="vehicle_price" name="vehicle_price"
+                                placeholder="Vehicle Price" class="form-control input-usd-cost"
+                                value="{{ old('vehicle_price', '') }}" />
+                            </div>
                           </div>
                           <div class="col-md-12 form-group">
-                            <label>Towing Cost</label>
-                            <input type="number" name="towing_cost" placeholder="Towing Cost" class="form-control"
-                              value="{{ old('towing_cost', '') }}" />
+                            <label for="towing_cost">Towing Cost</label>
+                            <div class="input-group">
+                              <div class="input-group-addon">$</div>
+                              <input type="number" id="towing_cost" name="towing_cost" placeholder="Towing Cost"
+                                class="form-control input-usd-cost" value="{{ old('towing_cost', '') }}" />
+                            </div>
                           </div>
                           <div class="col-md-12 form-group">
-                            <label>Clearance Cost</label>
-                            <input type="number" name="clearance_cost" placeholder="Clearance Cost"
-                              class="form-control" value="{{ old('clearance_cost', '') }}" />
+                            <label for="clearance_cost">Clearance Cost</label>
+                            <div class="input-group">
+                              <div class="input-group-addon">AED</div>
+                              <input type="number" id="clearance_cost" name="clearance_cost"
+                                placeholder="Clearance Cost" class="form-control input-aed-cost"
+                                value="{{ old('clearance_cost', '') }}" />
+                            </div>
                           </div>
                           <div class="col-md-12 form-group">
-                            <label>Ship Cost</label>
-                            <input type="number" name="ship_cost" placeholder="Ship Cost" class="form-control"
-                              value="{{ old('ship_cost', '') }}" />
+                            <label for="ship_cost">Ship Cost</label>
+                            <div class="input-group">
+                              <div class="input-group-addon">$</div>
+                              <input type="number" id="ship_cost" name="ship_cost" placeholder="Ship Cost"
+                                class="form-control input-usd-cost" value="{{ old('ship_cost', '') }}" />
+                            </div>
                           </div>
                         </div>
                         <div class="col-md-6 px-0">
                           <div class="col-md-12 form-group">
-                            <label>Storage Cost</label>
-                            <input type="number" name="storage_cost" placeholder="Storage Cost" class="form-control"
-                              value="{{ old('storage_cost', '') }}" />
+                            <label for="storage_cost">Storage Cost</label>
+                            <div class="input-group">
+                              <div class="input-group-addon">$</div>
+                              <input type="number" id="storage_cost" name="storage_cost" placeholder="Storage Cost"
+                                class="form-control input-usd-cost" value="{{ old('storage_cost', '') }}" />
+                            </div>
+                          </div>
+
+                          <div class="col-md-12 form-group">
+                            <label for="custom_cost">Custom Cost</label>
+                            <div class="input-group">
+                              <div class="input-group-addon">$</div>
+                              <input type="number" id="custom_cost" name="custom_cost" placeholder="Custom Cost"
+                                class="form-control input-usd-cost" value="{{ old('custom_cost', '') }}" />
+                            </div>
                           </div>
                           <div class="col-md-12 form-group">
-                            <label>Custom Cost</label>
-                            <input type="number" name="custom_cost" placeholder="Custom Cost" class="form-control"
-                              value="{{ old('custom_cost', '') }}" />
+                            <label for="tds_cost">TDS Cost</label>
+                            <div class="input-group">
+                              <div class="input-group-addon">$</div>
+                              <input type="number" id="tds_cost" name="tds_cost" placeholder="TDS Cost"
+                                class="form-control input-usd-cost" value="{{ old('tds_cost', '') }}" />
+
+                            </div>
                           </div>
                           <div class="col-md-12 form-group">
-                            <label>TDS Cost</label>
-                            <input type="number" name="tds_cost" placeholder="TDS Cost" class="form-control"
-                              value="{{ old('tds_cost', '') }}" />
-                          </div>
-                          <div class="col-md-12 form-group">
-                            <label>Other Cost</label>
-                            <input type="number" name="other_cost" placeholder="Other Cost" class="form-control"
-                              value="{{ old('other_cost', '') }}" />
+                            <label for="other_cost">Other Cost</label>
+                            <div class="input-group">
+                              <div class="input-group-addon">$</div>
+                              <input type="number" id="other_cost" name="other_cost" placeholder="Other Cost"
+                                class="form-control input-usd-cost" value="{{ old('other_cost', '') }}" />
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -232,9 +260,28 @@
                         <h4 class="px-1">Vehicle Sold Price</h4>
                         <hr class="mx-1" />
                         <div class="col-md-12 form-group">
-                          <label>Sold Price</label>
-                          <input type="number" name="sold_price" placeholder="Sold Price" class="form-control"
-                            value="{{ old('sold_price', '') }}" />
+                          <label for="sold_price">Sold Price</label>
+                          <div class="input-group">
+                            <div class="input-group-addon">AED</div>
+                            <input type="number" id="sold_price" name="sold_price" placeholder="Sold Price"
+                              class="form-control" value="{{ old('sold_price', '') }}" />
+                          </div>
+                        </div>
+                        <div class="col-md-12 form-group">
+                          <label for="total_cost">Total Cost</label>
+                          <div class="input-group">
+                            <div class="input-group-addon">AED</div>
+                            <input type="number" id="total_cost" name="total_cost" placeholder="Total Cost"
+                              class="form-control" value="" disabled />
+                          </div>
+                        </div>
+                        <div class="col-md-12 form-group">
+                          <label for="profit_and_loss">Profit & Loss</label>
+                          <div class="input-group">
+                            <div class="input-group-addon">AED</div>
+                            <input type="number" id="profit_and_loss" name="profit_and_loss"
+                              placeholder="Profit & Loss" class="form-control" value="" disabled />
+                          </div>
                         </div>
                       </div>
                       <div class="col-md-12 form-group">
@@ -297,5 +344,20 @@
         form.submit();
       }
     }
+
+    $('.input-usd-cost, .input-aed-cost, #sold_price').on('input', function(event) {
+      // Get all the input elements with the class "input-usd-cost"
+      let usdValues = $(".input-usd-cost").map((_, el) => parseFloat($(el).val()) || 0).toArray();
+      let sumUsd = usdValues.reduce((acc, val) => acc + val, 0);
+
+      let aedValues = $(".input-aed-cost").map((_, el) => parseFloat($(el).val()) || 0).toArray();
+      let sumAed = aedValues.reduce((acc, val) => acc + val, 0);
+
+      let total = sumUsd * 3.675 + sumAed;
+      let profiteAndLoss = $("#sold_price").val() - total;
+
+      $("#total_cost").val(total.toFixed(2));
+      $("#profit_and_loss").val(profiteAndLoss.toFixed(2));
+    });
   </script>
 @endpush
