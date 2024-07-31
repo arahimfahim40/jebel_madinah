@@ -334,5 +334,41 @@
         });
       }
     }
+
+    function deleteVehicle(vehicle_id) {
+      if (confirm('Vehicle will be deleted. Are you sure?')) {
+        $('#content_loader').html(
+          "<div style='position:fixed; margin-top:15%; margin-left:40%;'><img width='100px' src='/img/loading.gif' alt='Loading ...'> </div> "
+        );
+        var request = $.ajax({
+          url: "{{ url('/admin/vehicles') }}" + '/' + vehicle_id,
+          method: "DELETE",
+          data: {
+            _token: '{{ csrf_token() }}',
+          },
+        });
+        request.done(function(msg) {
+          $('#content_loader').html('');
+          updateVehicleList();
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: "Vehicle deleted successfully.",
+            showConfirmButton: false,
+            timer: 4000
+          });
+        });
+        request.fail(function(jqXHR, textStatus) {
+          $('#content_loader').html('');
+          Swal.fire({
+            position: 'center',
+            icon: 'error',
+            title: jqXHR.responseJSON.message,
+            showConfirmButton: false,
+            timer: 4000
+          });
+        });
+      }
+    }
   </script>
 @endpush

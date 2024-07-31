@@ -19,6 +19,7 @@
       <th>Buyer Number</th>
       <th>Invoice#</th>
       <th>Vehicle Price</th>
+      <th>Actions</th>
     </tr>
   </thead>
   <tbody>
@@ -55,7 +56,17 @@
         <td>{{ $item->auction_name }}</td>
         <td>{{ $item->buyer_number }}</td>
         <td>{{ empty($item->invoice_id) ? '' : 'JAM' . str_pad($item->invoice_id, 6, '0', STR_PAD_LEFT) }}</td>
-        <td>{{ $item->vehicle_price }}</td>
+        <td>@money($item->vehicle_price)</td>
+        <td>
+          @can('vehicle-delete')
+            @if ($item->status != 'sold')
+              <a onclick="deleteVehicle('{{ $item->id }}')"
+                style="cursor:pointer; display: flex; align-items: center;">
+                <i class="fa fa-trash-o" style="font-size:16px; color:red; margin: 0;"></i>
+              </a>
+            @endif
+          @endcan
+        </td>
       </tr>
     @endforeach
   </tbody>
@@ -78,6 +89,7 @@
       <th>Buyer Number</th>
       <th>Invoice#</th>
       <th>Vehicle Price</th>
+      <th>Actions</th>
     </tr>
   </tfoot>
 </table>
