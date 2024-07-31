@@ -113,13 +113,13 @@
                     <span class="tag tag-secondary">{{ ucwords(str_replace('_', ' ', $item->status)) }}</span>
                   @endif
                 </td>
-                <td>@money($soldPrice)</td>
-                <td>{{ $item->discount }}</td>
-                <td>@money($paymentAmount)</td>
-                <td>
+                <td>@money($soldPrice, AED)</td>
+                <td>@money($item->discount, AED)</td>
+                <td>@money($paymentAmount, AED)</td>
+                <td style="max-width: 140px;">
                   {{ $item->payments->pluck('payment_date')->join(' | ') }}
                 </td>
-                <td>@money($soldPrice - $item->discount - $paymentAmount)</td>
+                <td>@money($soldPrice - $item->discount - $paymentAmount, AED)</td>
                 <td>
                   @php
                     $age = '';
@@ -154,19 +154,22 @@
               <th>@money(
                   $invoices->sum(function ($invoice) {
                       return $invoice->vehicles->sum('sold_price');
-                  })
+                  }),
+                  AED
               )</th>
-              <th>@money($invoices->sum('discount'))</th>
+              <th>@money($invoices->sum('discount'), AED)</th>
               <th>@money(
                   $invoices->sum(function ($invoice) {
                       return $invoice->payments->sum('payment_amount');
-                  })
+                  }),
+                  AED
               )</th>
               <th>Payment Date</th>
               <th>@money(
                   $invoices->sum(function ($invoice) {
                       return $invoice->vehicles->sum('sold_price') - $invoice->discount - $invoice->payments->sum('payment_amount');
-                  })
+                  }),
+                  AED
               )</th>
               <th>Age</th>
             </tr>

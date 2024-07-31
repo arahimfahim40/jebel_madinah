@@ -23,7 +23,7 @@
           <div class="col-md-12">
             <div class="col-md-6">
               <div class="form-group">
-                <span class="main"><label for="payment_amount">Payment Amount</label>&nbsp;<span
+                <span class="main"><label for="payment_amount">Payment Amount (AED)</label>&nbsp;<span
                     class="text-danger">*</span></span>
                 <input type="number" step=".01" name="payment_amount" id="payment_amount" class="form-control"
                   required />

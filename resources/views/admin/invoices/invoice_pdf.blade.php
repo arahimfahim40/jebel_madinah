@@ -51,7 +51,6 @@
     <div class="col-md-12">
       <div class="col-md-12 col-md-offset-1 ">
         <div style="width: 100%; text-align: center;">
-          <img src="data:image/png;base64,{!! base64_encode(file_get_contents(public_path('img/logo.png'))) !!}" height="140px">
           <div style=" font-size:20px;font-weight:bold; text-align:center">
             Tax Invoice
           </div>
@@ -98,7 +97,7 @@
                   </tr>
                   <tr>
                     <td>Due Balance</td>
-                    <td>: <strong>@money($invoice->vehicles->sum('sold_price') - $invoice->discount - $invoice->payments->sum('payment_amount'))</th< /strong>
+                    <td>: <strong>@money($invoice->vehicles->sum('sold_price') - $invoice->discount - $invoice->payments->sum('payment_amount'), AED)</th< /strong>
                     </td>
                   </tr>
                 </table>
@@ -143,8 +142,8 @@
                     <br>
                     Lot#: <strong>{{ @$vehicle->lot_number }}</strong>
                   </td>
-                  <td class="td1">@money($vehicle->sold_price)</td>
-                  <td class="td1">@money($vehicle->sold_price)</td>
+                  <td class="td1">@money($vehicle->sold_price, AED)</td>
+                  <td class="td1">@money($vehicle->sold_price, AED)</td>
                 </tr>
               @endforeach
             </tbody>
@@ -155,21 +154,21 @@
                   <div style="clear: both;">
                     <span style="float: left;"> Sub Total</span>
                     <span style="font-weight: bold; float: right;">
-                      @money(@$invoice->vehicles->sum('sold_price'))
+                      @money(@$invoice->vehicles->sum('sold_price'), AED)
                     </span>
                   </div>
                   @if ($invoice->discount > 0)
                     <div style="clear: both;">
                       <span style="float: left;">Discount</span>
                       <span style="font-weight: bold; float: right;">
-                        -@money(@$invoice->discount)
+                        -@money(@$invoice->discount, AED)
                       </span>
                     </div>
                   @endif
                   <div style="clear: both;">
                     <span style="float: left;">Total</span>
                     <span style="font-weight: bold; float: right;">
-                      @money(@$invoice->vehicles->sum('sold_price') - @$invoice->discount)
+                      @money(@$invoice->vehicles->sum('sold_price') - @$invoice->discount, AED)
                     </span>
                   </div>
                   <div style="clear: both;"></div>
@@ -194,7 +193,7 @@
                     <tr>
                       <td class="td1">{{ $key + 1 }}</td>
 
-                      <td class="td1">@money(@$payment->payment_amount)
+                      <td class="td1">@money(@$payment->payment_amount, AED)
                       </td>
                       <td class="td1" style="text-align:right;">{{ $payment->payment_date }}</td>
 
@@ -211,9 +210,9 @@
                   @endforeach
                   <tr>
                     <th class="td1" colspan="2">Total Paid</th>
-                    <th style="text-align:right;" class="td1">@money($invoice->payments->sum('payment_amount'))</th>
+                    <th style="text-align:right;" class="td1">@money($invoice->payments->sum('payment_amount'), AED)</th>
                     <th class="td1">Due Balance</th>
-                    <th style="text-align:right;" class="td1">@money($invoice->vehicles->sum('sold_price') - $invoice->discount - $invoice->payments->sum('payment_amount'))</th>
+                    <th style="text-align:right;" class="td1">@money($invoice->vehicles->sum('sold_price') - $invoice->discount - $invoice->payments->sum('payment_amount'), AED)</th>
                   </tr>
                 </tbody>
               </table>

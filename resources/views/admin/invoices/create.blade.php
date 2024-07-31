@@ -31,8 +31,8 @@
     }
 
     /* .actions {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    display: none;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                } */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        display: none;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    } */
     #create-invoice-form ul {
       margin-bottom: 0px;
     }
@@ -83,9 +83,12 @@
                       </div>
                       <div class="col-md-12 px-0">
                         <div class="col-md-4 form-group">
-                          <label>Discount</label>
-                          <input type="number" name="discount" placeholder="Discount" class="form-control"
-                            value="0" />
+                          <label for="discount">Discount</label>
+                          <div class="input-group">
+                            <div class="input-group-addon">AED</div>
+                            <input type="number" id="discount" name="discount" placeholder="Discount"
+                              class="form-control" value="{{ old('discount', '') }}" />
+                          </div>
                         </div>
                       </div>
 
@@ -229,7 +232,7 @@
           }).append(
             $('<div>', {
               class: 'input-group-addon',
-              text: 'Sold Price'
+              text: 'Sold Price (AED)'
             }),
             $('<input>', {
               type: 'number',

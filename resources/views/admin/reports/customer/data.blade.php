@@ -25,10 +25,10 @@
         <td>{{ $loop->iteration }}</td>
         <td>{{ $item->customer_name }}</td>
 
-        <td>@money($item->total_invoice)</td>
-        <td>@money($item->total_paid)</td>
-        <td>@money($item->total_discount)</td>
-        <td>@money($item->total_due_balance)</td>
+        <td>@money($item->total_invoice, AED)</td>
+        <td>@money($item->total_paid, AED)</td>
+        <td>@money($item->total_discount, AED)</td>
+        <td>@money($item->total_due_balance, AED)</td>
         <td>{{ @$item->total_vehicles }}</td>
         <td>
           <a target="_blank" class="btn btn-info btn-circle btn-sm waves-effect waves-light"
@@ -56,10 +56,10 @@
         <h5 style="text-align: center;">Total</h5>
       </th>
 
-      <th>@money($customerReport->sum('total_invoice'))</th>
-      <th>@money($customerReport->sum('total_paid'))</th>
-      <th>@money($customerReport->sum('total_discount'))</th>
-      <th>@money($customerReport->sum('total_due_balance'))</th>
+      <th>@money($customerReport->sum('total_invoice'), AED)</th>
+      <th>@money($customerReport->sum('total_paid'), AED)</th>
+      <th>@money($customerReport->sum('total_discount'), AED)</th>
+      <th>@money($customerReport->sum('total_due_balance'), AED)</th>
       <th>{{ @$customerReport->sum('total_vehicles') }}</th>
       <th>Actions</th>
     </tr>

@@ -31,8 +31,8 @@
     }
 
     /* .actions {
-                                                                                                                                                                                                                                                                                                                        display: none;
-                                                                                                                                                                                                                                                                                                                    } */
+                                                                                                                                                                                                                                                                                                                                      display: none;
+                                                                                                                                                                                                                                                                                                                                  } */
     #edit-invoice-form ul {
       margin-bottom: 0px;
     }
@@ -92,9 +92,12 @@
                             value="{{ old('invoice_due_date', @$invoice->invoice_due_date) }}" />
                         </div>
                         <div class="col-md-4 form-group">
-                          <label>Discount</label>
-                          <input type="number" name="discount" placeholder="Discount" class="form-control"
-                            value="{{ old('discount', @$invoice->discount) }}" value="0" />
+                          <label for="discount">Discount</label>
+                          <div class="input-group">
+                            <div class="input-group-addon">AED</div>
+                            <input type="number" id="discount" name="discount" placeholder="Discount"
+                              class="form-control" value="{{ old('discount', @$invoice->discount) }}" />
+                          </div>
                         </div>
 
                       </div>
@@ -128,7 +131,7 @@
                               <label for="{{ $vehicle->id }}">{{ $vehicle->year }} {{ $vehicle->make }}
                                 {{ $vehicle->model }} {{ $vehicle->color }}</label>
                               <div class="input-group">
-                                <div class="input-group-addon">Sold Price</div>
+                                <div class="input-group-addon">Sold Price (AED)</div>
                                 <input type="number" step="any" name="vehicles[{{ $vehicle->id }}]"
                                   value="{{ $vehicle->sold_price }}" class="vehicle_charges form-control"
                                   placeholder="Enter Vehicle Sold Price">
@@ -245,7 +248,7 @@
           }).append(
             $('<div>', {
               class: 'input-group-addon',
-              text: 'Sold Price'
+              text: 'Sold Price (AED)'
             }),
             $('<input>', {
               type: 'number',

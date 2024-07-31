@@ -53,13 +53,13 @@
             <span class="tag tag-secondary">{{ ucwords(str_replace('_', ' ', $item->status)) }}</span>
           @endif
         </td>
-        <td>@money($soldPrice)</td>
-        <td>{{ $item->discount }}</td>
-        <td>@money($paymentAmount)</td>
-        <td>
+        <td>@money($soldPrice, AED)</td>
+        <td>@money($item->discount, AED)</td>
+        <td>@money($paymentAmount, AED)</td>
+        <td style="max-width: 160px;">
           {{ $item->payments->pluck('payment_date')->join(' | ') }}
         </td>
-        <td>@money($soldPrice - $item->discount - $paymentAmount)</td>
+        <td>@money($soldPrice - $item->discount - $paymentAmount, AED)</td>
         <td>
           @php
             $age = '';
