@@ -38,11 +38,10 @@ class AppServiceProvider extends ServiceProvider
                 $arguments = explode(',', $expression);
                 $amount = trim($arguments[0]);
                 $currency = isset($arguments[1]) ? trim($arguments[1]) : '$';
-
                 $formattedAmount = "<?php echo '{$currency}' . number_format({$amount} ?? 0, 2); ?>";
-return $formattedAmount;
-}
-);
-Paginator::defaultView('vendor.pagination.bootstrap-4');
-}
+                return $formattedAmount;
+            }
+        );
+        Paginator::defaultView('vendor.pagination.bootstrap-4');
+    }
 }
