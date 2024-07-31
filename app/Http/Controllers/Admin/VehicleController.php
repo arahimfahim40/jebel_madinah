@@ -269,7 +269,19 @@ class VehicleController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            // Find the vehicle
+            $vehicle = Vehicle::findOrFail($id);
+            if ($vehicle->status == 'sold') {
+                return response()->json(['status' => 'error', 'message' => 'Cannot delete a sold vehicle!']);
+            }
+            $vehicle->update(['deleted_by' => auth()->id()]);
+            // Delete the vehicle
+            $vehicle->delete();
+            return response()->json(['status' => 'success', 'message' => 'Vehicle deleted successfully!']);
+        } catch (\Exception $ex) {
+            return response()->json(['status' => 'error', 'message' => 'Something went wrong, cannot delete the user.']);
+        }
     }
 
     public function change_status(Request  $request)
