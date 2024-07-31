@@ -37,7 +37,7 @@
             @$item->custom_cost +
             @$item->tds_cost +
             @$item->other_cost;
-        $totalCost = $totalUSD * 3.685 + @$item->clearance_cost;
+        $totalCost = $totalUSD * 3.675 + @$item->clearance_cost;
         $totalSoldPrice = @$item->sold_price;
       @endphp
       <tr>
@@ -88,7 +88,7 @@
             @$vehicles->sum('custom_cost') +
             @$vehicles->sum('tds_cost') +
             @$vehicles->sum('other_cost');
-        $totalCost = $totalUSD * 3.685 + @$vehicles->sum('clearance_cost');
+        $totalCost = $totalUSD * 3.675 + @$vehicles->sum('clearance_cost');
         $totalSoldPrice = @$vehicles->sum('sold_price');
 
       @endphp

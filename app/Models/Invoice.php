@@ -15,6 +15,7 @@ class Invoice extends Model
     protected $table = 'invoices';
 
     const INVOICE_STATUS = ['pending', 'open', 'past_due', 'paid'];
+    const EXCHANGE_RATE = 3.675;
 
     protected $fillable = [
         "customer_id",
