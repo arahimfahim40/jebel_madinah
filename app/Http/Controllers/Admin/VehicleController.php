@@ -18,7 +18,7 @@ class VehicleController extends Controller
         'model',
         'color',
         'container_number',
-        'auction',
+        'auction_name',
         'buyer_number',
         'note'
     ];
@@ -280,7 +280,7 @@ class VehicleController extends Controller
             $vehicle->delete();
             return response()->json(['status' => 'success', 'message' => 'Vehicle deleted successfully!']);
         } catch (\Exception $ex) {
-            return response()->json(['status' => 'error', 'message' => 'Something went wrong, cannot delete the user.']);
+            return response()->json(['status' => 'error', 'message' => 'Something went wrong, cannot delete the user.' . $ex->getMessage()]);
         }
     }
 
@@ -298,6 +298,46 @@ class VehicleController extends Controller
         } catch (\Throwable $th) {
             DB::rollBack();
             return response()->json(['result' => false, 'message' => 'Something went wrong, ' . $th->getMessage()], 400);
+        }
+    }
+
+
+    public function trash_list(Request $request)
+    {
+        $paginate = $request->paginate ? $request->paginate : 20;
+
+        // dd($request->searchValue);
+        $vehicles = Vehicle::onlyTrashed()
+            ->when(!empty($request->searchValue), function ($q) use ($request) {
+                $q->where(function ($query) use ($request) {
+                    foreach (self::$searchColumns as $value) {
+                        $query->orWhere($value, 'LIKE', "%$request->searchValue%");
+                    }
+                });
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate($paginate);
+
+        if ($request->ajax()) {
+            return view('admin.vehicles.trash_data', compact('vehicles', 'paginate'));
+        }
+        return view('admin.vehicles.trash_list', compact('vehicles', 'paginate'));
+    }
+
+    public function restore(string $id)
+    {
+        try {
+            // Find the vehicle
+            $vehicle = Vehicle::withTrashed()->findOrFail($id);
+
+            // Restore the vehicle
+            $vehicle->restore();
+
+            // Update the 'deleted_by' field
+            $vehicle->update(['deleted_by' => null]);
+            return response()->json(['status' => 'success', 'message' => 'Vehicle restored successfully!']);
+        } catch (\Exception $ex) {
+            return response()->json(['status' => 'error', 'message' => 'Something went wrong, cannot delete the user.' . $ex->getMessage()]);
         }
     }
 }

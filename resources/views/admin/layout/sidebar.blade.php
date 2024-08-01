@@ -43,6 +43,7 @@
             </li>
 
             <li><a href="{{ route('vehicles.cost_analysis') }}">Cost anlysis</a></li>
+            <li><a href="{{ route('vehicles.trash_list') }}">Trash List</a></li>
 
             {{-- @can('vehicle-summary')
               <li class="with-sub">
