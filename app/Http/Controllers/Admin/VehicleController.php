@@ -20,7 +20,9 @@ class VehicleController extends Controller
         'container_number',
         'auction_name',
         'buyer_number',
-        'note'
+        'note',
+        'owner.name',
+        'invoice.id'
     ];
 
     /**
@@ -38,9 +40,23 @@ class VehicleController extends Controller
                 $q->where('owner_id', $request->owner_id);
             })
             ->when(!empty($request->searchValue), function ($q) use ($request) {
-                $q->where(function ($query) use ($request) {
+                $searchQuery = trim($request->searchValue);
+                $q->where(function ($query) use ($searchQuery) {
+                    $query->whereRaw('CONCAT(year, " ", make, " ", model, " ", color) LIKE ?', ["%$searchQuery%"]);
                     foreach (self::$searchColumns as $value) {
-                        $query->orWhere($value, 'LIKE', "%$request->searchValue%");
+                        $fields = explode('.', $value);
+                        if (count($fields) == 1) {
+                            $query->orWhere($value, 'LIKE', "%$searchQuery%");
+                        } elseif (count($fields) == 2) {
+                            $query->orWhereHas($fields[0], function ($q2) use ($fields, $searchQuery) {
+                                if ($fields[1] == 'id') {
+                                    $search = preg_replace('/[^0-9.]+/', '', $searchQuery);
+                                    $q2->where($fields[1], '=', $search);
+                                } else {
+                                    $q2->where($fields[1], 'LIKE', "%$searchQuery%");
+                                }
+                            });
+                        }
                     }
                 });
             })
