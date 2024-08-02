@@ -43,8 +43,9 @@
             </li>
 
             <li><a href="{{ route('vehicles.cost_analysis') }}">Cost anlysis</a></li>
-            <li><a href="{{ route('vehicles.trash_list') }}">Trash List</a></li>
-
+            @can('vehicle-trash-list')
+              <li><a href="{{ route('vehicles.trash_list') }}">Trash List</a></li>
+            @endcan
             {{-- @can('vehicle-summary')
               <li class="with-sub">
                 <a href="#" class="waves-effect waves-light">
