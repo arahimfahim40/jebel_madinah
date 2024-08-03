@@ -92,12 +92,12 @@
               <input type="text" name="search" class="form-control b-a" placeholder="Search for ..." id="search">
             </div>
             <div class="form-group col-md-4">
-              @can('vehicle-change-status')
+              {{-- @can('vehicle-change-status')
                 <button class="btn btn-info" style="float: left; border-radius: 5px; margin-right: 10px;"
                   onclick="changeStatus()">
                   <i class="fa fa-info-circle"></i> Change Status
                 </button>
-              @endcan
+              @endcan --}}
               {{-- @can('vehicle-change-status')
                 <button class="btn btn-success" style="float: left; border-radius: 5px;" onclick="vehicleSell()">
                   <i class="fa fa-dollar"></i> Sell
@@ -176,113 +176,14 @@
     }
 
 
-
-    function checkAll(checkbox) {
-      if (checkbox.checked == true) {
-        $(".checkbox").prop('checked', true);
-        $(".checkbox_all").prop('checked', true);
-      } else {
-        $(".checkbox").prop('checked', false);
-        $(".checkbox_all").prop('checked', false);
-      }
-    }
-
-    function changeStatus() {
-      var selectedVehicleIds = [];
-      $(".checkbox:checked").each(function() {
-        selectedVehicleIds.push($(this).attr('data-id'));
-      });
-
-      if (selectedVehicleIds.length <= 0) {
-        Swal.fire({
-          position: 'center',
-          icon: 'info',
-          title: "Please select atleast one record to change the status.",
-          showConfirmButton: false,
-          timer: 4000
-        });
-      } else {
-        $('#vehicle_change_status_modal').modal('show');
-      }
-    }
-
-    function vehicleSell() {
-      var selectedVehicleIds = [];
-      $(".checkbox:checked").each(function() {
-        selectedVehicleIds.push($(this).attr('data-id'));
-      });
-
-      if (selectedVehicleIds.length <= 0) {
-        Swal.fire({
-          position: 'center',
-          icon: 'info',
-          title: "Please select atleast one record to change the status.",
-          showConfirmButton: false,
-          timer: 4000
-        });
-      } else {
-        $('#vehicle_sell_modal').modal('show');
-      }
-    }
-
-    function submitForm() {
-      var status = $(".vehicle_status:checked").val();
-      if (status == null) {
-        Swal.fire({
-          position: 'center',
-          icon: 'info',
-          title: "Please select at least one status",
-          showConfirmButton: false,
-          timer: 4000
-        });
-        return;
-      } else {
-        var selectedVehicleIds = [];
-        $(".checkbox:checked").each(function() {
-          selectedVehicleIds.push($(this).attr('data-id'));
-        });
-
-        var request = $.ajax({
-          url: "{{ route('vehicles.change_status') }}",
-          method: "POST",
-          data: {
-            selectedVehicleIds: selectedVehicleIds,
-            status: status,
-            _token: '{{ csrf_token() }}',
-          },
-        });
-        request.done(function(msg) {
-          $('#vehicle_change_status_modal').modal('hide');
-          Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: msg.message,
-            showConfirmButton: false,
-            timer: 4000
-          });
-          updateVehicleList();
-        });
-        request.fail(function(jqXHR, textStatus) {
-          $('#vehicle_change_status_modal').modal('hide');
-          Swal.fire({
-            position: 'center',
-            icon: 'error',
-            title: jqXHR.responseJSON.message,
-            showConfirmButton: false,
-            timer: 4000
-          });
-        });
-      }
-    }
-
-    function deleteVehicle(vehicle_id) {
-      if (confirm('Vehicle will be deleted. Are you sure?')) {
+    function restoreVehicle(vehicle_id) {
+      if (confirm('Vehicle will be restored. Are you sure?')) {
         $('#content_loader').html(
           "<div style='position:fixed; margin-top:15%; margin-left:40%;'><img width='100px' src='/img/loading.gif' alt='Loading ...'> </div> "
         );
         var request = $.ajax({
-          url: "{{ url('/admin/vehicles') }}" + '/' + vehicle_id,
-          method: "DELETE",
+          url: "{{ url('/admin/vehicles_restore') }}" + '/' + vehicle_id,
+          method: "GET",
           data: {
             _token: '{{ csrf_token() }}',
           },
@@ -293,7 +194,7 @@
           Swal.fire({
             position: 'center',
             icon: 'success',
-            title: "Vehicle deleted successfully.",
+            title: msg.message,
             showConfirmButton: false,
             timer: 4000
           });

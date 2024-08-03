@@ -3,9 +3,6 @@
   <thead class="bg-info">
     <tr>
       <th>#</th>
-      @can('vehicle-change-status')
-        <th><input class="checkbox_all" onclick="checkAll(this)" type="checkbox" style=" width:25px; height:20px;"></th>
-      @endcan
       <th>Vehicle Description</th>
       <th>VIN#</th>
       <th>Lot#</th>
@@ -15,7 +12,9 @@
       <th>Auction</th>
       <th>Buyer Number</th>
       <th>Vehicle Cost</th>
-      <th>Restore</th>
+      @can('vehicle-restore')
+        <th>Restore</th>
+      @endcan
 
     </tr>
   </thead>
@@ -35,12 +34,6 @@
       @endphp
       <tr>
         <td>{{ $index + 1 }}</td>
-        @can('vehicle-change-status')
-          <td>
-            <input name="status[{{ $item->id }}]" type="checkbox" style="width:25px; height:20px;" class="checkbox"
-              data-id="{{ $item->id }}" data-status="{{ $item->status }}" />
-          </td>
-        @endcan
         <td>{{ $item->year }} {{ $item->make }} {{ $item->model }} {{ $item->color }}</td>
         <td>{{ $item->vin }}</td>
         <td>{{ $item->lot_number }}</td>
@@ -58,25 +51,19 @@
         <td>{{ $item->auction_name }}</td>
         <td>{{ $item->buyer_number }}</td>
         <td>@money($vehicleTotalCost, AED)</td>
-        <td>
-          @can('vehicle-delete')
-            @if ($item->status != 'sold')
-              <a onclick="deleteVehicle('{{ $item->id }}')"
-                style="cursor:pointer; display: flex; align-items: center;">
-                <i class="fa fa-trash-restore" style="font-size:16px; color:red; margin: 0;"></i>
-              </a>
-            @endif
-          @endcan
-        </td>
+        @can('vehicle-restore')
+          <td>
+            <a onclick="restoreVehicle('{{ $item->id }}')" style="cursor:pointer; display: flex; align-items: center;">
+              <i class="fa fa-undo" style="font-size:16px; color:red; margin: 0;"> </i>
+            </a>
+          </td>
+        @endcan
       </tr>
     @endforeach
   </tbody>
   <tfoot>
     <tr>
       <th>#</th>
-      @can('vehicle-change-status')
-        <th><input class="checkbox_all" onclick="checkAll(this)" type="checkbox" style=" width:25px; height:20px;"></th>
-      @endcan
       <th>Vehicle Description</th>
       <th>VIN#</th>
       <th>Lot#</th>
@@ -86,7 +73,9 @@
       <th>Auction</th>
       <th>Buyer Number</th>
       <th>Vehicle Cost</th>
-      <th>Restore</th>
+      @can('vehicle-restore')
+        <th>Restore</th>
+      @endcan
 
     </tr>
   </tfoot>
