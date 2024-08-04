@@ -72,8 +72,16 @@
         <td>@money($totalUSD) <br> @money($totalUSD * 3.685, AED)</td>
         <td>@money($item->clearance_cost, AED)</td>
         <th class="bg-color-total">@money($totalCost, AED)</th>
-        <th class="bg-color-total">@money($totalSoldPrice, AED)</th>
-        <th>@money($totalSoldPrice - $totalCost, AED)</th>
+        <th class="bg-color-total">
+          @if ($totalSoldPrice != 0)
+            @money($totalSoldPrice, AED)
+          @endif
+        </th>
+        <th>
+          @if ($totalSoldPrice != 0)
+            @money($totalSoldPrice - $totalCost, AED)
+          @endif
+        </th>
       </tr>
     @endforeach
   </tbody>
