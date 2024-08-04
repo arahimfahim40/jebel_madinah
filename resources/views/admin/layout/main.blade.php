@@ -271,12 +271,11 @@
 
       function addNewCustomer() {
         if (true) {
-          // window.location.href = "{{ route('unitedCustomers') }}";
+          // window.location.href = "";
         } else {
           alert("You are not allowed to add new customer!");
         }
       }
-
     </script>
 
     @include('admin.layout.select2-search')
