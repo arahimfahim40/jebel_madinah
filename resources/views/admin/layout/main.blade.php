@@ -268,6 +268,15 @@
       $(document).on('select2:open', () => {
         document.querySelector('.select2-search__field').focus();
       });
+
+      function addNewCustomer() {
+        if (true) {
+          // window.location.href = "{{ route('unitedCustomers') }}";
+        } else {
+          alert("You are not allowed to add new customer!");
+        }
+      }
+
     </script>
 
     @include('admin.layout.select2-search')

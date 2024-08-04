@@ -288,5 +288,6 @@
         </option>`
       );
     }
+
   </script>
 @endpush

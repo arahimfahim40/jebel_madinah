@@ -20,7 +20,15 @@ $(document).ready(function() {
             },
             cache: true,
             tags: true
-        }
+        },
+        language: {
+        noResults: function() {
+          return 'No Result Found <button class="btn btn-sm btn-primary pull-right" onclick="addNewCustomer()"><i class="fa fa-plus"></i></a>';
+        },
+      },
+      escapeMarkup: function(markup) {
+        return markup;
+      }
     });
 
 });
