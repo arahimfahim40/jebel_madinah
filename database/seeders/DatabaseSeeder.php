@@ -41,6 +41,8 @@ class DatabaseSeeder extends Seeder
         ["name" => "vehicle-edit", "group_name" => "vehicle"],
         ["name" => "vehicle-delete", "group_name" => "vehicle"],
         ["name" => "vehicle-summary", "group_name" => "vehicle"],
+        ["name" => "vehicle-trash-list", "group_name" => "vehicle"],
+        ["name" => "vehicle-restore", "group_name" => "vehicle"],
 
         ["name" => "invoice-view", "group_name" => "invoice"],
         ["name" => "invoice-create", "group_name" => "invoice"],
