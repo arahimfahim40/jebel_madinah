@@ -112,9 +112,9 @@
                   <div class="row">
                     <div class="col-md-6">
                       <div class="form-group">
-                        <label for="email"> Email <span class="text-danger">*</span></label>
+                        <label for="email"> Email</label>
                         <input type="email" name="email" id="email" class="form-control"
-                          value="{{ old('email', $customer->email) }}" placeholder="Enter customer email" required />
+                          value="{{ old('email', $customer->email) }}" placeholder="Enter customer email" />
                       </div>
 
                       {{-- <div class="form-group">
@@ -124,9 +124,9 @@
                       </div> --}}
 
                       <div class="form-group">
-                        <label for="phone"> Phone <span class="text-danger">*</span></label>
+                        <label for="phone"> Phone</label>
                         <input type="text" name="phone" id="phone" class="form-control"
-                          value="{{ old('phone', $customer->phone) }}" placeholder="Enter customer phone" required />
+                          value="{{ old('phone', $customer->phone) }}" placeholder="Enter customer phone" />
                       </div>
                       <div class="form-group">
                         <label for="join_date"> Join Date</label>

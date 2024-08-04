@@ -76,9 +76,9 @@
                     </div>
                     <div class="col-md-6">
                       <div class="form-group">
-                        <label for="address"> Address <span class="text-danger">*</span></label>
+                        <label for="address"> Address</label>
                         <input type="text" name="address" id="address" class="form-control"
-                          value="{{ old('address') }}" placeholder="Enter customer address" required />
+                          value="{{ old('address') }}" placeholder="Enter customer address" />
                       </div>
                     </div>
                   </div>
@@ -86,7 +86,7 @@
                   <div class="row">
                     <div class="col-md-6">
                       <div class="form-group">
-                        <label for="gender"> Gender <span class="text-danger">*</span></label>
+                        <label for="gender"> Gender</label>
                         <select name="gender" id='gender' class="form-control">
                           <option value="" disabled selected> ----Gender----</option>
                           <option value="Male">Male</option>
@@ -109,19 +109,19 @@
                   <div class="row">
                     <div class="col-md-6">
                       <div class="form-group">
-                        <label for="email"> Email <span class="text-danger">*</span></label>
+                        <label for="email"> Email</label>
                         <input type="email" name="email" id="email" class="form-control"
-                          value="{{ old('email') }}" placeholder="Enter customer email" required />
+                          value="{{ old('email') }}" placeholder="Enter customer email" />
                       </div>
 
                       {{-- <div class="form-group">
-                                            <label for="password">Password <span class="text-danger">*</span></label>
-                                            <input type="password" name="password" id="password" class="form-control" minlength="6" value="{{old('password')}}" placeholder="Enter customer password" required />
-                                        </div> --}}
+                        <label for="password">Password <span class="text-danger">*</span></label>
+                        <input type="password" name="password" id="password" class="form-control" minlength="6" value="{{old('password')}}" placeholder="Enter customer password" required />
+                      </div> --}}
                       <div class="form-group">
-                        <label for="phone"> Phone <span class="text-danger">*</span></label>
+                        <label for="phone"> Phone</label>
                         <input type="text" name="phone" id="phone" class="form-control"
-                          value="{{ old('phone') }}" placeholder="Enter customer phone" required />
+                          value="{{ old('phone') }}" placeholder="Enter customer phone" />
                       </div>
                       <div class="form-group">
                         <label for="join_date"> Join Date</label>

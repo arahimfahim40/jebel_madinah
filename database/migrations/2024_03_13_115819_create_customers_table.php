@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('address', 255)->nullable();
             $table->string('phone', 255)->nullable();
             $table->enum('gender', ['Male', 'Female'])->nullable();
-            $table->string('email', 255);
+            $table->string('email', 255)->nullable();
             // $table->string('password', 255);
             $table->string('photo', 255)->nullable();
             $table->text('about')->nullable();
