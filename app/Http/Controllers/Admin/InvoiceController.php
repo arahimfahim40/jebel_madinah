@@ -284,4 +284,43 @@ class InvoiceController extends Controller
             return response()->json(['result' => false, 'message' => 'Something went wrong, ' . $th->getMessage()], 400);
         }
     }
+
+    public function trash_list(Request $request)
+    {
+        $paginate = $request->paginate ? $request->paginate : 20;
+
+        // dd($request->searchValue);
+        $invoices = Invoice::onlyTrashed()
+            ->when(!empty($request->searchValue), function ($q) use ($request) {
+                $q->where(function ($query) use ($request) {
+                    foreach (self::$searchColumns as $value) {
+                        $query->orWhere($value, 'LIKE', "%$request->searchValue%");
+                    }
+                });
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate($paginate);
+
+        if ($request->ajax()) {
+            return view('admin.invoices.trash_data', compact('invoices', 'paginate'));
+        }
+        return view('admin.invoices.trash_list', compact('invoices', 'paginate'));
+    }
+
+    public function restore(string $id)
+    {
+        try {
+            // Find the invoice
+            $invoice = Invoice::withTrashed()->findOrFail($id);
+
+            // Restore the invoice
+            $invoice->restore();
+
+            // Update the 'deleted_by' field
+            $invoice->update(['deleted_by' => null]);
+            return response()->json(['status' => 'success', 'message' => 'invoice restored successfully!']);
+        } catch (\Exception $ex) {
+            return response()->json(['status' => 'error', 'message' => 'Something went wrong, cannot delete the user.' . $ex->getMessage()]);
+        }
+    }
 }

@@ -98,6 +98,9 @@
             <li><a href="{{ route('invoices.index') }}?status=paid">Paid
                 <span class="tag tag-success t_paid_invoice" style="float:right;">0</span>
               </a></li>
+            @can('vehicle-trash-list')
+              <li><a href="{{ route('invoices.trash_list') }}">Trash List</a></li>
+            @endcan
           </ul>
         </li>
       @endcan

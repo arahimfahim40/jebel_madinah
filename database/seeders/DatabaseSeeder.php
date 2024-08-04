@@ -49,6 +49,8 @@ class DatabaseSeeder extends Seeder
         ["name" => "invoice-change-status", "group_name" => "invoice"],
         ["name" => "invoice-edit", "group_name" => "invoice"],
         ["name" => "invoice-delete", "group_name" => "invoice"],
+        ["name" => "invoice-trash-list", "group_name" => "invoice"],
+        ["name" => "invoice-restore", "group_name" => "invoice"],
 
         ["name" => "payment-add", "group_name" => "payment"],
         ["name" => "payment-edit", "group_name" => "payment"],
