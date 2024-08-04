@@ -35,8 +35,8 @@
     }
 
     /* .actions {
-                display: none;
-            } */
+                  display: none;
+              } */
     #create-customer ul {
       margin-bottom: 0px;
       margin-right: 200px;
@@ -150,13 +150,13 @@
                     <textarea name="about" id="about" class="form-control" placeholder="About customer"> {{ old('about') }} </textarea>
                   </div>
                   <!-- <div class="box box-block bg-white">
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <h6>Customer Photo</h6>
-                                                    <input type="file" id="input-file-now" class="dropify" name="photo" accept="image/png, image/gif, image/jpeg"/>
-                                                </div>
-                                            </div>
-                                        </div> -->
+                                              <div class="row">
+                                                  <div class="col-md-12">
+                                                      <h6>Customer Photo</h6>
+                                                      <input type="file" id="input-file-now" class="dropify" name="photo" accept="image/png, image/gif, image/jpeg"/>
+                                                  </div>
+                                              </div>
+                                          </div> -->
 
                   <div class="row mt-2">
                     <div class="col-md-12">

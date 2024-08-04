@@ -30,9 +30,6 @@
       justify-content: center;
     }
 
-    /* .actions {
-                                                                                                                                                                                                                                                                                                                                      display: none;
-                                                                                                                                                                                                                                                                                                                                  } */
     #edit-invoice-form ul {
       margin-bottom: 0px;
     }
@@ -49,6 +46,8 @@
   </style>
 @endpush
 @section('content')
+  @include('admin.invoices.add_customer')
+
   <div class="site-content">
     <div class="content-area py-1">
       <div class="container-fluid">

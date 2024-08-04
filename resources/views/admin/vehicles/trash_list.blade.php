@@ -46,40 +46,6 @@
   </style>
 @endpush
 @section('content')
-  <!-- Change Status modal -->
-  <div class="modal fade small-modal" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true"
-    id="vehicle_change_status_modal">
-    <div class="modal-dialog modal-md">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-          <h4 class="modal-title">Change Vehicle Status</h4>
-        </div>
-        <div class="modal-body">
-          <div class="form-group">
-            <span class="pl-1">
-              <input type="radio" name="vehicle_status" value="on_the_way" id="on_the_way" class="vehicle_status">
-              <label for="on_the_way">On The Way</label>
-            </span>
-            <span class="pl-1">
-              <input type="radio" name="vehicle_status" value="inventory" id="inventory" class="vehicle_status">
-              <label for="inventory">Inventory</label>
-            </span>
-            {{-- <span class="pl-1">
-              <input type="radio" name="vehicle_status" value="sold" id="sold" class="vehicle_status">
-              <label for="sold">Sold</label>
-            </span> --}}
-          </div>
-          <div class="modal-footer" style="text-align:center !important;">
-            <button type="button" class="btn btn-primary btn-rounded" onclick="submitForm()">Change</button>
-            <button type="button" class="btn btn-danger btn-rounded" data-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <div class="site-content">
     <div class="content-area py-1">

@@ -270,11 +270,43 @@
       });
 
       function addNewCustomer() {
-        if (true) {
-          // window.location.href = "";
-        } else {
-          alert("You are not allowed to add new customer!");
-        }
+        $('#add_new_customer_modal').modal('show');
+      }
+
+      function createNewCustomer() {
+        $('#content_loader').html(
+          "<div style='position:fixed; margin-top:15%; margin-left:40%;'><img width='100px' src='/img/loading.gif' alt='Loading ...'> </div> "
+        );
+        var request = $.ajax({
+          url: "{{ route('customers.store') }}",
+          method: "POST",
+          data: {
+            name: $("#add_new_customer_modal #name").val(),
+            email: $("#add_new_customer_modal #email").val(),
+            phone: $("#add_new_customer_modal #phone").val(),
+            _token: '{{ csrf_token() }}'
+          },
+        });
+        request.done(function(msg) {
+          $('#content_loader').html('');
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: msg.message,
+            showConfirmButton: false,
+            timer: 4000
+          });
+        });
+        request.fail(function(jqXHR, textStatus) {
+          $('#content_loader').html('');
+          Swal.fire({
+            position: 'center',
+            icon: 'error',
+            title: jqXHR.responseJSON.message,
+            showConfirmButton: false,
+            timer: 4000
+          });
+        });
       }
     </script>
 
