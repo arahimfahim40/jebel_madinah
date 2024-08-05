@@ -16,8 +16,8 @@
       <th>Age</th>
       <th>Description</th>
       @can('invoice-restore')
-      <th>Restore</th>
-    @endcan
+        <th>Restore</th>
+      @endcan
     </tr>
   </thead>
   <tbody>
@@ -30,12 +30,6 @@
       @endphp
       <tr id="searchBody">
         <td>{{ $index + 1 }}</td>
-        @can('vehicle-change-status')
-          <td>
-            <input name="status[{{ $item->id }}]" type="checkbox" style="width:25px; height:20px;" class="checkbox"
-              data-id="{{ $item->id }}" data-status="{{ $item->status }}" />
-          </td>
-        @endcan
         <td>{{ 'JAM' . str_pad($item->id, 6, '0', STR_PAD_LEFT) }}</td>
         <td>{{ $item->customer->name }}</td>
         <td style="max-width: 150px;">{{ $item->vehicles->pluck('vin')->join(' | ') }}</td>
@@ -75,12 +69,13 @@
 
         <td style="max-width: 160px;">{{ $item->description }}</td>
         @can('invoice-restore')
-        <td>
-          <a onclick="restoreInvoice('{{ $item->id }}')" style="cursor:pointer; display: flex; align-items: center;">
-            <i class="fa fa-undo" style="font-size:16px; color:red; margin: 0;"> </i>
-          </a>
-        </td>
-      @endcan
+          <td>
+            <a onclick="restoreInvoice('{{ $item->id }}')"
+              style="cursor:pointer; display: flex; align-items: center;">
+              <i class="fa fa-undo" style="font-size:16px; color:red; margin: 0;"> </i>
+            </a>
+          </td>
+        @endcan
       </tr>
     @endforeach
   </tbody>
@@ -101,8 +96,8 @@
       <th>Age</th>
       <th>Description</th>
       @can('invoice-restore')
-      <th>Restore</th>
-    @endcan
+        <th>Restore</th>
+      @endcan
     </tr>
   </tfoot>
 </table>
