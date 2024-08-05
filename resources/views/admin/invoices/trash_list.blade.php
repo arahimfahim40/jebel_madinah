@@ -70,7 +70,7 @@
           </div>
           <div class="col-md-2 col-lg-2 col-sm-6 col-xs-12 text-right"
             style="margin-top:1.5%;float: right;text-align: right;">
-            <div class="text text-warning"><b>{{ ucwords(str_replace('_', ' ', $status ? $status : 'All')) }} Invoices</b>
+            <div class="text text-warning"><b>Invoices Trash List</b>
             </div>
           </div>
           <div class="site table-responsive" id="invoice_data">
@@ -126,6 +126,7 @@
         $('#invoice_data').append(textStatus);
       });
     }
+
     function restoreInvoice(invoice_id) {
       if (confirm('Invoice will be restored. Are you sure?')) {
         $('#content_loader').html(
