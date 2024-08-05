@@ -60,7 +60,7 @@ Route::middleware('auth:user')->group(function () {
         ->middleware(['can:customer-create']);
     Route::post('/admin/customers', [CustomerController::class, 'store'])
         ->name('customers.store')
-        ->middleware(['can:customer-create']);
+        ->middleware(['can:customer-create', 'can:invoice-create']);
     Route::get('/admin/customers/{id}', [CustomerController::class, 'show'])
         ->name('customers.show')
         ->middleware(['can:customer-view']);
