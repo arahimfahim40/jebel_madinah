@@ -134,6 +134,9 @@ class CustomerController extends Controller
             $customer->about = $request->about;
             $customer->updated_by = $user->id;
             $customer->save();
+            if ($request->ajax()) {
+                return response()->json(['status' => 'success', 'message' => 'Customer added successfully']);
+            }
             return redirect()->route('customers.show', ['id' => $id])->with('success', 'Saved successfully!');
         } catch (\Exception $ex) {
             return redirect()->route('customers.show', ['id' => $id])->with('error', 'Something went wrong, cannot save the user.' . $ex->getMessage());

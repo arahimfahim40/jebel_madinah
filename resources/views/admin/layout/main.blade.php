@@ -284,6 +284,7 @@
             name: $("#add_new_customer_modal #name").val(),
             email: $("#add_new_customer_modal #email").val(),
             phone: $("#add_new_customer_modal #phone").val(),
+            status: 'Active',
             _token: '{{ csrf_token() }}'
           },
         });
