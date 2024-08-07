@@ -42,10 +42,10 @@
     <tr>
       <th>#</th>
       <th>Name</th>
-      @can('vehicle-edit')
+      @can('owner-edit')
         <th>Edit</th>
       @endcan
-      @can('vehicle-delete')
+      @can('owner-delete')
         <th>Delete</th>
       @endcan
     </tr>
