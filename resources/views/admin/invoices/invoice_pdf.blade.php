@@ -52,6 +52,7 @@
       <div class="col-md-12 col-md-offset-1 ">
         <div style="width: 100%; text-align: center;">
           <div style=" font-size:20px;font-weight:bold; text-align:center">
+            <img src="data:image/png;base64,{!! base64_encode(file_get_contents(public_path('img/logo.png'))) !!}" height="140px">
             Tax Invoice
           </div>
           <div style="margin-top: 4px; text-align:center">
