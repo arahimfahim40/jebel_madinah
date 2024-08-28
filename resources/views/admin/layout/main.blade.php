@@ -290,6 +290,10 @@
         });
         request.done(function(msg) {
           $('#content_loader').html('');
+          $("#add_new_customer_modal #name").val('');
+          $("#add_new_customer_modal #email").val('');
+          $("#add_new_customer_modal #phone").val('');
+          $('#add_new_customer_modal').modal('hide');
           Swal.fire({
             position: 'center',
             icon: 'success',

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class CustomerController extends Controller
 {
@@ -57,6 +58,8 @@ class CustomerController extends Controller
 
         $user = Auth::user();
         try {
+            DB::beginTransaction();
+
             $customer = new Customer;
             $customer->name = $request->name;
             $customer->address = $request->address;
@@ -72,9 +75,14 @@ class CustomerController extends Controller
             $customer->created_by = $user->id;
             $customer->updated_by = $user->id;
             $customer->save();
-
+            if ($request->ajax()) {
+                DB::commit();
+                return response()->json(['customer' => $customer, 'status' => 'success', 'message' => 'Customer added successfully']);
+            }
+            DB::commit();
             return redirect()->route('customers.show', ['id' => $customer->id])->with('success', 'Saved successfully!');
         } catch (\Exception $ex) {
+            DB::rollBack();
             return redirect()->route('customers.index')->with('error', 'Something went wrong, cannot save the user.' . $ex->getMessage());
         }
     }

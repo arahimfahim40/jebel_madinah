@@ -41,7 +41,9 @@
         @can('vehicle-change-status')
           <td>
             <input name="status[{{ $item->id }}]" type="checkbox" style="width:25px; height:20px;" class="checkbox"
-              data-id="{{ $item->id }}" data-status="{{ $item->status }}" />
+              data-id="{{ $item->id }}" data-status="{{ $item->status }}"
+              data-description="{{ $item->year }} {{ $item->make }} {{ $item->model }} {{ $item->color }}"
+              data-sold_price="{{ $item->sold_price }}" />
           </td>
         @endcan
         @can('vehicle-edit')

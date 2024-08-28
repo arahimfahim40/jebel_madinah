@@ -43,9 +43,15 @@
       background: #e9e8e8;
       color: black;
     }
+
+    .form-check-label {
+      padding-left: 4px;
+    }
   </style>
 @endpush
 @section('content')
+
+  @include('admin.invoices.add_customer')
   <!-- Change Status modal -->
   <div class="modal fade small-modal" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true"
     id="vehicle_change_status_modal">
@@ -92,7 +98,7 @@
           </button>
           <h4 class="modal-title">Sell Vehicles</h4>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" style="overflow-y: auto; max-height: 65vh;">
           <div class="row">
             <div class="col-md-6">
               <div class="col-md-12 form-group">
@@ -102,7 +108,8 @@
               </div>
               <div class="col-md-12 form-group">
                 <label class="required">Invoice Date</label>
-                <input type="date" name="invoice_date" placeholder="Invoice Date" class="form-control" required />
+                <input type="date" name="invoice_date" placeholder="Invoice Date" class="form-control"
+                  value="{{ now()->format('Y-m-d') }}" required />
               </div>
               <div class="col-md-12 form-group">
                 <label class="required">Due Date</label>
@@ -115,21 +122,69 @@
               </div>
             </div>
 
-            <div class="col-md-6">
-
-            </div>
-
+            <div class="col-md-6" id="vehicle-sold-price-list"></div>
             <div class="col-md-12">
               <div class="col-md-12 form-group">
                 <label>Description</label>
-                <textarea name="description" placeholder="Description" rows="6" class="form-control"></textarea>
+                <textarea name="description" placeholder="Description" rows="4" class="form-control"></textarea>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="col-md-12 form-group">
+                <hr>
+              </div>
+              <div class="col-md-12 form-group">
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="payment_type" id="complete_payment"
+                    value="complete" checked>
+                  <label class="form-check-label" for="complete_payment">Complete Payment</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="payment_type" id="partial_payment"
+                    value="partial">
+                  <label class="form-check-label" for="partial_payment">Partial Payment</label>
+                </div>
+              </div>
+
+              <div style="display: none;" id="vehicle-payment-form">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <span class="main"><label for="payment_amount">Payment Amount (AED)</label>&nbsp;<span
+                        class="text-danger">*</span></span>
+                    <input type="number" step=".01" name="payment_amount" id="payment_amount"
+                      class="form-control" required />
+                    <span id="payment_amount" style="color: red;font-weight: bold;"></span>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <span class="main"><label for="payment_date">Payment Date</label>&nbsp;<span
+                        class="text-danger">*</span></span>
+                    <input type="date" value="{{ now()->format('Y-m-d') }}" name="payment_date" id="payment_date"
+                      class="form-control" required />
+                    <span id="payment_date" style="color: red;font-weight: bold;"></span>
+                  </div>
+                </div>
+                <div class="col-md-12 form-group">
+                  <label for="">Evidence Link</label>
+                  <input type="text" class="form-control" name="evidence_link" id="evidence_link">
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <span class="main"><label for="payment_description">Payment Description</label>&nbsp;</span>
+                    <textarea name="payment_description" id="payment_description" cols="70" rows="3" class="form-control"></textarea>
+                  </div>
+                </div>
+
               </div>
             </div>
 
           </div>
           <div class="modal-footer" style="text-align:center !important;">
-            <button type="button" class="btn btn-primary btn-rounded" onclick="submitForm()">Change</button>
-            <button type="button" class="btn btn-danger btn-rounded" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" style="border-radius: 5px;"
+              onclick="submitForm()">Save</button>
+            <button type="button" class="btn btn-danger" style="border-radius: 5px;"
+              data-dismiss="modal">Close</button>
           </div>
         </div>
       </div>
@@ -154,11 +209,11 @@
                   <i class="fa fa-info-circle"></i> Change Status
                 </button>
               @endcan
-              {{-- @can('vehicle-change-status')
+              @can('vehicle-change-status')
                 <button class="btn btn-success" style="float: left; border-radius: 5px;" onclick="vehicleSell()">
                   <i class="fa fa-dollar"></i> Sell
                 </button>
-              @endcan --}}
+              @endcan
             </div>
 
             <div class="form-group col-md-1 col-lg-1 col-sm-2 col-xs-12" style="float:right;">
@@ -266,24 +321,88 @@
       }
     }
 
+
+    var selectedVehicleForSell = [];
+
     function vehicleSell() {
-      var selectedVehicleIds = [];
+      selectedVehicleForSell = [];
+      var isSold = false;
       $(".checkbox:checked").each(function() {
-        selectedVehicleIds.push($(this).attr('data-id'));
+        selectedVehicleForSell.push({
+          id: $(this).data('id'),
+          description: $(this).data('description'),
+          sold_price: $(this).data('sold_price'),
+        });
+        if ($(this).attr('data-status') == 'sold') {
+          isSold = true;
+          return;
+        }
       });
 
-      if (selectedVehicleIds.length <= 0) {
+      if (isSold) {
         Swal.fire({
           position: 'center',
           icon: 'info',
-          title: "Please select atleast one record to change the status.",
+          title: "At last one of vehicles is already sold.",
+          showConfirmButton: false,
+          timer: 4000
+        });
+        return;
+      }
+
+      if (selectedVehicleForSell.length <= 0) {
+        Swal.fire({
+          position: 'center',
+          icon: 'info',
+          title: "Please select atleast one record for selling.",
           showConfirmButton: false,
           timer: 4000
         });
       } else {
+        generateVehicleSoldField();
         $('#vehicle_sell_modal').modal('show');
       }
     }
+
+    function generateVehicleSoldField() {
+      $(`#vehicle-sold-price-list`).html('');
+      selectedVehicleForSell.forEach(element => {
+        var newField = $('<div>', {
+          class: `form-group col-md-12 vehicle-field-${element.id}`
+        }).append(
+          $('<label>', {
+            for: element.id,
+            text: element.description
+          }),
+          $('<div>', {
+            class: 'input-group'
+          }).append(
+            $('<div>', {
+              class: 'input-group-addon',
+              text: 'Sold Price (AED)'
+            }),
+            $('<input>', {
+              type: 'number',
+              step: 'any',
+              name: `vehicles[${element.id}]`,
+              class: 'vehicle_charges form-control',
+              placeholder: 'Enter Vehicle Sold Price',
+              value: element.sold_price
+            })
+          )
+        );
+        $(`#vehicle-sold-price-list`).append(newField);
+      });
+    }
+
+    $('input[type=radio][name=payment_type]').change(function() {
+      if (this.value == 'partial') {
+        $('#vehicle-payment-form').show();
+      } else if (this.value == 'complete') {
+        $('#vehicle-payment-form').hide();
+      }
+    });
+
 
     function submitForm() {
       var status = $(".vehicle_status:checked").val();
