@@ -100,89 +100,100 @@
         </div>
         <div class="modal-body" style="overflow-y: auto; max-height: 65vh;">
           <div class="row">
-            <div class="col-md-6">
-              <div class="col-md-12 form-group">
-                <label class="required">Select Customer</label>
-                <select onchange="onCustomerChange(this)" name="customer_id" class="form-control s2s_customers"
-                  required></select>
-              </div>
-              <div class="col-md-12 form-group">
-                <label class="required">Invoice Date</label>
-                <input type="date" name="invoice_date" placeholder="Invoice Date" class="form-control"
-                  value="{{ now()->format('Y-m-d') }}" required />
-              </div>
-              <div class="col-md-12 form-group">
-                <label class="required">Due Date</label>
-                <input type="date" name="invoice_due_date" placeholder="Due Date" class="form-control" required />
-              </div>
+            <form id="vehcile-sell-form" method="post" enctype="multipart/form-data">
 
-              <div class="col-md-12 form-group">
-                <label>Discount</label>
-                <input type="number" name="discount" placeholder="Discount" class="form-control" value="0" />
-              </div>
-            </div>
-
-            <div class="col-md-6" id="vehicle-sold-price-list"></div>
-            <div class="col-md-12">
-              <div class="col-md-12 form-group">
-                <label>Description</label>
-                <textarea name="description" placeholder="Description" rows="4" class="form-control"></textarea>
-              </div>
-            </div>
-            <div class="col-md-12">
-              <div class="col-md-12 form-group">
-                <hr>
-              </div>
-              <div class="col-md-12 form-group">
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="payment_type" id="complete_payment"
-                    value="complete" checked>
-                  <label class="form-check-label" for="complete_payment">Complete Payment</label>
-                </div>
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="payment_type" id="partial_payment"
-                    value="partial">
-                  <label class="form-check-label" for="partial_payment">Partial Payment</label>
-                </div>
-              </div>
-
-              <div style="display: none;" id="vehicle-payment-form">
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <span class="main"><label for="payment_amount">Payment Amount (AED)</label>&nbsp;<span
-                        class="text-danger">*</span></span>
-                    <input type="number" step=".01" name="payment_amount" id="payment_amount"
-                      class="form-control" required />
-                    <span id="payment_amount" style="color: red;font-weight: bold;"></span>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <span class="main"><label for="payment_date">Payment Date</label>&nbsp;<span
-                        class="text-danger">*</span></span>
-                    <input type="date" value="{{ now()->format('Y-m-d') }}" name="payment_date" id="payment_date"
-                      class="form-control" required />
-                    <span id="payment_date" style="color: red;font-weight: bold;"></span>
-                  </div>
+              <div class="col-md-6">
+                <div class="col-md-12 form-group">
+                  <label class="required">Select Customer</label>
+                  <select id="customer_id" name="customer_id" class="form-control s2s_customers" required></select>
+                  <div id="customer-error" class="text-danger" style="display: none;"></div>
                 </div>
                 <div class="col-md-12 form-group">
-                  <label for="">Evidence Link</label>
-                  <input type="text" class="form-control" name="evidence_link" id="evidence_link">
+                  <label class="required">Invoice Date</label>
+                  <input type="date" name="invoice_date" placeholder="Invoice Date" class="form-control"
+                    value="{{ now()->format('Y-m-d') }}" required />
                 </div>
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <span class="main"><label for="payment_description">Payment Description</label>&nbsp;</span>
-                    <textarea name="payment_description" id="payment_description" cols="70" rows="3" class="form-control"></textarea>
+                <div class="col-md-12 form-group">
+                  <label class="required">Due Date</label>
+                  <input type="date" name="invoice_due_date" placeholder="Due Date" class="form-control" required />
+                </div>
+
+                <div class="col-md-12 form-group">
+                  <label>Discount</label>
+                  <input type="number" name="discount" placeholder="Discount" class="form-control" value="0" />
+                </div>
+              </div>
+
+              <div class="col-md-6" id="vehicle-sold-price-list"></div>
+              <div class="col-md-12">
+                <div class="col-md-12 form-group">
+                  <label>Description</label>
+                  <textarea name="description" placeholder="Description" rows="4" class="form-control"></textarea>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="col-md-12 form-group">
+                  <hr>
+                </div>
+                <div class="col-md-12 form-group">
+                  <div>
+                    <label style="font-weight: bold; font-size: 14px;">Payment Section</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="payment_type" id="unpaid" value="unpaid"
+                      checked>
+                    <label class="form-check-label" for="unpaid">Unpaid</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="payment_type" id="fully_paid"
+                      value="fully_paid">
+                    <label class="form-check-label" for="fully_paid">Fully Paid</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="payment_type" id="partial_paid"
+                      value="partial_paid">
+                    <label class="form-check-label" for="partial_paid">Partially Paid</label>
                   </div>
                 </div>
 
-              </div>
-            </div>
+                <div style="display: none;" id="vehicle-payment-form">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <span class="main"><label for="payment_amount">Payment Amount (AED)</label>&nbsp;<span
+                          class="text-danger">*</span></span>
+                      <input type="number" step=".01" name="payment_amount" id="payment_amount"
+                        class="form-control" required />
+                      <span id="payment_amount" style="color: red;font-weight: bold;"></span>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <span class="main"><label for="payment_date">Payment Date</label>&nbsp;<span
+                          class="text-danger">*</span></span>
+                      <input type="date" value="{{ now()->format('Y-m-d') }}" name="payment_date" id="payment_date"
+                        class="form-control" required />
+                      <span id="payment_date" style="color: red;font-weight: bold;"></span>
+                    </div>
+                  </div>
+                  <div class="col-md-12 form-group">
+                    <label for="">Evidence Link</label>
+                    <input type="text" class="form-control" name="evidence_link" id="evidence_link">
+                  </div>
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <span class="main"><label for="payment_description">Payment Description</label>&nbsp;</span>
+                      <textarea name="payment_description" id="payment_description" cols="70" rows="3" class="form-control"></textarea>
+                    </div>
+                  </div>
 
+                </div>
+              </div>
+
+            </form>
           </div>
           <div class="modal-footer" style="text-align:center !important;">
             <button type="button" class="btn btn-primary" style="border-radius: 5px;"
-              onclick="submitForm()">Save</button>
+              onclick="submitSellForm()">Save</button>
             <button type="button" class="btn btn-danger" style="border-radius: 5px;"
               data-dismiss="modal">Close</button>
           </div>
@@ -210,7 +221,7 @@
                 </button>
               @endcan
               @can('vehicle-change-status')
-                <button class="btn btn-success" style="float: left; border-radius: 5px;" onclick="vehicleSell()">
+                <button class="btn btn-success" style="float: left; border-radius: 5px;" onclick="vehicleSell(this)">
                   <i class="fa fa-dollar"></i> Sell
                 </button>
               @endcan
@@ -396,9 +407,9 @@
     }
 
     $('input[type=radio][name=payment_type]').change(function() {
-      if (this.value == 'partial') {
+      if (this.value == 'partial_paid') {
         $('#vehicle-payment-form').show();
-      } else if (this.value == 'complete') {
+      } else if (this.value == 'fully_paid' || this.value == 'unpaid') {
         $('#vehicle-payment-form').hide();
       }
     });
@@ -452,6 +463,57 @@
           });
         });
       }
+    }
+
+    function submitSellForm() {
+
+      // Assuming you have a form element with an ID of 'myForm'
+      var form = $('#vehcile-sell-form')[0];
+      $('#customer-error').hide();
+
+      // Create a new FormData object
+      var formData = new FormData(form);
+
+      // To get all input values
+      var formValues = {};
+      formData.forEach(function(value, key) {
+        formValues[key] = value;
+      });
+
+      var request = $.ajax({
+        url: "{{ route('vehicles.sell_and_payment') }}",
+        method: "POST",
+        data: {
+          ...formValues,
+          _token: '{{ csrf_token() }}',
+        },
+        success: function(data) {
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: data.message,
+            showConfirmButton: false,
+            timer: 3000
+          });
+          updateVehicleList();
+          $('#vehicle_sell_modal').modal('hide');
+          window.open("{{ url('/') }}" + `/admin/invoices/${data.invoice_id}`, '_blank');
+        },
+        error: function(jqXHR, textStatus) {
+          var errors = jqXHR.responseJSON.errors;
+          if (Object.keys(errors).length > 0) {
+            for (const key in errors) {
+              if (errors.hasOwnProperty(key)) {
+                if (key == 'customer_id') {
+                  $('#customer-error').html(errors[key]);
+                  $('#customer-error').show();
+                }
+              }
+            }
+          }
+        },
+      });
+
     }
 
     function deleteVehicle(vehicle_id) {

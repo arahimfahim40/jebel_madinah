@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
+use App\Models\Invoice;
+use App\Models\InvoicePayment;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -202,6 +204,63 @@ class VehicleController extends Controller
             return redirect()->back()
                 ->withErrors(['error' => $e->getMessage()])
                 ->withInput($request->all());
+        }
+    }
+
+    public function sell_and_payment(Request $request)
+    {
+        $request->validate([
+            'customer_id' => 'required|exists:customers,id',
+            'discount' => 'nullable|numeric',
+            'vehicles' => 'required|array',
+        ]);
+
+        try {
+            DB::beginTransaction();
+            $user = auth()->user();
+            // Retrieve the filtered data from the request
+            $filteredData = $request->only([
+                'customer_id',
+                'invoice_date',
+                'invoice_due_date',
+                'discount',
+                'description',
+            ]);
+            $filteredData['status'] = $request->payment_type == 'fully_paid' ? 'paid' : 'open';
+
+            $filteredData['created_by'] = $user->id;
+            $invoice = Invoice::create($filteredData);
+            $totalSoldPrice = 0;
+
+            foreach ($request->vehicles as $id => $soldPrice) {
+                $totalSoldPrice += $soldPrice;
+                Vehicle::where('id', $id)->update([
+                    'sold_price' => $soldPrice,
+                    'invoice_id' => $invoice->id,
+                    'status' => 'sold'
+                ]);
+            }
+
+            if ($request->payment_type != 'unpaid') {
+                $payment_amount = $request->payment_type == 'fully_paid' ? $totalSoldPrice - $request->discount : $request->payment_amount;
+                InvoicePayment::create([
+                    'invoice_id' => $invoice->id,
+                    'payment_amount' => $payment_amount,
+                    'payment_date' => $invoice->invoice_date,
+                    'evidence_link' => $invoice->evidence_link,
+                    'description' => $invoice->payment_description,
+                ]);
+            }
+
+            DB::commit();
+
+            return response()->json(['message' => 'Invoice created successfully!', 'invoice_id' => $invoice->id]);
+        } catch (\Exception $e) {
+            // An error occurred, rollback the transaction
+            DB::rollBack();
+
+            // Handle the exception or return an error response
+            return response()->json(['message' => 'Failed to create invoice store', 'error' => $e->getMessage()], 500);
         }
     }
 

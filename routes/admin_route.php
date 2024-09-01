@@ -170,6 +170,9 @@ Route::middleware('auth:user')->group(function () {
         ->name('vehicles.restore')
         ->middleware(['can:vehicle-restore']);
 
+    Route::post('/admin/vehicles/sell_and_payment/store', [VehicleController::class, 'sell_and_payment'])
+        ->name('vehicles.sell_and_payment')
+        ->middleware(['can:invoice-create']);
 
     // Invoice Routes
     Route::get('/admin/invoices', [InvoiceController::class, 'index'])
@@ -196,6 +199,7 @@ Route::middleware('auth:user')->group(function () {
     Route::post('/admin/invoices_change_status', [InvoiceController::class, 'change_status'])
         ->name('invoices.change_status')
         ->middleware(['can:invoice-change-status']);
+
 
     // Route::get('/get_vehicles_open_of_customer', [InvoiceController::class, 'get_vehicles_open_of_customer'])
     // ->name('get_vehicles_open_of_customer');
