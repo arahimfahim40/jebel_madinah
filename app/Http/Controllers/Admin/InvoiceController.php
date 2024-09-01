@@ -114,7 +114,7 @@ class InvoiceController extends Controller
             DB::commit();
 
             // Redirect back with success message
-            return redirect()->route('invoices.index')->with('success', 'Invoice created successfully');
+            return redirect()->route('invoices.show', [$id])->with('success', 'Invoice created successfully');
         } catch (\Exception $e) {
             // An error occurred, rollback the transaction
             DB::rollBack();
